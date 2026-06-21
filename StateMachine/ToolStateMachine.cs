@@ -21,9 +21,9 @@ public partial class ToolStateMachine : CharacterStateMachine
             Logger.Error("ToolStateMachine: InputHandler autoload not found.");
         }
 
-        if (AnimationPlayer != null)
+        if (ActiveAnimationPlayer != null)
         {
-            AnimationPlayer.AnimationFinished += OnAnimationFinished;
+            ActiveAnimationPlayer.AnimationFinished += OnAnimationFinished;
         }
     }
 
@@ -62,9 +62,9 @@ public partial class ToolStateMachine : CharacterStateMachine
             _InputHandler._OnUseInput -= OnUseInput;
         }
 
-        if (AnimationPlayer != null)
+        if (ActiveAnimationPlayer != null)
         {
-            AnimationPlayer.AnimationFinished -= OnAnimationFinished;
+            ActiveAnimationPlayer.AnimationFinished -= OnAnimationFinished;
         }
         base._ExitTree();
     }

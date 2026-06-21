@@ -28,15 +28,15 @@ public partial class WalkState : CharacterState
     public override void Enter()
     {
         base.Enter();
-        if (StateMachine.AnimationPlayer != null)
+        if (StateMachine.ActiveAnimationPlayer != null)
         {
-            if (StateMachine.AnimationPlayer.HasAnimation("Idle"))
+            if (StateMachine.ActiveAnimationPlayer.HasAnimation("Idle"))
             {
-                StateMachine.AnimationPlayer.Play("Idle");
+                StateMachine.ActiveAnimationPlayer.Play("Idle");
             }
             else
             {
-                StateMachine.AnimationPlayer.Play("idle_down");
+                StateMachine.ActiveAnimationPlayer.Play("idle_down");
             }
         }
     }

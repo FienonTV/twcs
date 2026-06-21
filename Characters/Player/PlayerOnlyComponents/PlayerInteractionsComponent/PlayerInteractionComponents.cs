@@ -3,11 +3,16 @@ using System.Collections.Generic;
 
 public partial class PlayerInteractionComponents : Node2D
 {
-    private Character OwnerCharacter;
-    private Interaction_Area InteractionArea;
-    private CollisionShape2D _InteractionAreaCollisionShape;
+    private Character _OwnerCharacter;
 
-    private Label _InteractLabel;
+    [Export]
+    private Interaction_Area InteractionArea;
+
+    [Export]
+    private CollisionShape2D InteractionAreaCollisionShape;
+
+    [Export]
+    private Label InteractLabel;
 
     private bool _isLoaded = false;
 
@@ -22,7 +27,10 @@ public partial class PlayerInteractionComponents : Node2D
             return;
         }
 
-        InteractionArea = GetNodeOrNull<Interaction_Area>("InteractionArea");
+        if (InteractionArea == null)
+        {
+            InteractionArea = FindChild("InteractionArea") as Interaction_Area;
+        }
         if (InteractionArea == null)
         {
             Logger.Error("PlayerInteractionComponents: No InteractionArea found.");
@@ -30,13 +38,19 @@ public partial class PlayerInteractionComponents : Node2D
             return;
         }
 
-        _InteractionAreaCollisionShape = InteractionArea.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
-        if (_InteractionAreaCollisionShape == null)
+        if (InteractionAreaCollisionShape == null)
+        {
+            InteractionAreaCollisionShape = InteractionArea.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
+        }
+        if (InteractionAreaCollisionShape == null)
         {
             Logger.Error("PlayerInteractionComponents: InteractionArea has no CollisionShape2D.");
         }
 
-        _InteractLabel = FindChild("InteractLabel", recursive: true) as Label;
+        if (InteractLabel == null)
+        {
+            InteractLabel = FindChild("InteractLabel", recursive: true) as Label;
+        }
 
         InteractionArea.AreaEntered += OnInteractionAreaEntered;
         InteractionArea.AreaExited += OnInteractionAreaExited;
@@ -89,17 +103,17 @@ public partial class PlayerInteractionComponents : Node2D
 
     private void UpdateInteractions()
     {
-        if (_InteractLabel == null)
+        if (InteractLabel == null)
         {
             return;
         }
         if (_AllInteractions.Count > 0)
         {
-            _InteractLabel.Text = _AllInteractions[0].GetInteractionLabel();
+            InteractLabel.Text = _AllInteractions[0].GetInteractionLabel();
         }
         else
         {
-            _InteractLabel.Text = "";
+            InteractLabel.Text = "";
         }
     }
 
@@ -108,20 +122,20 @@ public partial class PlayerInteractionComponents : Node2D
         if (_AllInteractions.Count > 0)
         {
             IInteractable currentInteraction = _AllInteractions[0];
-            currentInteraction.Interact(OwnerCharacter);
+            currentInteraction.Interact(_OwnerCharacter);
         }
     }
 
     private void ChangeCurrentInteractionCollisionShapeDirection()
     {
-        if (_InteractionAreaCollisionShape == null || OwnerCharacter == null)
+        if (InteractionAreaCollisionShape == null || _OwnerCharacter == null)
         {
             return;
         }
-        if (OwnerCharacter.CurrentLookingDirection != Vector2.Zero)
+        if (_OwnerCharacter.CurrentLookingDirection != Vector2.Zero)
         {
-            _InteractionAreaCollisionShape.Position = OwnerCharacter.CurrentLookingDirection * 10;
-            _InteractionAreaCollisionShape.Rotation = OwnerCharacter.CurrentLookingDirection.Angle();
+            InteractionAreaCollisionShape.Position = _OwnerCharacter.CurrentLookingDirection * 10;
+            InteractionAreaCollisionShape.Rotation = _OwnerCharacter.CurrentLookingDirection.Angle();
         }
     }
 
@@ -132,7 +146,7 @@ public partial class PlayerInteractionComponents : Node2D
         {
             if (node is Character character)
             {
-                OwnerCharacter = character;
+                _OwnerCharacter = character;
                 return true;
             }
             node = node.GetParent();

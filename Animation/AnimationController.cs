@@ -1,92 +1,78 @@
 /*
  * AnimationController Class
  * -------------------------
- * This class is responsible for managing and playing animations for characters and effects in the game.
- * It interacts with AnimationPlayer nodes to control animations based on game events and states.
- * 
- * Key Responsibilities:
- * - Play and stop character animations.
- * - Handle effect animations.
- * - Manage animation-related timers and signals.
- * 
- * This class is a crucial part of the animation system in the project, ensuring that characters and effects
- * are animated correctly based on the game's logic and state transitions.
+ * Manages character and effect animations.
  */
 
 using Godot;
 
 public partial class AnimationController : Node
 {
-    // Reference to the AnimationPlayer node that handles character animations
+    [Export]
     public AnimationPlayer AnimationPlayer;
 
-    // Reference to the AnimationPlayer node that handles effect animations
+    [Export]
     public AnimationPlayer EffectPlayer;
 
-    // Timer used for handling hurt effect duration
-    private Timer _HurtEffectTimer;
+    [Export]
+    private Timer HurtEffectTimer;
 
     public override void _Ready()
     {
         base._Ready();
-        // Find and store the reference to the AnimationPlayer node
-        AnimationPlayer = FindChild("AnimationPlayer") as AnimationPlayer;
 
-        // Get the reference to the EffectPlayer node
-        EffectPlayer = GetNodeOrNull<AnimationPlayer>("EffectPlayer");
-
-        // Find and store the reference to the HurtEffectTimer node
-        _HurtEffectTimer = FindChild("HurtEffectTimer") as Timer;
-
-        // Check if the AnimationPlayer node was found
         if (AnimationPlayer == null)
         {
-            Logger.Debug("AnimationPlayer == null");
+            AnimationPlayer = FindChild("AnimationPlayer") as AnimationPlayer;
+        }
+        if (EffectPlayer == null)
+        {
+            EffectPlayer = GetNodeOrNull<AnimationPlayer>("EffectPlayer");
+        }
+        if (HurtEffectTimer == null)
+        {
+            HurtEffectTimer = FindChild("HurtEffectTimer") as Timer;
         }
 
-        // Connect the Timeout signal of the HurtEffectTimer to the StopEffect method
-        if (_HurtEffectTimer != null)
+        if (AnimationPlayer == null)
         {
-            _HurtEffectTimer.Timeout += StopEffect;
+            Logger.Debug("AnimationController: AnimationPlayer == null");
+        }
+        if (HurtEffectTimer == null)
+        {
+            Logger.Warning("AnimationController: HurtEffectTimer not assigned.");
         }
         else
         {
-            Logger.Error("AnimationController: HurtEffectTimer not found.");
+            HurtEffectTimer.Timeout += StopEffect;
         }
     }
 
-    // Method to play a specified animation
     public void PlayAnimation(string animationName)
     {
-        Logger.Debug("Playing: " + animationName);
-        // Check if the AnimationPlayer has the specified animation
-        if (AnimationPlayer.HasAnimation(animationName))
+        Logger.Debug($"AnimationController: Playing: {animationName}");
+        if (AnimationPlayer != null && AnimationPlayer.HasAnimation(animationName))
         {
-            // Play the specified animation
-            AnimationPlayer?.Play(animationName);
+            AnimationPlayer.Play(animationName);
         }
     }
 
-    // Method to stop the currently playing animation
     public void StopAnimation()
     {
         AnimationPlayer?.Stop();
     }
 
-    // Method to check if any animation is currently playing
     public bool IsAnimationPlaying()
     {
         return AnimationPlayer != null && AnimationPlayer.IsPlaying();
     }
 
-    // Method to play a specified effect animation
     public void PlayEffect(string effectName)
     {
         EffectPlayer?.Play(effectName);
-        _HurtEffectTimer?.Start();
+        HurtEffectTimer?.Start();
     }
 
-    // Method to stop the effect animation
     private void StopEffect()
     {
         EffectPlayer?.Play("RESET");

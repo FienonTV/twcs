@@ -9,17 +9,24 @@ public partial class CharacterStateMachine : Node2D
     [Export]
     protected CharacterState _DefaultState;
 
+    [Export]
+    private AnimationController AnimationController;
+
+    [Export]
+    private AnimationPlayer AnimationPlayer;
+
     public Vector2 CurrentDirection;
-    public AnimationPlayer AnimationPlayer { get; private set; }
-    public AnimationController AnimationController { get; private set; }
+
+    public AnimationPlayer ActiveAnimationPlayer { get; private set; }
+    public AnimationController ActiveAnimationController { get; private set; }
 
     private Dictionary<string, CharacterState> _StateRegistry = new Dictionary<string, CharacterState>();
 
     public override void _Ready()
     {
         BuildStateRegistry();
-        AnimationController = ResolveAnimationController();
-        AnimationPlayer = AnimationController?.AnimationPlayer ?? ResolveAnimationPlayer();
+        ActiveAnimationController = ResolveAnimationController();
+        ActiveAnimationPlayer = ActiveAnimationController?.AnimationPlayer ?? ResolveAnimationPlayer();
         _CurrentState = _DefaultState;
         _PreviousState = _CurrentState;
         CallDeferred(nameof(EnterDefaultState));
@@ -43,6 +50,10 @@ public partial class CharacterStateMachine : Node2D
 
     protected virtual AnimationController ResolveAnimationController()
     {
+        if (AnimationController != null)
+        {
+            return AnimationController;
+        }
         if (Owner == null)
         {
             Logger.Error("CharacterStateMachine: Owner is null; cannot resolve AnimationController.");
@@ -53,6 +64,10 @@ public partial class CharacterStateMachine : Node2D
 
     protected virtual AnimationPlayer ResolveAnimationPlayer()
     {
+        if (AnimationPlayer != null)
+        {
+            return AnimationPlayer;
+        }
         if (Owner == null)
         {
             Logger.Error("CharacterStateMachine: Owner is null; cannot resolve AnimationPlayer.");

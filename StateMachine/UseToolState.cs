@@ -33,12 +33,12 @@ public partial class UseToolState : CharacterState
     {
         base.Enter();
 
-        if (StateMachine.AnimationPlayer != null)
+        if (StateMachine.ActiveAnimationPlayer != null)
         {
-            if (StateMachine.AnimationPlayer.HasAnimation("Idle"))
-                StateMachine.AnimationPlayer.Play("Idle");
+            if (StateMachine.ActiveAnimationPlayer.HasAnimation("Idle"))
+                StateMachine.ActiveAnimationPlayer.Play("Idle");
             else
-                StateMachine.AnimationPlayer.Play("idle_down");
+                StateMachine.ActiveAnimationPlayer.Play("idle_down");
         }
 
         HitBoxComponent?.ActivateHitBox();
@@ -53,7 +53,7 @@ public partial class UseToolState : CharacterState
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-        if (StateMachine.AnimationPlayer != null && StateMachine.AnimationPlayer.CurrentAnimation.StartsWith("useTool_") == false)
+        if (StateMachine.ActiveAnimationPlayer != null && StateMachine.ActiveAnimationPlayer.CurrentAnimation.StartsWith("useTool_") == false)
         {
             StartAnimation("useTool_");
         }

@@ -2,11 +2,19 @@ using Godot;
 
 public partial class HealthBarDisplay : Control
 {
-    private ProgressBar _Hurtbar;
-    private ProgressBar _Healthbar;
-    private Timer _VisibleTimer;
-    private Character OwnerCharacter;
-    private HealthComponent _HealthComponent;
+    [Export]
+    private ProgressBar Hurtbar;
+
+    [Export]
+    private ProgressBar Healthbar;
+
+    [Export]
+    private Timer VisibleTimer;
+
+    private Character _OwnerCharacter;
+
+    [Export]
+    private HealthComponent HealthComponent;
 
     public override void _Ready()
     {
@@ -18,34 +26,33 @@ public partial class HealthBarDisplay : Control
             return;
         }
 
-        _Hurtbar = GetNodeOrNull<ProgressBar>("Hurtbar");
-        _Healthbar = GetNodeOrNull<ProgressBar>("Healthbar");
-        _HealthComponent = OwnerCharacter.FindChild("HealthComponent", recursive: true) as HealthComponent;
-        _VisibleTimer = GetNodeOrNull<Timer>("VisibleTimer");
-
-        if (_Hurtbar == null || _Healthbar == null || _VisibleTimer == null)
+        if (Hurtbar == null || Healthbar == null || VisibleTimer == null)
         {
             Logger.Error("HealthBarDisplay: Required UI nodes missing.");
             return;
         }
 
-        if (_HealthComponent == null)
+        if (HealthComponent == null)
         {
-            Logger.Error($"HealthBarDisplay: No HealthComponent found on '{OwnerCharacter.Name}'.");
+            HealthComponent = _OwnerCharacter.FindChild("HealthComponent", recursive: true) as HealthComponent;
+        }
+        if (HealthComponent == null)
+        {
+            Logger.Error($"HealthBarDisplay: No HealthComponent found on '{_OwnerCharacter.Name}'.");
             return;
         }
 
-        _Healthbar.MaxValue = _HealthComponent.GetMaxHealth();
-        _Healthbar.Value = _HealthComponent.GetHealth();
+        Healthbar.MaxValue = HealthComponent.GetMaxHealth();
+        Healthbar.Value = HealthComponent.GetHealth();
 
-        _Hurtbar.MaxValue = _HealthComponent.GetMaxHealth();
-        _Hurtbar.Value = _HealthComponent.GetHealth();
+        Hurtbar.MaxValue = HealthComponent.GetMaxHealth();
+        Hurtbar.Value = HealthComponent.GetHealth();
 
-        _VisibleTimer.Timeout += HideHealthBar;
+        VisibleTimer.Timeout += HideHealthBar;
 
-        _HealthComponent.HealthChanged += OnHealthChanged;
-        _HealthComponent.MaxHealthChanged += OnMaxHealthChanged;
-        _HealthComponent.HealthEmpty += OnHealthEmpty;
+        HealthComponent.HealthChanged += OnHealthChanged;
+        HealthComponent.MaxHealthChanged += OnMaxHealthChanged;
+        HealthComponent.HealthEmpty += OnHealthEmpty;
     }
 
     private void OnHealthChanged(int health)
@@ -55,8 +62,8 @@ public partial class HealthBarDisplay : Control
 
     private void OnMaxHealthChanged(int maxHealth)
     {
-        _Healthbar.MaxValue = maxHealth;
-        _Hurtbar.MaxValue = maxHealth;
+        Healthbar.MaxValue = maxHealth;
+        Hurtbar.MaxValue = maxHealth;
     }
 
     private void OnHealthEmpty()
@@ -66,20 +73,20 @@ public partial class HealthBarDisplay : Control
 
     public void DisplayDamage(int health)
     {
-        if (_Healthbar == null || _Hurtbar == null || _VisibleTimer == null)
+        if (Healthbar == null || Hurtbar == null || VisibleTimer == null)
         {
             return;
         }
 
-        if (_Healthbar.Value != health)
+        if (Healthbar.Value != health)
         {
             this.Show();
-            _Healthbar.Value = health;
+            Healthbar.Value = health;
             Tween tween = CreateTween();
             tween.SetEase(Tween.EaseType.In).SetTrans(Tween.TransitionType.Cubic);
-            tween.TweenProperty(_Hurtbar, "value", _Healthbar.Value, 0.3);
+            tween.TweenProperty(Hurtbar, "value", Healthbar.Value, 0.3);
 
-            _VisibleTimer.Start();
+            VisibleTimer.Start();
         }
     }
 
@@ -95,7 +102,7 @@ public partial class HealthBarDisplay : Control
         {
             if (node is Character character)
             {
-                OwnerCharacter = character;
+                _OwnerCharacter = character;
                 Logger.Debug($"HealthBarDisplay: Character parent '{character.Name}' found.");
                 return true;
             }

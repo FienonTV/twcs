@@ -40,7 +40,7 @@ public partial class CharacterState : Node2D
             Mathf.Round(StateMachine.CurrentDirection.Y)
         );
 
-        AnimationPlayer player = StateMachine.AnimationPlayer;
+        AnimationPlayer player = StateMachine.ActiveAnimationPlayer;
         if (player == null)
         {
             return;
