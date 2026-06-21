@@ -9,22 +9,22 @@ public partial class Character : CharacterBody2D
     [Export] public NavigationAgent2D navigationAgent2D;
 
     /****************************** NODE VARIABLES ******************************/
-    protected CharacterStateMachine _StateMachine;
+    protected CharacterStateMachine StateMachine;
     protected AnimationController _AnimationController;
-    public HealthComponent _HealthComponent;
+    public HealthComponent HealthComponent;
     protected HurtBoxComponent _HurtBoxComponent;
 
     /****************************** OTHER VARIABLES ******************************/
-    public Vector2 _CurrentLookingDirection = Vector2.Down;
+    public Vector2 CurrentLookingDirection = Vector2.Down;
 
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
         base._Ready();
-        _HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
-        if (_HealthComponent == null)
+        HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
+        if (HealthComponent == null)
         {
-            GD.PrintErr("Character: Can't find HealthComponent");
+            Logger.Error("Character: Can't find HealthComponent");
         }
     }
 

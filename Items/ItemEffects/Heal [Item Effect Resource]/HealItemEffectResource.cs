@@ -11,14 +11,14 @@ public partial class HealItemEffectResource : ItemEffectResource
     {
         if (user == null)
         {
-            GD.PrintErr("HealItemEffectResource: No user provided.");
+            Logger.Error("HealItemEffectResource: No user provided.");
             return;
         }
 
         HealthComponent healthComponent = user.FindChild("HealthComponent", recursive: true) as HealthComponent;
         if (healthComponent == null)
         {
-            GD.PrintErr("HealItemEffectResource: User has no HealthComponent.");
+            Logger.Error("HealItemEffectResource: User has no HealthComponent.");
             return;
         }
 

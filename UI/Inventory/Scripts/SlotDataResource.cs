@@ -8,4 +8,5 @@ public partial class SlotDataResource : Resource
     [Export]
     public int _Quantity = 0;
 
+    public Character User { get; set; }
 }

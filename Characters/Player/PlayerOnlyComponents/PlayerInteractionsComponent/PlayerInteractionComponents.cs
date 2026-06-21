@@ -119,10 +119,10 @@ public partial class PlayerInteractionComponents : Node2D
         {
             return;
         }
-        if (_CharacterParent._CurrentLookingDirection != Vector2.Zero)
+        if (_CharacterParent.CurrentLookingDirection != Vector2.Zero)
         {
-            _InteractionAreaCollisionShape.Position = _CharacterParent._CurrentLookingDirection * 10;
-            _InteractionAreaCollisionShape.Rotation = _CharacterParent._CurrentLookingDirection.Angle();
+            _InteractionAreaCollisionShape.Position = _CharacterParent.CurrentLookingDirection * 10;
+            _InteractionAreaCollisionShape.Rotation = _CharacterParent.CurrentLookingDirection.Angle();
         }
     }
 }

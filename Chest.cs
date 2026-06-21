@@ -17,13 +17,13 @@ public partial class Chest : StaticBody2D, IInteractable
 
     public void Interact(Character user)
     {
-        GD.Print("Chest opened by " + user.Name);
+        Logger.Debug("Chest opened by " + user.Name);
         // TODO: open chest UI / give loot
     }
 
     // Legacy signature kept for backward compatibility with any direct callers.
     public void Interact()
     {
-        GD.Print("Chest opened.");
+        Logger.Debug("Chest opened.");
     }
 }

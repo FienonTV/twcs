@@ -19,29 +19,32 @@ public partial class Player : Character
 
     private HandItem _CurrentHandItem;
 
+    private GameManager _GameManager;
 
 
     /****************************** OTHER VARIABLES ******************************/
 
-    public InventoryDataResource _INVENTORY_DATA = ResourceLoader.Load<InventoryDataResource>("res://UI/Inventory/Player_Inventory.tres") as InventoryDataResource;
+    public InventoryDataResource _INVENTORY_DATA = ResourceLoader.Load<InventoryDataResource>(ResourcePaths.InventoryTres) as InventoryDataResource;
 
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
         base._Ready();
         AddToGroup("Player");
-        GameManager.RegisterPlayer(this);
 
-        _HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
-        if (_HealthComponent == null)
+        _GameManager = GetNodeOrNull<GameManager>("/root/GameManager");
+        _GameManager?.RegisterPlayer(this);
+
+        HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
+        if (HealthComponent == null)
         {
-            GD.PrintErr("Player: Can't find HealthComponent");
+            Logger.Error("Player: Can't find HealthComponent");
         }
 
         _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
         if (_InputHandler == null)
         {
-            GD.PrintErr("Player: InputHandler autoload not found.");
+            Logger.Error("Player: InputHandler autoload not found.");
         }
 
         _PlayerInteractionComponents = GetNodeOrNull<PlayerInteractionComponents>(
@@ -49,24 +52,24 @@ public partial class Player : Character
         );
         if (_PlayerInteractionComponents == null)
         {
-            GD.PrintErr("Player: Interaction Components not found.");
+            Logger.Error("Player: Interaction Components not found.");
         }
 
         _AttackComponent = GetNodeOrNull<AttackComponent>("AttackComponent");
         if (_AttackComponent == null)
         {
-            GD.PrintErr("Player: AttackComponent not found.");
+            Logger.Error("Player: AttackComponent not found.");
         }
 
         _PlayerMovementComponent = FindChild("MovementComponent") as PlayerMovementComponent;
         if (_PlayerMovementComponent == null)
         {
-            GD.PrintErr("Player: MovementComponent not found.");
+            Logger.Error("Player: MovementComponent not found.");
         }
 
         EquipHandItemFromToolNode();
 
-        _HealthComponent?.SetHealth(_HealthComponent.GetMaxHealth());
+        HealthComponent?.SetHealth(HealthComponent.GetMaxHealth());
 
         if (_PlayerMovementComponent != null && _InputHandler != null)
         {
@@ -79,7 +82,7 @@ public partial class Player : Character
         Node toolNode = GetNodeOrNull("Tool");
         if (toolNode == null)
         {
-            GD.PrintErr("Player: No Tool node found.");
+            Logger.Error("Player: No Tool node found.");
             return;
         }
 
@@ -92,7 +95,7 @@ public partial class Player : Character
             }
         }
 
-        GD.PrintErr("Player: No HandItem equipped under Tool.");
+        Logger.Error("Player: No HandItem equipped under Tool.");
     }
 
     /****************************** EVENTHANDLER ******************************/

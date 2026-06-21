@@ -41,7 +41,7 @@ public partial class AnimationController : Node
         // Check if the AnimationPlayer node was found
         if (_AnimationPlayer == null)
         {
-            GD.Print("AnimationPlayer == null");
+            Logger.Debug("AnimationPlayer == null");
         }
 
         // Connect the Timeout signal of the HurtEffectTimer to the StopEffect method
@@ -51,14 +51,14 @@ public partial class AnimationController : Node
         }
         else
         {
-            GD.PrintErr("AnimationController: HurtEffectTimer not found.");
+            Logger.Error("AnimationController: HurtEffectTimer not found.");
         }
     }
 
     // Method to play a specified animation
     public void PlayAnimation(string animationName)
     {
-        GD.Print("Playing: " + animationName);
+        Logger.Debug("Playing: " + animationName);
         // Check if the AnimationPlayer has the specified animation
         if (_AnimationPlayer.HasAnimation(animationName))
         {

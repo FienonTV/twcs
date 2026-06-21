@@ -11,7 +11,7 @@ public partial class UseToolState : CharacterState
         _HitBoxComponent = Owner.GetNodeOrNull<HitBoxComponent>("HitBoxComponent");
         if (_HitBoxComponent == null)
         {
-            GD.PrintErr("UseToolState: No HitBoxComponent found on " + Owner.Name);
+            Logger.Error("UseToolState: No HitBoxComponent found on " + Owner.Name);
         }
         else
         {
@@ -22,12 +22,12 @@ public partial class UseToolState : CharacterState
     {
         base.Enter();
 
-        if (_StateMachine._AnimationPlayer != null)
+        if (StateMachine.AnimationPlayer != null)
         {
-            if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
-                _StateMachine._AnimationPlayer.Play("Idle");
+            if (StateMachine.AnimationPlayer.HasAnimation("Idle"))
+                StateMachine.AnimationPlayer.Play("Idle");
             else
-                _StateMachine._AnimationPlayer.Play("idle_down");
+                StateMachine.AnimationPlayer.Play("idle_down");
         }
 
         _HitBoxComponent?.ActivateHitBox();
@@ -42,7 +42,7 @@ public partial class UseToolState : CharacterState
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-        if (_StateMachine._AnimationPlayer != null && _StateMachine._AnimationPlayer.CurrentAnimation.StartsWith("useTool_") == false)
+        if (StateMachine.AnimationPlayer != null && StateMachine.AnimationPlayer.CurrentAnimation.StartsWith("useTool_") == false)
         {
             StartAnimation("useTool_");
         }

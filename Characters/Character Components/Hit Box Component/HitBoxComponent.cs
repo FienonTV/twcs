@@ -59,7 +59,7 @@ public partial class HitBoxComponent : Area2D
     /****************************** OTHER METHODS ******************************/
     public void ActivateHitBox()
     {
-        GD.Print("HitBox activated and performing Hit");
+        Logger.Debug("HitBox activated and performing Hit");
         _IsActive = true;
         if (_CollisionShape2D != null)
         {
@@ -70,7 +70,7 @@ public partial class HitBoxComponent : Area2D
 
     public void DeactivateHitBox()
     {
-        GD.Print("Hitbox Deactivated");
+        Logger.Debug("Hitbox Deactivated");
         _IsActive = false;
         if (_CollisionShape2D != null)
         {
@@ -86,12 +86,12 @@ public partial class HitBoxComponent : Area2D
             if (node is HandItem handItem)
             {
                 _Tool = handItem;
-                GD.Print("HandItem parent found for HitBoxComponent");
+                Logger.Debug("HandItem parent found for HitBoxComponent");
                 return;
             }
             node = node.GetParent();
         }
-        GD.PrintErr("HitBoxComponent: No HandItem parent found.");
+        Logger.Error("HitBoxComponent: No HandItem parent found.");
     }
 
     public void FindCharacterParent()
@@ -102,12 +102,12 @@ public partial class HitBoxComponent : Area2D
             if (node is Character character)
             {
                 _CharacterParent = character;
-                GD.Print("Character parent found for HitBoxComponent");
+                Logger.Debug("Character parent found for HitBoxComponent");
                 return;
             }
             node = node.GetParent();
         }
-        GD.PrintErr("HitBoxComponent: No Character parent found.");
+        Logger.Error("HitBoxComponent: No Character parent found.");
     }
 
     private void ChangeCurrentHitboxPosition()
@@ -116,8 +116,8 @@ public partial class HitBoxComponent : Area2D
         {
             return;
         }
-        Position = _CharacterParent._CurrentLookingDirection * 20;
-        Rotation = _CharacterParent._CurrentLookingDirection.Angle();
+        Position = _CharacterParent.CurrentLookingDirection * 20;
+        Rotation = _CharacterParent.CurrentLookingDirection.Angle();
 
     }
 

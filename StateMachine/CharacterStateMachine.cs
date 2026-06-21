@@ -10,7 +10,7 @@ public partial class CharacterStateMachine : Node2D
     protected CharacterState _DefaultState;
 
     public Vector2 _CurrentDirection;
-    public AnimationPlayer _AnimationPlayer;
+    public AnimationPlayer AnimationPlayer { get; private set; }
 
     protected AnimationController _AnimationController;
 
@@ -19,7 +19,7 @@ public partial class CharacterStateMachine : Node2D
     public override void _Ready()
     {
         BuildStateRegistry();
-        _AnimationPlayer = ResolveAnimationPlayer();
+        AnimationPlayer = ResolveAnimationPlayer();
         _CurrentState = _DefaultState;
         _PreviousState = _CurrentState;
         CallDeferred(nameof(EnterDefaultState));
@@ -32,7 +32,7 @@ public partial class CharacterStateMachine : Node2D
         {
             if (child is CharacterState state)
             {
-                string key = child.Name;
+                string key = state.StateKey;
                 if (!_StateRegistry.ContainsKey(key))
                 {
                     _StateRegistry.Add(key, state);
@@ -54,7 +54,7 @@ public partial class CharacterStateMachine : Node2D
         }
         else
         {
-            GD.PrintErr("CharacterStateMachine: No default state assigned on " + Owner?.Name);
+            Logger.Error($"CharacterStateMachine: No default state assigned on '{Owner?.Name}'.");
         }
     }
 
@@ -62,7 +62,7 @@ public partial class CharacterStateMachine : Node2D
     {
         if (!_StateRegistry.TryGetValue(state, out CharacterState newState))
         {
-            GD.PrintErr("State '" + state + "' not found");
+            Logger.Error($"CharacterStateMachine: State '{state}' not found.");
             return;
         }
 

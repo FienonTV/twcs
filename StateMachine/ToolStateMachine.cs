@@ -10,7 +10,7 @@ public partial class ToolStateMachine : CharacterStateMachine
     public override void _Ready()
     {
         base._Ready();
-        GD.Print("This tool is part of " + Owner?.Name);
+        Logger.Debug("This tool is part of " + Owner?.Name);
         _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
         if (_InputHandler != null)
         {
@@ -18,12 +18,12 @@ public partial class ToolStateMachine : CharacterStateMachine
         }
         else
         {
-            GD.PrintErr("ToolStateMachine: InputHandler autoload not found.");
+            Logger.Error("ToolStateMachine: InputHandler autoload not found.");
         }
 
-        if (_AnimationPlayer != null)
+        if (AnimationPlayer != null)
         {
-            _AnimationPlayer.AnimationFinished += OnAnimationFinished;
+            AnimationPlayer.AnimationFinished += OnAnimationFinished;
         }
     }
 
@@ -41,7 +41,7 @@ public partial class ToolStateMachine : CharacterStateMachine
     {
         if (_CurrentState?.GetType() != typeof(UseToolState))
         {
-            GD.Print("UseTool");
+            Logger.Debug("UseTool");
             ChangeState("UseTool");
         }
     }
@@ -50,7 +50,7 @@ public partial class ToolStateMachine : CharacterStateMachine
     {
         if (_CurrentState?.GetType() == typeof(UseToolState))
         {
-            GD.Print("Idle");
+            Logger.Debug("Idle");
             ChangeState("Idle");
         }
     }
@@ -62,9 +62,9 @@ public partial class ToolStateMachine : CharacterStateMachine
             _InputHandler._OnUseInput -= OnUseInput;
         }
 
-        if (_AnimationPlayer != null)
+        if (AnimationPlayer != null)
         {
-            _AnimationPlayer.AnimationFinished -= OnAnimationFinished;
+            AnimationPlayer.AnimationFinished -= OnAnimationFinished;
         }
         base._ExitTree();
     }

@@ -29,7 +29,7 @@ public partial class NPCStateMachine : CharacterStateMachine
 
         if (_CurrentScenePlayer == null)
         {
-            GD.PrintErr("NPCStateMachine: Could not find a Player in the scene.");
+            Logger.Error("NPCStateMachine: Could not find a Player in the scene.");
         }
     }
 
@@ -44,7 +44,7 @@ public partial class NPCStateMachine : CharacterStateMachine
         {
             if (_CurrentState.GetType() != typeof(FollowState))
             {
-                GD.Print("Changing State to Follow");
+                Logger.Debug("Changing State to Follow");
                 ChangeState("Follow");
             }
         }
@@ -52,7 +52,7 @@ public partial class NPCStateMachine : CharacterStateMachine
         {
             if (_CurrentState.GetType() != typeof(WalkState))
             {
-                GD.Print("Changing State to Walk");
+                Logger.Debug("Changing State to Walk");
                 ChangeState("Walk");
             }
         }

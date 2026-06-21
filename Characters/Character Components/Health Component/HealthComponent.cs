@@ -40,7 +40,7 @@ public partial class HealthComponent : Node
         }
         else
         {
-            GD.PrintErr("HealthComponent: InvulnerableTimer not found.");
+            Logger.Error("HealthComponent: InvulnerableTimer not found.");
         }
     }
 
@@ -58,11 +58,11 @@ public partial class HealthComponent : Node
 
     public void ChangeCurrentHealth(int change)
     {
-        GD.Print("Changed Current Health");
+        Logger.Debug("Changed Current Health");
         _Health += change;
         ClampHealth();
         _HealthChanged?.Invoke(_Health);
-        GD.Print("Current Health is: " + _Health);
+        Logger.Debug("Current Health is: " + _Health);
     }
 
     //Increases or decreases Health depended on the passed Variable (+/-)
@@ -94,7 +94,7 @@ public partial class HealthComponent : Node
             _HealthEmpty?.Invoke();
         }
 
-        GD.Print("Current Health: " + _Health);
+        Logger.Debug("Current Health: " + _Health);
     }
 
     private void ClampHealth()
@@ -105,7 +105,7 @@ public partial class HealthComponent : Node
     //Makes the Parent Invulnerable for specific time
     public void StartTemporaryInvulnerability()
     {
-        GD.Print("Invulnerable");
+        Logger.Debug("Invulnerable");
         if (_InvulnerableTimer != null)
         {
             _InvulnerableTimer.WaitTime = _InvulnerableDuration;
@@ -117,7 +117,7 @@ public partial class HealthComponent : Node
     //Stops the Invulnerability
     public void StopTemporaryInvulnerability()
     {
-        GD.Print("Not Invulnerable anymore");
+        Logger.Debug("Not Invulnerable anymore");
         _Invulnerable = false;
     }
 

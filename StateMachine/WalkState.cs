@@ -13,22 +13,22 @@ public partial class WalkState : CharacterState
         _MovementComponent = Owner.FindChild("MovementComponent", recursive: true) as IMovementComponent;
         if (_MovementComponent == null)
         {
-            GD.PrintErr("WalkState: No IMovementComponent found on " + Owner.Name);
+            Logger.Error("WalkState: No IMovementComponent found on " + Owner.Name);
         }
     }
 
     public override void Enter()
     {
         base.Enter();
-        if (_StateMachine._AnimationPlayer != null)
+        if (StateMachine.AnimationPlayer != null)
         {
-            if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
+            if (StateMachine.AnimationPlayer.HasAnimation("Idle"))
             {
-                _StateMachine._AnimationPlayer.Play("Idle");
+                StateMachine.AnimationPlayer.Play("Idle");
             }
             else
             {
-                _StateMachine._AnimationPlayer.Play("idle_down");
+                StateMachine.AnimationPlayer.Play("idle_down");
             }
         }
     }
@@ -44,10 +44,10 @@ public partial class WalkState : CharacterState
 
         if (_MovementBehavior != null)
         {
-            _StateMachine._CurrentDirection = _MovementBehavior.GetNextDirection();
+            StateMachine._CurrentDirection = _MovementBehavior.GetNextDirection();
         }
 
-        _MovementComponent.HandleMovement(_StateMachine._CurrentDirection);
+        _MovementComponent.HandleMovement(StateMachine._CurrentDirection);
         StartAnimation("move_");
     }
 }

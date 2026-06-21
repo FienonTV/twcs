@@ -24,11 +24,11 @@ public partial class Item : CharacterBody2D
 
 		if (_CollectableComponent == null)
 		{
-			GD.PrintErr("Item: " + Name + "CollectableComponent == null");
+			Logger.Error("Item: " + Name + "CollectableComponent == null");
 		}
 		if (_Sprite2D == null)
 		{
-			GD.PrintErr("Item: " + Name + "_Sprite2D == null");
+			Logger.Error("Item: " + Name + "_Sprite2D == null");
 		}
 
 		if (Engine.IsEditorHint())
@@ -74,11 +74,11 @@ public partial class Item : CharacterBody2D
 
 		if (_ItemData == null)
 		{
-			GD.PrintErr("Item: " + Name + "_ItemData == null in UpdateTexture()");
+			Logger.Error("Item: " + Name + "_ItemData == null in UpdateTexture()");
 		}
 		if (_Sprite2D == null)
 		{
-			GD.PrintErr("Item: " + Name + " _Sprite2D == null in UpdateTexture()");
+			Logger.Error("Item: " + Name + " _Sprite2D == null in UpdateTexture()");
 		}
 	}
 

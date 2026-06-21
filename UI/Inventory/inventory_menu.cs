@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 public partial class inventory_menu : CanvasLayer
 {
     public bool _IsOpen = false;
@@ -11,67 +12,72 @@ public partial class inventory_menu : CanvasLayer
     [Signal]
     public delegate void InventoryHiddenEventHandler();
 
-    Label _ItemDescriptionLabel;
+    public Character CurrentUser { get; set; }
 
     public override void _Ready()
     {
-        _ItemDescriptionLabel = FindChild("ItemDescription", true) as Label;
-        hideInventory();
-
-        InputHandler inputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
+        Visible = false;
+        ProcessMode = ProcessModeEnum.Always;
+        var inputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
         if (inputHandler != null)
         {
-            inputHandler._ToggleInventoryRequested += OnToggleInventoryRequested;
+            inputHandler._ToggleInventoryRequested += ToggleInventory;
         }
         else
         {
-            GD.PrintErr("inventory_menu: InputHandler autoload not found.");
+            Logger.Error("inventory_menu: InputHandler autoload not found.");
         }
     }
 
-    private void OnToggleInventoryRequested()
+    public void ToggleInventory()
     {
         if (_IsOpen)
         {
-            hideInventory();
+            HideInventory();
         }
         else
         {
-            showInventory();
+            ShowInventory();
         }
     }
 
-    public void showInventory()
+    public void ShowInventory()
     {
-        GetTree().Paused = true;
-        Visible = true;
+        if (CurrentUser == null)
+        {
+            Logger.Warning("inventory_menu: No CurrentUser set; cannot open inventory.");
+            return;
+        }
+
         _IsOpen = true;
+        Visible = true;
+        GetTree().Paused = true;
         EmitSignal(SignalName.InventoryActive);
     }
 
-    public void hideInventory()
+    public void HideInventory()
     {
-        GetTree().Paused = false;
-        Visible = false;
         _IsOpen = false;
+        Visible = false;
+        GetTree().Paused = false;
         EmitSignal(SignalName.InventoryHidden);
     }
 
-    public void updateItemDescription(String newText)
+    public override void _Input(InputEvent @event)
     {
-        if (_ItemDescriptionLabel != null)
+        if (@event.IsActionPressed("inventory") && _IsOpen)
         {
-            _ItemDescriptionLabel.Text = newText;
+            HideInventory();
+            GetViewport().SetInputAsHandled();
         }
     }
 
-    public override void _ExitTree()
+    public void updateItemDescription(string description)
     {
-        InputHandler inputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
-        if (inputHandler != null)
+        Label itemDescriptionLabel = GetNodeOrNull<Label>("ItemDescription");
+        if (itemDescriptionLabel != null)
         {
-            inputHandler._ToggleInventoryRequested -= OnToggleInventoryRequested;
+            itemDescriptionLabel.Text = description;
         }
-        base._ExitTree();
     }
 }

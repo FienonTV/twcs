@@ -4,7 +4,7 @@ using System;
 
 public partial class InventoryUI : Control
 {
-    static readonly PackedScene INVENTORY_SLOT = ResourceLoader.Load<PackedScene>("res://UI/Inventory/inventory_slot.tscn");
+    static readonly PackedScene InventorySlot = ResourceLoader.Load<PackedScene>(ResourcePaths.InventorySlotScene);
 
     [Export]
     InventoryDataResource _Data;
@@ -14,14 +14,12 @@ public partial class InventoryUI : Control
     public override void _Ready()
     {
         _InventoryMenu = Owner as inventory_menu;
-        _InventoryMenu.InventoryActive += updateInventory;
-        _InventoryMenu.InventoryHidden += clearInventory;
-        clearInventory();
-
-
+        _InventoryMenu.InventoryActive += UpdateInventory;
+        _InventoryMenu.InventoryHidden += ClearInventory;
+        ClearInventory();
     }
 
-    public void clearInventory()
+    public void ClearInventory()
     {
         foreach (Node child in GetChildren())
         {
@@ -29,20 +27,19 @@ public partial class InventoryUI : Control
         }
     }
 
-    public void updateInventory()
+    public void UpdateInventory()
     {
+        Character currentUser = _InventoryMenu?.CurrentUser;
         foreach (SlotDataResource s in _Data._Slots)
         {
-            InventorySlotUI slot = INVENTORY_SLOT.Instantiate() as InventorySlotUI;
+            if (s != null)
+            {
+                s.User = currentUser;
+            }
+
+            InventorySlotUI slot = InventorySlot.Instantiate() as InventorySlotUI;
             AddChild(slot);
             slot.SlotData = s;
-
-
-
-
         }
-
-
     }
 }
-

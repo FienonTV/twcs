@@ -43,7 +43,7 @@ public partial class CharacterMovementComponent : Node, IMovementComponent
         _Character = GetParent<Character>(); // Get the parent character node
         if (_Character == null)
         {
-            GD.PrintErr("CharacterMovementComponent: Parent is not a Character.");
+            Logger.Error("CharacterMovementComponent: Parent is not a Character.");
             return;
         }
         _StartPosition = _Character.GlobalPosition; // Set the start position to the character's initial position
@@ -65,7 +65,7 @@ public partial class CharacterMovementComponent : Node, IMovementComponent
     {
         if (_Character == null)
         {
-            GD.PrintErr("CharacterMovementComponent: Parent is null.");
+            Logger.Error("CharacterMovementComponent: Parent is null.");
             return;
         }
 
@@ -75,7 +75,7 @@ public partial class CharacterMovementComponent : Node, IMovementComponent
             // Change direction to right if not already moving right
             if (_WalkingDirection != Vector2.Right)
             {
-                GD.Print("Direction Changed to Right");
+                Logger.Debug("Direction Changed to Right");
                 _WalkingDirection = Vector2.Right;
             }
         }
@@ -85,7 +85,7 @@ public partial class CharacterMovementComponent : Node, IMovementComponent
             // Change direction to left if not already moving left
             if (_WalkingDirection != Vector2.Left)
             {
-                GD.Print("Direction Changed to Left");
+                Logger.Debug("Direction Changed to Left");
                 _WalkingDirection = Vector2.Left;
             }
         }

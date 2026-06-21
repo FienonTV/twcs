@@ -19,7 +19,7 @@ public partial class InventorySlotUI : Button
     {
         _TextureRect = GetNodeOrNull<TextureRect>("TextureRect");
         _QuantityLabel = GetNodeOrNull<Label>("QuantityLabel");
-        _InventoryMenu = GetNodeOrNull<inventory_menu>("/root/InventoryMenu");
+        _InventoryMenu = GetNodeOrNull<inventory_menu>(ResourcePaths.InventoryMenuAutoload);
 
         if (_TextureRect != null)
         {
@@ -74,10 +74,10 @@ public partial class InventorySlotUI : Button
     {
         if (_SlotData != null && _SlotData._ItemData != null)
         {
-            Player user = GameManager.getPlayer();
+            Character user = _SlotData.User;
             if (user == null)
             {
-                GD.PrintErr("InventorySlotUI: No player found to use item.");
+                Logger.Error("InventorySlotUI: No user assigned to slot.");
                 return;
             }
 

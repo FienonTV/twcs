@@ -37,11 +37,11 @@ public partial class AttackComponent : Node
             {
                 _HitBoxTimer.Timeout += _HitBoxComponent.DeactivateHitBox;
             }
-            GD.Print("HitBoxComponent found");
+            Logger.Debug("HitBoxComponent found");
         }
         else
         {
-            GD.PrintErr("AttackComponent: No HitBoxComponent found.");
+            Logger.Error("AttackComponent: No HitBoxComponent found.");
         }
     }
 
@@ -55,7 +55,7 @@ public partial class AttackComponent : Node
     {
         _HitBoxComponent?.ActivateHitBox();
         Character ownerCharacter = GetParent<Character>();
-        Vector2 direction = ownerCharacter?._CurrentLookingDirection ?? Vector2.Down;
+        Vector2 direction = ownerCharacter?.CurrentLookingDirection ?? Vector2.Down;
         _StartAttackAnimation?.Invoke(direction);
         _HitBoxTimer?.Start();
     }

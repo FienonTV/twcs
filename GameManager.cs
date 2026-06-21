@@ -2,29 +2,40 @@ using Godot;
 
 public partial class GameManager : Node
 {
-    public static PackedScene _PlayerScene;
-    private static Player _Player;
+    public PackedScene PlayerScene { get; private set; }
+
+    private Player _player;
+
+    public Player Player
+    {
+        get
+        {
+            if (_player == null)
+            {
+                Logger.Error("GameManager: No Player registered.");
+            }
+            return _player;
+        }
+    }
+
+    public bool HasPlayer
+    {
+        get { return _player != null && IsInstanceValid(_player); }
+    }
 
     public override void _Ready()
     {
-        _PlayerScene = GD.Load<PackedScene>("res://Characters/Player/Player.tscn");
+        PlayerScene = GD.Load<PackedScene>(ResourcePaths.PlayerScene);
+        Logger.Debug("GameManager ready.");
     }
 
-    public static void RegisterPlayer(Player player)
+    public void RegisterPlayer(Player player)
     {
-        _Player = player;
+        _player = player;
         if (player != null && EventBus.Instance != null)
         {
             EventBus.Instance.EmitSignal(EventBus.SignalName.PlayerSpawned, player);
         }
-    }
-
-    public static Player getPlayer()
-    {
-        if (_Player == null)
-        {
-            GD.PrintErr("GameManager: No Player registered.");
-        }
-        return _Player;
+        Logger.Debug($"GameManager: Registered player '{player?.Name}'.");
     }
 }

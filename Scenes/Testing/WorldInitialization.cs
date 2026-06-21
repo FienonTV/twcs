@@ -9,26 +9,28 @@ public partial class WorldInitialization : Node2D
     public NodePath _PlayerParentPath = "../Y Sorted";
 
     private Player _PlayerInWorld;
+    private GameManager _GameManager;
 
     public override void _Ready()
     {
-        if (GameManager._PlayerScene == null)
+        _GameManager = GetNodeOrNull<GameManager>("/root/GameManager");
+        if (_GameManager == null || _GameManager.PlayerScene == null)
         {
-            GD.PrintErr("WorldInitialization: GameManager._PlayerScene is null. Cannot spawn player.");
+            Logger.Error("WorldInitialization: GameManager not found or PlayerScene not loaded.");
             return;
         }
 
-        _PlayerInWorld = GameManager._PlayerScene.Instantiate() as Player;
+        _PlayerInWorld = _GameManager.PlayerScene.Instantiate() as Player;
         if (_PlayerInWorld == null)
         {
-            GD.PrintErr("WorldInitialization: Failed to instantiate Player from GameManager._PlayerScene.");
+            Logger.Error("WorldInitialization: Failed to instantiate Player from GameManager.PlayerScene.");
             return;
         }
 
         Node playerParent = GetNodeOrNull(_PlayerParentPath);
         if (playerParent == null)
         {
-            GD.PrintErr("WorldInitialization: Player parent node not found at " + _PlayerParentPath + ". Spawning under self.");
+            Logger.Error($"WorldInitialization: Player parent node not found at {_PlayerParentPath}. Spawning under self.");
             AddChild(_PlayerInWorld);
         }
         else
@@ -39,8 +41,8 @@ public partial class WorldInitialization : Node2D
         _PlayerInWorld.GlobalPosition = _PlayerSpawnPosition;
         _PlayerInWorld.ZIndex = 1;
 
-        GameManager.RegisterPlayer(_PlayerInWorld);
+        _GameManager.RegisterPlayer(_PlayerInWorld);
 
-        GD.Print("WorldInitialization: Player spawned at " + _PlayerSpawnPosition);
+        Logger.Info($"WorldInitialization: Player spawned at {_PlayerSpawnPosition}.");
     }
 }

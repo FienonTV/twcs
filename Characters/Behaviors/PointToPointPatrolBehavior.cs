@@ -14,12 +14,12 @@ public partial class PointToPointPatrolBehavior : BaseMovementBehavior
     {
         if (_CharacterParent == null)
         {
-            GD.PrintErr("_CharacterParent is null");
+            Logger.Error("_CharacterParent is null");
             return Vector2.Zero;
         }
         if (_CharacterParent.navigationAgent2D == null)
         {
-            GD.PrintErr("_CharacterParent.navigationAgent2D is null");
+            Logger.Error("_CharacterParent.navigationAgent2D is null");
             return Vector2.Zero;
         }
 
@@ -27,7 +27,7 @@ public partial class PointToPointPatrolBehavior : BaseMovementBehavior
 
         if (_CharacterParent.navigationAgent2D.IsNavigationFinished())
         {
-            GD.Print("Calculating new Target Position");
+            Logger.Debug("Calculating new Target Position");
             _TargetPosition = NavigationServer2D.MapGetRandomPoint(_CharacterParent.navigationAgent2D.GetNavigationMap(), _CharacterParent.navigationAgent2D.NavigationLayers, false);
         }
 

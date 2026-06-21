@@ -22,7 +22,7 @@ public partial class Sword : HandItem
         _HitBoxComponent = FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
         if (_HitBoxComponent == null)
         {
-            GD.PrintErr("Sword: No HitBoxComponent found.");
+            Logger.Error("Sword: No HitBoxComponent found.");
         }
     }
 

@@ -22,11 +22,11 @@ public partial class Interaction_Area : Area2D, IInteractable
         switch (InteractType)
         {
             case "print_text":
-                GD.Print(InteractValue);
+                Logger.Debug(InteractValue);
                 break;
 
             default:
-                GD.Print("Default interaction on " + Name);
+                Logger.Debug("Default interaction on " + Name);
                 break;
         }
     }

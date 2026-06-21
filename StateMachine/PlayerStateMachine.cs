@@ -12,7 +12,7 @@ public partial class PlayerStateMachine : CharacterStateMachine
 
         if (_InputHandler == null)
         {
-            GD.PrintErr("PlayerStateMachine: InputHandler autoload not found.");
+            Logger.Error("PlayerStateMachine: InputHandler autoload not found.");
             return;
         }
 
