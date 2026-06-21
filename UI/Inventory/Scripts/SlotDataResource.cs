@@ -4,9 +4,9 @@ using Godot;
 public partial class SlotDataResource : Resource
 {
     [Export]
-    public ItemDataResource _ItemData;
+    public ItemDataResource ItemData;
     [Export]
-    public int _Quantity = 0;
+    public int Quantity = 0;
 
     public Character User { get; set; }
 }

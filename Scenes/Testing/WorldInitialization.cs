@@ -3,10 +3,10 @@ using Godot;
 public partial class WorldInitialization : Node2D
 {
     [Export]
-    public Vector2 _PlayerSpawnPosition = new Vector2(150, 150);
+    public Vector2 PlayerSpawnPosition = new Vector2(150, 150);
 
     [Export]
-    public NodePath _PlayerParentPath = "../Y Sorted";
+    public NodePath PlayerParentPath = "../Y Sorted";
 
     private Player _PlayerInWorld;
     private GameManager _GameManager;
@@ -27,10 +27,10 @@ public partial class WorldInitialization : Node2D
             return;
         }
 
-        Node playerParent = GetNodeOrNull(_PlayerParentPath);
+        Node playerParent = GetNodeOrNull(PlayerParentPath);
         if (playerParent == null)
         {
-            Logger.Error($"WorldInitialization: Player parent node not found at {_PlayerParentPath}. Spawning under self.");
+            Logger.Error($"WorldInitialization: Player parent node not found at {PlayerParentPath}. Spawning under self.");
             AddChild(_PlayerInWorld);
         }
         else
@@ -38,11 +38,11 @@ public partial class WorldInitialization : Node2D
             playerParent.AddChild(_PlayerInWorld);
         }
 
-        _PlayerInWorld.GlobalPosition = _PlayerSpawnPosition;
+        _PlayerInWorld.GlobalPosition = PlayerSpawnPosition;
         _PlayerInWorld.ZIndex = 1;
 
         _GameManager.RegisterPlayer(_PlayerInWorld);
 
-        Logger.Info($"WorldInitialization: Player spawned at {_PlayerSpawnPosition}.");
+        Logger.Info($"WorldInitialization: Player spawned at {PlayerSpawnPosition}.");
     }
 }

@@ -19,9 +19,9 @@ public partial class FollowPlayerBehavior : BaseMovementBehavior
             return Vector2.Zero;
         }
 
-        if (OwnerCharacter.navigationAgent2D == null)
+        if (OwnerCharacter.NavigationAgent2D == null)
         {
-            Logger.Error($"FollowPlayerBehavior: navigationAgent2D is null on '{OwnerCharacter.Name}'.");
+            Logger.Error($"FollowPlayerBehavior: NavigationAgent2D is null on '{OwnerCharacter.Name}'.");
             return Vector2.Zero;
         }
 
@@ -40,8 +40,8 @@ public partial class FollowPlayerBehavior : BaseMovementBehavior
             return Vector2.Zero;
         }
 
-        OwnerCharacter.navigationAgent2D.TargetPosition = _Target.GlobalPosition;
-        Vector2 nextPathPoint = OwnerCharacter.navigationAgent2D.GetNextPathPosition();
+        OwnerCharacter.NavigationAgent2D.TargetPosition = _Target.GlobalPosition;
+        Vector2 nextPathPoint = OwnerCharacter.NavigationAgent2D.GetNextPathPosition();
         Vector2 direction = OwnerCharacter.GlobalPosition.DirectionTo(nextPathPoint);
         return direction;
     }

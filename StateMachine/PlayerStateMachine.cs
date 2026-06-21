@@ -30,7 +30,7 @@ public partial class PlayerStateMachine : CharacterStateMachine
 
     private void OnInputHandlerMoveInput(Vector2 direction)
     {
-        _CurrentDirection = direction.Normalized();
+        CurrentDirection = direction.Normalized();
 
         if (_CurrentState?.GetType() != typeof(WalkState))
         {

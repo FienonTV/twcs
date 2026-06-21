@@ -3,7 +3,7 @@ using Godot;
 public partial class Chest : StaticBody2D, IInteractable
 {
     [Export]
-    public string _InteractionLabel = "Open Chest";
+    public string InteractionLabel = "Open Chest";
 
     public override void _Ready()
     {
@@ -12,7 +12,7 @@ public partial class Chest : StaticBody2D, IInteractable
 
     public string GetInteractionLabel()
     {
-        return _InteractionLabel;
+        return InteractionLabel;
     }
 
     public void Interact(Character user)

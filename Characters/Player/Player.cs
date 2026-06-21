@@ -8,7 +8,7 @@ public partial class Player : Character
 
     /****************************** EXPORT VARIABLES ******************************/
     [Export]
-    string _Name = "Player";
+    string DisplayName = "Player";
 
     /****************************** NODE VARIABLES ******************************/
     private PlayerMovementComponent _PlayerMovementComponent;
@@ -24,7 +24,7 @@ public partial class Player : Character
 
     /****************************** OTHER VARIABLES ******************************/
 
-    public InventoryDataResource _INVENTORY_DATA = ResourceLoader.Load<InventoryDataResource>(ResourcePaths.InventoryTres) as InventoryDataResource;
+    public InventoryDataResource InventoryData = ResourceLoader.Load<InventoryDataResource>(ResourcePaths.InventoryTres) as InventoryDataResource;
 
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()

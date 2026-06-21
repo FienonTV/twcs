@@ -33,7 +33,7 @@ public partial class ToolStateMachine : CharacterStateMachine
 
         if (_OwnerStateMachine != null)
         {
-            _CurrentDirection = _OwnerStateMachine._CurrentDirection;
+            CurrentDirection = _OwnerStateMachine.CurrentDirection;
         }
     }
 

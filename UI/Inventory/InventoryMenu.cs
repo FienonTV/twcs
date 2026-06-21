@@ -2,9 +2,9 @@ using Godot;
 using System;
 
 
-public partial class inventory_menu : CanvasLayer
+public partial class InventoryMenu : CanvasLayer
 {
-    public bool _IsOpen = false;
+    public bool IsOpen = false;
 
     [Signal]
     public delegate void InventoryActiveEventHandler();
@@ -25,13 +25,13 @@ public partial class inventory_menu : CanvasLayer
         }
         else
         {
-            Logger.Error("inventory_menu: InputHandler autoload not found.");
+            Logger.Error("InventoryMenu: InputHandler autoload not found.");
         }
     }
 
     public void ToggleInventory()
     {
-        if (_IsOpen)
+        if (IsOpen)
         {
             HideInventory();
         }
@@ -45,11 +45,11 @@ public partial class inventory_menu : CanvasLayer
     {
         if (CurrentUser == null)
         {
-            Logger.Warning("inventory_menu: No CurrentUser set; cannot open inventory.");
+            Logger.Warning("InventoryMenu: No CurrentUser set; cannot open inventory.");
             return;
         }
 
-        _IsOpen = true;
+        IsOpen = true;
         Visible = true;
         GetTree().Paused = true;
         EmitSignal(SignalName.InventoryActive);
@@ -57,7 +57,7 @@ public partial class inventory_menu : CanvasLayer
 
     public void HideInventory()
     {
-        _IsOpen = false;
+        IsOpen = false;
         Visible = false;
         GetTree().Paused = false;
         EmitSignal(SignalName.InventoryHidden);
@@ -65,7 +65,7 @@ public partial class inventory_menu : CanvasLayer
 
     public override void _Input(InputEvent @event)
     {
-        if (@event.IsActionPressed("inventory") && _IsOpen)
+        if (@event.IsActionPressed("inventory") && IsOpen)
         {
             HideInventory();
             GetViewport().SetInputAsHandled();

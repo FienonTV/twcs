@@ -4,7 +4,7 @@ using Godot;
 public partial class InventoryDataResource : Resource
 {
     [Export]
-    public SlotDataResource[] _Slots;
+    public SlotDataResource[] Slots;
 
     public bool AddItem(ItemDataResource item, int amount = 1)
     {
@@ -15,13 +15,13 @@ public partial class InventoryDataResource : Resource
 
         int remaining = amount;
 
-        foreach (SlotDataResource slot in _Slots)
+        foreach (SlotDataResource slot in Slots)
         {
-            if (slot != null && slot._ItemData == item && slot._Quantity < item._MaxStackSize)
+            if (slot != null && slot.ItemData == item && slot.Quantity < item.MaxStackSize)
             {
-                int space = item._MaxStackSize - slot._Quantity;
+                int space = item.MaxStackSize - slot.Quantity;
                 int transfer = Mathf.Min(space, remaining);
-                slot._Quantity += transfer;
+                slot.Quantity += transfer;
                 remaining -= transfer;
 
                 if (remaining <= 0)
@@ -31,14 +31,14 @@ public partial class InventoryDataResource : Resource
             }
         }
 
-        for (int i = 0; i < _Slots.Length; i++)
+        for (int i = 0; i < Slots.Length; i++)
         {
-            if (_Slots[i] == null)
+            if (Slots[i] == null)
             {
-                _Slots[i] = new SlotDataResource();
-                _Slots[i]._ItemData = item;
-                _Slots[i]._Quantity = Mathf.Min(remaining, item._MaxStackSize);
-                remaining -= _Slots[i]._Quantity;
+                Slots[i] = new SlotDataResource();
+                Slots[i].ItemData = item;
+                Slots[i].Quantity = Mathf.Min(remaining, item.MaxStackSize);
+                remaining -= Slots[i].Quantity;
 
                 if (remaining <= 0)
                 {

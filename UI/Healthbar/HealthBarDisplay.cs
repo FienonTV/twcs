@@ -43,9 +43,9 @@ public partial class HealthBarDisplay : Control
 
         _VisibleTimer.Timeout += HideHealthBar;
 
-        _HealthComponent._HealthChanged += OnHealthChanged;
-        _HealthComponent._MaxHealthChanged += OnMaxHealthChanged;
-        _HealthComponent._HealthEmpty += OnHealthEmpty;
+        _HealthComponent.HealthChanged += OnHealthChanged;
+        _HealthComponent.MaxHealthChanged += OnMaxHealthChanged;
+        _HealthComponent.HealthEmpty += OnHealthEmpty;
     }
 
     private void OnHealthChanged(int health)

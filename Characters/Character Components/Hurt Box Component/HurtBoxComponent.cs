@@ -19,11 +19,14 @@ public partial class HurtBoxComponent : Area2D
     /****************************** EXPORT VARIABLES ******************************/
 
     [Export]
-    Godot.Collections.Array<data_types.HandItemsTypes> _EffectiveItems = new Godot.Collections.Array<data_types.HandItemsTypes>();
+    Godot.Collections.Array<DataTypes.HandItemsTypes> EffectiveItems = new Godot.Collections.Array<DataTypes.HandItemsTypes>();
+
+    [Export]
+    private Timer CooldownTimer;
+
 
     /****************************** NODE VARIABLES ******************************/
 
-    private Timer _CoolDownTimer;
 
 
     /****************************** OTHER VARIABLES ******************************/
@@ -33,7 +36,10 @@ public partial class HurtBoxComponent : Area2D
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
-        _CoolDownTimer = FindChild("CooldownTimer") as Timer;
+        if (CooldownTimer == null)
+        {
+            CooldownTimer = FindChild("CooldownTimer") as Timer;
+        }
         AreaEntered += OnAreaEntered;
     }
 
@@ -48,9 +54,9 @@ public partial class HurtBoxComponent : Area2D
 
         if (hitBoxComponent.Owner is HandItem)
         {
-            if (_EffectiveItems.Contains(hitBoxComponent.Tool._HandItemCategory))
+            if (EffectiveItems.Contains(hitBoxComponent.Tool.HandItemCategory))
             {
-                OnDamageReceived?.Invoke(hitBoxComponent.Tool._Damage);
+                OnDamageReceived?.Invoke(hitBoxComponent.Tool.Damage);
             }
         }
     }

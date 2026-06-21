@@ -1,7 +1,7 @@
 using Godot;
 
 
-public partial class data_types : Node
+public partial class DataTypes : Node
 {
 	public enum HandItemsTypes
 	{

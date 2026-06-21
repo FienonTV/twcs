@@ -9,14 +9,14 @@ public partial class InventoryUI : Control
     [Export]
     InventoryDataResource _Data;
 
-    inventory_menu _InventoryMenu;
+    InventoryMenu _InventoryMenu;
 
     public override void _Ready()
     {
-        _InventoryMenu = Owner as inventory_menu;
+        _InventoryMenu = Owner as InventoryMenu;
         if (_InventoryMenu == null)
         {
-            Logger.Error("InventoryUI: Owner is not inventory_menu.");
+            Logger.Error("InventoryUI: Owner is not InventoryMenu.");
             return;
         }
 
@@ -42,7 +42,7 @@ public partial class InventoryUI : Control
 
     public void UpdateInventory()
     {
-        if (_InventorySlotScene == null || _Data?._Slots == null)
+        if (_InventorySlotScene == null || _Data?.Slots == null)
         {
             return;
         }
@@ -50,7 +50,7 @@ public partial class InventoryUI : Control
         ClearInventory();
 
         Character currentUser = _InventoryMenu?.CurrentUser;
-        foreach (SlotDataResource s in _Data._Slots)
+        foreach (SlotDataResource s in _Data.Slots)
         {
             if (s != null)
             {

@@ -19,7 +19,7 @@ public partial class SmallTree : Sprite2D
 
 		if (_HealthComponent != null)
 		{
-			_HealthComponent._HealthEmpty += ZeroHealthReached;
+			_HealthComponent.HealthEmpty += ZeroHealthReached;
 		}
 	}
 

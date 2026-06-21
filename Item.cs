@@ -6,7 +6,7 @@ public partial class Item : CharacterBody2D
 {
 
 	[Export]
-	public ItemDataResource _ItemData;
+	public ItemDataResource ItemData;
 	CollectableComponent _CollectableComponent;
 	Sprite2D _Sprite2D;
 
@@ -67,14 +67,14 @@ public partial class Item : CharacterBody2D
 
 	public void UpdateTexture()
 	{
-		if (_ItemData != null && _Sprite2D != null)
+		if (ItemData != null && _Sprite2D != null)
 		{
-			_Sprite2D.Texture = _ItemData._Texture;
+			_Sprite2D.Texture = ItemData.Texture;
 		}
 
-		if (_ItemData == null)
+		if (ItemData == null)
 		{
-			Logger.Error("Item: " + Name + "_ItemData == null in UpdateTexture()");
+			Logger.Error("Item: " + Name + "ItemData == null in UpdateTexture()");
 		}
 		if (_Sprite2D == null)
 		{

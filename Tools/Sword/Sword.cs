@@ -19,8 +19,8 @@ public partial class Sword : HandItem
     public override void _Ready()
     {
         base._Ready();
-        _HitBoxComponent = FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
-        if (_HitBoxComponent == null)
+        HitBoxComponent = FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
+        if (HitBoxComponent == null)
         {
             Logger.Error("Sword: No HitBoxComponent found.");
         }

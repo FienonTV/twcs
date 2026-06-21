@@ -5,7 +5,7 @@ public partial class PlayerMovementComponent : Node, IMovementComponent
 {
     private CharacterBody2D _CharacterBody;
 
-    [Export] private int _MovingSpeed = 100;
+    [Export] private int MovingSpeed = 100;
 
     public override void _Ready()
     {
@@ -26,7 +26,7 @@ public partial class PlayerMovementComponent : Node, IMovementComponent
 
         if (direction != Vector2.Zero)
         {
-            _CharacterBody.Velocity = direction * _MovingSpeed;
+            _CharacterBody.Velocity = direction * MovingSpeed;
         }
         else
         {

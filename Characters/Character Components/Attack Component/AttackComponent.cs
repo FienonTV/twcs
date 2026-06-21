@@ -16,10 +16,10 @@ public partial class AttackComponent : Node
 
     /****************************** EXPORT VARIABLES ******************************/
     [Export]
-    private HitBoxComponent _HitBoxComponent;
+    private HitBoxComponent HitBoxComponent;
 
-    /****************************** NODE VARIABLES ******************************/
-    private Timer _HitBoxTimer;
+    [Export]
+    private Timer HitBoxTimer;
 
     /****************************** OTHER VARIABLES ******************************/
 
@@ -27,23 +27,26 @@ public partial class AttackComponent : Node
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
-        _HitBoxTimer = FindChild("HitBoxTimer") as Timer;
-
-        if (_HitBoxComponent == null)
+        if (HitBoxComponent == null)
         {
             // Fallback: search in the tool node if the character exposes one.
             Node toolNode = GetParent()?.GetNodeOrNull("Tool");
             if (toolNode != null)
             {
-                _HitBoxComponent = toolNode.FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
+                HitBoxComponent = toolNode.FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
             }
         }
 
-        if (_HitBoxComponent != null)
+        if (HitBoxTimer == null)
         {
-            if (_HitBoxTimer != null)
+            HitBoxTimer = FindChild("HitBoxTimer") as Timer;
+        }
+
+        if (HitBoxComponent != null)
+        {
+            if (HitBoxTimer != null)
             {
-                _HitBoxTimer.Timeout += _HitBoxComponent.DeactivateHitBox;
+                HitBoxTimer.Timeout += HitBoxComponent.DeactivateHitBox;
             }
             Logger.Debug("AttackComponent: HitBoxComponent found.");
         }
@@ -68,10 +71,10 @@ public partial class AttackComponent : Node
             return;
         }
 
-        _HitBoxComponent?.ActivateHitBox(ownerCharacter);
+        HitBoxComponent?.ActivateHitBox(ownerCharacter);
         Vector2 direction = ownerCharacter.CurrentLookingDirection;
         StartAttackAnimation?.Invoke(direction);
-        _HitBoxTimer?.Start();
+        HitBoxTimer?.Start();
     }
 
     /****************************** OTHER METHODS ******************************/

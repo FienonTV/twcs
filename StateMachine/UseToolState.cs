@@ -2,22 +2,33 @@ using Godot;
 
 public partial class UseToolState : CharacterState
 {
-
-    private HitBoxComponent _HitBoxComponent;
+    [Export]
+    private HitBoxComponent HitBoxComponent;
 
     public override void _Ready()
     {
         base._Ready();
-        _HitBoxComponent = Owner.GetNodeOrNull<HitBoxComponent>("HitBoxComponent");
-        if (_HitBoxComponent == null)
+        if (Owner == null)
         {
-            Logger.Error("UseToolState: No HitBoxComponent found on " + Owner.Name);
+            Logger.Error("UseToolState: Owner is null. State will not function.");
+            return;
+        }
+
+        if (HitBoxComponent == null)
+        {
+            HitBoxComponent = Owner.GetNodeOrNull<HitBoxComponent>("HitBoxComponent");
+        }
+
+        if (HitBoxComponent == null)
+        {
+            Logger.Error($"UseToolState: No HitBoxComponent found on '{Owner.Name}'.");
         }
         else
         {
-            _HitBoxComponent.DeactivateHitBox();
+            HitBoxComponent.DeactivateHitBox();
         }
     }
+
     public override void Enter()
     {
         base.Enter();
@@ -30,13 +41,13 @@ public partial class UseToolState : CharacterState
                 StateMachine.AnimationPlayer.Play("idle_down");
         }
 
-        _HitBoxComponent?.ActivateHitBox();
+        HitBoxComponent?.ActivateHitBox();
     }
 
     public override void Exit()
     {
         base.Exit();
-        _HitBoxComponent?.DeactivateHitBox();
+        HitBoxComponent?.DeactivateHitBox();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -47,6 +58,4 @@ public partial class UseToolState : CharacterState
             StartAnimation("useTool_");
         }
     }
-
-
 }

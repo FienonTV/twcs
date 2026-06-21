@@ -17,25 +17,25 @@ public partial class PointToPointPatrolBehavior : BaseMovementBehavior
             Logger.Error("OwnerCharacter is null");
             return Vector2.Zero;
         }
-        if (OwnerCharacter.navigationAgent2D == null)
+        if (OwnerCharacter.NavigationAgent2D == null)
         {
-            Logger.Error("OwnerCharacter.navigationAgent2D is null");
+            Logger.Error("OwnerCharacter.NavigationAgent2D is null");
             return Vector2.Zero;
         }
 
         // Check if the Character is near enough to the target position
 
-        if (OwnerCharacter.navigationAgent2D.IsNavigationFinished())
+        if (OwnerCharacter.NavigationAgent2D.IsNavigationFinished())
         {
             Logger.Debug("Calculating new Target Position");
-            _TargetPosition = NavigationServer2D.MapGetRandomPoint(OwnerCharacter.navigationAgent2D.GetNavigationMap(), OwnerCharacter.navigationAgent2D.NavigationLayers, false);
+            _TargetPosition = NavigationServer2D.MapGetRandomPoint(OwnerCharacter.NavigationAgent2D.GetNavigationMap(), OwnerCharacter.NavigationAgent2D.NavigationLayers, false);
         }
 
         // Set this target position as target for the NavigationAgent2D
-        OwnerCharacter.navigationAgent2D.TargetPosition = _TargetPosition;
+        OwnerCharacter.NavigationAgent2D.TargetPosition = _TargetPosition;
 
         // Get the next path point to the target from the NavigationAgent2D
-        Vector2 nextPathPoint = OwnerCharacter.navigationAgent2D.GetNextPathPosition();
+        Vector2 nextPathPoint = OwnerCharacter.NavigationAgent2D.GetNextPathPosition();
 
         // Calculate the direction Vector2 to the next path point
         Vector2 direction = OwnerCharacter.GlobalPosition.DirectionTo(nextPathPoint);
