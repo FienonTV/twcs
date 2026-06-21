@@ -40,6 +40,8 @@
 
 | 18 | `Tools/Sword/Sword.cs` | Verwaiste Referenz auf alte `StateMachine`-Klasse entfernt (`private StateMachine _StateMachine;` und auskommentierter `GetNode`). | Build-Fehler CS0246 nach Löschung des alten Systems; `Sword` nutzt jetzt das ToolStateMachine-System im Szenenbaum. |
 
+| 19 | `Items/log.tres` | `_ItemEffects` verweist jetzt auf die `.tres`-Resource (`HealItemEffect.tres`) statt auf das `.cs`-Skript (`HealItemEffectResource.cs`). | Behebt Laufzeitfehler `InvalidCastException: unable to cast object of type 'Godot.CSharpScript' to 'ItemEffectResource'`. |
+
 ## Build-Ergebnis
 
 - **.NET SDK**: 8.0.422 installiert

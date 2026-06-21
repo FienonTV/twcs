@@ -44,6 +44,14 @@ Dieses Dokument fasst alle Änderungen zusammen, die im Rahmen der State-Machine
 7. **Weitere interne Verweise aktualisiert**
    - `Characters/Character.cs`: Kommentierter Typ `newStateMachine` → `CharacterStateMachine`.
 
+8. **Laufzeitfehler `InvalidCastException` in Item-Effekten behoben**
+   - `Items/log.tres`: `_ItemEffects` verwies auf das C#-Skript (`HealItemEffectResource.cs`) statt auf die Resource-Instanz (`HealItemEffect.tres`).
+   - Das führte dazu, dass Godot versucht hat, ein `CSharpScript`-Objekt in `ItemEffectResource` zu casten.
+   - Behoben durch Verwendung der korrekten `.tres`-Resource.
+
+9. **Build weiterhin erfolgreich**
+   - `dotnet build` liefert weiterhin `0 Fehler, 6 Warnungen`.
+
 ## Betroffene Dateien
 
 ### Erstellt / umbenannt
@@ -64,6 +72,8 @@ Dieses Dokument fasst alle Änderungen zusammen, die im Rahmen der State-Machine
 - `Tools/Axe/axe.tscn`
 - `TestStateMachine.tscn`
 - `Characters/Enemies/Minotaur/Minotaur.tscn`
+- `Tools/Sword/Sword.cs`
+- `Items/log.tres`
 - `CHANGELOG_STATE_MACHINE.md`
 - `SUMMARY_STATE_MACHINE.md`
 
