@@ -46,13 +46,15 @@ public partial class HealthComponent : Node
     public void ChangeMaxHealth(int change)
     {
         _MaxHealth += change;
-        //_MaxHealthChanged.Invoke(change);
+        _MaxHealthChanged?.Invoke(_MaxHealth);
     }
 
     public void ChangeCurrentHealth(int change)
     {
         GD.Print("Changed Current Health");
         _Health += change;
+        ClampHealth();
+        _HealthChanged?.Invoke(_Health);
         GD.Print("Current Health is: " + _Health);
     }
 
@@ -76,13 +78,21 @@ public partial class HealthComponent : Node
             _Health += change;
         }
 
+        ClampHealth();
+        _HealthChanged?.Invoke(_Health);
+
         //Currently Setting the Health to maxHealt if Health is 0 (Dead)
         if (_Health <= 0)
         {
-            _HealthEmpty.Invoke();
+            _HealthEmpty?.Invoke();
         }
 
         GD.Print("Current Health: " + _Health);
+    }
+
+    private void ClampHealth()
+    {
+        _Health = Mathf.Clamp(_Health, 0, _MaxHealth);
     }
 
     //Makes the Parent Invulnerable for specific time

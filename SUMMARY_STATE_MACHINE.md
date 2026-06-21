@@ -49,8 +49,11 @@ Dieses Dokument fasst alle Änderungen zusammen, die im Rahmen der State-Machine
    - Das führte dazu, dass Godot versucht hat, ein `CSharpScript`-Objekt in `ItemEffectResource` zu casten.
    - Behoben durch Verwendung der korrekten `.tres`-Resource.
 
-9. **Build weiterhin erfolgreich**
-   - `dotnet build` liefert weiterhin `0 Fehler, 6 Warnungen`.
+10. **Alle Build-Warnungen behoben**
+    - `World/TileMap.cs` entfernt (veralteter `TileMap`-Wrapper).
+    - `HealthComponent`-Events korrekt implementiert.
+    - `HealthBarDisplay` reagiert jetzt auf Events statt in `_Process` zu pollen.
+    - `dotnet build` liefert nun `0 Fehler, 0 Warnungen`.
 
 ## Betroffene Dateien
 
@@ -74,18 +77,18 @@ Dieses Dokument fasst alle Änderungen zusammen, die im Rahmen der State-Machine
 - `Characters/Enemies/Minotaur/Minotaur.tscn`
 - `Tools/Sword/Sword.cs`
 - `Items/log.tres`
+- `Characters/Character Components/Health Component/HealthComponent.cs`
+- `UI/Healthbar/HealthBarDisplay.cs`
 - `CHANGELOG_STATE_MACHINE.md`
 - `SUMMARY_STATE_MACHINE.md`
 
 ### Gelöscht
 - `State Machine/`-Ordner (altes, veraltetes State-Machine-System) vollständig entfernt.
+- `World/TileMap.cs` (veralteter, leerer `TileMap`-Wrapper) entfernt.
 
 ## Bekannte Einschränkungen / offene Punkte
 
-- **Build-Validierung**: `dotnet` 8.0.422 wurde installiert; Build erfolgreich (`0 Fehler, 6 Warnungen`).
-- **Verbleibende Warnungen**:
-  - `World/TileMap.cs`: `TileMap` ist veraltet, sollte durch `TileMapLayer` ersetzt werden.
-  - `HealthComponent.cs`: Events `_MaxHealthChanged` und `_HealthChanged` werden nie verwendet.
+- **Build-Validierung**: `dotnet` 8.0.422 wurde installiert; Build erfolgreich (`0 Fehler, 0 Warnungen`).
 - **FollowState**: Derzeit nur leere Vererbung von `WalkState`; die eigentliche Follow-Logik liegt im `FollowPlayerBehavior`, das als `_MovementBehavior` im `Follow`-State-Node eingebunden ist.
 - **ToolStateMachine**: Greift weiterhin über `Owner.Owner.GetNode<CharacterStateMachine>("StateMachine")` auf die Owner-State-Machine zu; dies ist ein potenzieller Null-Ref-Punkt, falls der Owner keinen `StateMachine`-Node hat. Für diesen Fix wurde nur der Typ angepasst.
 

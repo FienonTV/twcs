@@ -42,11 +42,14 @@
 
 | 19 | `Items/log.tres` | `_ItemEffects` verweist jetzt auf die `.tres`-Resource (`HealItemEffect.tres`) statt auf das `.cs`-Skript (`HealItemEffectResource.cs`). | Behebt Laufzeitfehler `InvalidCastException: unable to cast object of type 'Godot.CSharpScript' to 'ItemEffectResource'`. |
 
+| 20 | `World/TileMap.cs` | Veraltete, leere Wrapper-Klasse `TileMap : Godot.TileMap` entfernt. | `TileMap` ist in Godot 4.3 deprecated; `World.cs` arbeitet bereits mit `TileMapLayer[]`. Beseitigt 4x `CS0618`-Warnung. |
+
+| 21 | `Characters/Character Components/Health Component/HealthComponent.cs` | `_MaxHealthChanged` und `_HealthChanged` werden jetzt korrekt gefeuert; Health-Werte werden via `ClampHealth()` auf `[0, _MaxHealth]` begrenzt; `_HealthEmpty` sicher mit `?.Invoke()` aufgerufen. | Events waren deklariert aber ungenutzt (CS0067); Todesevent und Health-Änderungen werden jetzt zuverlässig signalisiert. |
+
+| 22 | `UI/Healthbar/HealthBarDisplay.cs` | Lauscht jetzt auf `_HealthChanged`, `_MaxHealthChanged` und `_HealthEmpty` statt in `_Process` dauernd Health abzufragen; `DisplayDamage` nimmt Health-Wert als Parameter. | Entkopplung via Events, effizienteres Update, entfernt verbleibende CS0067-Warnungen. |
+
 ## Build-Ergebnis
 
 - **.NET SDK**: 8.0.422 installiert
-- **Build**: erfolgreich (`0 Fehler, 6 Warnungen`)
-- **Verbleibende Warnungen**:
-  - `World/TileMap.cs`: `TileMap` ist veraltet, sollte durch `TileMapLayer` ersetzt werden (4x)
-  - `HealthComponent.cs`: Events `_MaxHealthChanged` und `_HealthChanged` werden nie verwendet (2x)
+- **Build**: erfolgreich (`0 Fehler, 0 Warnungen`)
 

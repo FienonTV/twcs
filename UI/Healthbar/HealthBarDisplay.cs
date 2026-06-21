@@ -38,20 +38,36 @@ public partial class HealthBarDisplay : Control
         _Hurtbar.Value = _HealthComponent.GetHealth();
 
         _VisibleTimer.Timeout += HideHealthBar;
+
+        _HealthComponent._HealthChanged += OnHealthChanged;
+        _HealthComponent._MaxHealthChanged += OnMaxHealthChanged;
+        _HealthComponent._HealthEmpty += OnHealthEmpty;
     }
 
-    public override void _Process(double delta)
+    /****************************** EVENTHANDLER ******************************/
+    private void OnHealthChanged(int health)
     {
-        DisplayDamage();
+        DisplayDamage(health);
+    }
+
+    private void OnMaxHealthChanged(int maxHealth)
+    {
+        _Healthbar.MaxValue = maxHealth;
+        _Hurtbar.MaxValue = maxHealth;
+    }
+
+    private void OnHealthEmpty()
+    {
+        HideHealthBar();
     }
 
     /****************************** OTHER METHODS ******************************/
-    public void DisplayDamage()
+    public void DisplayDamage(int health)
     {
-        if (_Healthbar.Value != _HealthComponent.GetHealth())
+        if (_Healthbar.Value != health)
         {
             this.Show();
-            _Healthbar.Value = _HealthComponent.GetHealth();
+            _Healthbar.Value = health;
             Tween tween = CreateTween();
             tween.SetEase(Tween.EaseType.In).SetTrans(Tween.TransitionType.Cubic);
             tween.TweenProperty(_Hurtbar, "value", _Healthbar.Value, 0.3);
