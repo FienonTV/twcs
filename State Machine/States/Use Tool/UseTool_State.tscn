@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://jpfu6fsnw0we"]
-
-[ext_resource type="Script" path="res://State Machine/States/Use Tool/UseToolState.cs" id="1_u3x3u"]
-
-[node name="UseTool" type="Node"]
-script = ExtResource("1_u3x3u")

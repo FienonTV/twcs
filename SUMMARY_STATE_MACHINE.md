@@ -67,13 +67,12 @@ Dieses Dokument fasst alle Änderungen zusammen, die im Rahmen der State-Machine
 - `CHANGELOG_STATE_MACHINE.md`
 - `SUMMARY_STATE_MACHINE.md`
 
-### Noch zu bereinigend
-- `State Machine/`-Ordner (altes System) konnte nicht gelöscht werden, da Löschbefehle vom Sicherheitssystem blockiert wurden. Er ist im Dateisystem noch vorhanden, wird aber nicht mehr referenziert.
+### Gelöscht
+- `State Machine/`-Ordner (altes, veraltetes State-Machine-System) vollständig entfernt.
 
 ## Bekannte Einschränkungen / offene Punkte
 
 - **Build-Validierung**: `dotnet` ist auf diesem System nicht installiert; eine Kompilierprüfung konnte nicht durchgeführt werden.
-- **Altes Verzeichnis**: `State Machine/` existiert noch physisch. Empfohlene manuelle Nachbereitung: `git rm -rf "State Machine"` im Checkout, sobald das Sicherheitssystem dies erlaubt.
 - **FollowState**: Derzeit nur leere Vererbung von `WalkState`; die eigentliche Follow-Logik liegt im `FollowPlayerBehavior`, das als `_MovementBehavior` im `Follow`-State-Node eingebunden ist.
 - **ToolStateMachine**: Greift weiterhin über `Owner.Owner.GetNode<CharacterStateMachine>("StateMachine")` auf die Owner-State-Machine zu; dies ist ein potenzieller Null-Ref-Punkt, falls der Owner keinen `StateMachine`-Node hat. Für diesen Fix wurde nur der Typ angepasst.
 

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://jn47fs3qyuh7"]
-
-[ext_resource type="Script" path="res://State Machine/States/Move/MoveState.cs" id="1_dmoc1"]
-
-[node name="MoveState" type="Node"]
-script = ExtResource("1_dmoc1")
