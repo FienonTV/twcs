@@ -72,7 +72,10 @@ Dieses Dokument fasst alle Änderungen zusammen, die im Rahmen der State-Machine
 
 ## Bekannte Einschränkungen / offene Punkte
 
-- **Build-Validierung**: `dotnet` ist auf diesem System nicht installiert; eine Kompilierprüfung konnte nicht durchgeführt werden.
+- **Build-Validierung**: `dotnet` 8.0.422 wurde installiert; Build erfolgreich (`0 Fehler, 6 Warnungen`).
+- **Verbleibende Warnungen**:
+  - `World/TileMap.cs`: `TileMap` ist veraltet, sollte durch `TileMapLayer` ersetzt werden.
+  - `HealthComponent.cs`: Events `_MaxHealthChanged` und `_HealthChanged` werden nie verwendet.
 - **FollowState**: Derzeit nur leere Vererbung von `WalkState`; die eigentliche Follow-Logik liegt im `FollowPlayerBehavior`, das als `_MovementBehavior` im `Follow`-State-Node eingebunden ist.
 - **ToolStateMachine**: Greift weiterhin über `Owner.Owner.GetNode<CharacterStateMachine>("StateMachine")` auf die Owner-State-Machine zu; dies ist ein potenzieller Null-Ref-Punkt, falls der Owner keinen `StateMachine`-Node hat. Für diesen Fix wurde nur der Typ angepasst.
 

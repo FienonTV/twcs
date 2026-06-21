@@ -38,8 +38,13 @@
 
 | 17 | Ordner `State Machine/` | Altes State-Machine-System vollständig aus Git und Dateisystem entfernt (`git rm -rf "State Machine"`). | Keine parallelen Systeme mehr; Build-Blocker und toter Code beseitigt. |
 
-## Offene Punkte / Hinweise
+| 18 | `Tools/Sword/Sword.cs` | Verwaiste Referenz auf alte `StateMachine`-Klasse entfernt (`private StateMachine _StateMachine;` und auskommentierter `GetNode`). | Build-Fehler CS0246 nach Löschung des alten Systems; `Sword` nutzt jetzt das ToolStateMachine-System im Szenenbaum. |
 
-- Build-Validierung konnte nicht durchgeführt werden, da `dotnet` nicht installiert ist.
-- Die `FollowState`-Klasse ist derzeit leer (nur Vererbung von `WalkState`); Funktionalität liegt im `FollowPlayerBehavior` des NPCs.
+## Build-Ergebnis
+
+- **.NET SDK**: 8.0.422 installiert
+- **Build**: erfolgreich (`0 Fehler, 6 Warnungen`)
+- **Verbleibende Warnungen**:
+  - `World/TileMap.cs`: `TileMap` ist veraltet, sollte durch `TileMapLayer` ersetzt werden (4x)
+  - `HealthComponent.cs`: Events `_MaxHealthChanged` und `_HealthChanged` werden nie verwendet (2x)
 

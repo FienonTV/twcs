@@ -12,7 +12,6 @@ public partial class Sword : HandItem
 
     /****************************** NODE VARIABLES ******************************/
 
-    private StateMachine _StateMachine;
     private AnimationController _AnimationController;
 
     /****************************** OTHER VARIABLES ******************************/
@@ -22,8 +21,6 @@ public partial class Sword : HandItem
     public override void _Ready()
     {
         _HitBoxComponent = FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
-        // _StateMachine = GetNode<StateMachine>("StateMachine");
-
     }
 
     /****************************** EVENTHANDLER ******************************/
