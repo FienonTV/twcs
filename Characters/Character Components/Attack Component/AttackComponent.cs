@@ -9,16 +9,16 @@ using Godot;
 /// It controls when the HitboxComponent of the tool, which the character must carry in order to be able to perform attacks, is active and sends a signal to start the animation of the tool.
 /// </summary>
 
-
 public partial class AttackComponent : Node
 {
     /****************************** EVENTS & SIGNALS ******************************/
-    public event Action<Vector2> _StartAttackAnimation;
+    public event Action<Vector2> StartAttackAnimation;
 
     /****************************** EXPORT VARIABLES ******************************/
+    [Export]
+    private HitBoxComponent _HitBoxComponent;
 
     /****************************** NODE VARIABLES ******************************/
-    private HitBoxComponent _HitBoxComponent;
     private Timer _HitBoxTimer;
 
     /****************************** OTHER VARIABLES ******************************/
@@ -28,8 +28,16 @@ public partial class AttackComponent : Node
     public override void _Ready()
     {
         _HitBoxTimer = FindChild("HitBoxTimer") as Timer;
-        _HitBoxComponent =
-            GetParent().FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
+
+        if (_HitBoxComponent == null)
+        {
+            // Fallback: search in the tool node if the character exposes one.
+            Node toolNode = GetParent()?.GetNodeOrNull("Tool");
+            if (toolNode != null)
+            {
+                _HitBoxComponent = toolNode.FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
+            }
+        }
 
         if (_HitBoxComponent != null)
         {
@@ -37,7 +45,7 @@ public partial class AttackComponent : Node
             {
                 _HitBoxTimer.Timeout += _HitBoxComponent.DeactivateHitBox;
             }
-            Logger.Debug("HitBoxComponent found");
+            Logger.Debug("AttackComponent: HitBoxComponent found.");
         }
         else
         {
@@ -53,10 +61,16 @@ public partial class AttackComponent : Node
     /****************************** EVENTHANDLER ******************************/
     public void OnAttackRequest()
     {
-        _HitBoxComponent?.ActivateHitBox();
         Character ownerCharacter = GetParent<Character>();
-        Vector2 direction = ownerCharacter?.CurrentLookingDirection ?? Vector2.Down;
-        _StartAttackAnimation?.Invoke(direction);
+        if (ownerCharacter == null)
+        {
+            Logger.Error("AttackComponent: Owner is not a Character.");
+            return;
+        }
+
+        _HitBoxComponent?.ActivateHitBox(ownerCharacter);
+        Vector2 direction = ownerCharacter.CurrentLookingDirection;
+        StartAttackAnimation?.Invoke(direction);
         _HitBoxTimer?.Start();
     }
 

@@ -3,7 +3,7 @@ using Godot;
 public abstract partial class BaseMovementBehavior : Node, IMovementBehavior
 {
     [Export]
-    protected Character _CharacterParent; //The Character that this Behavior is attached to
+    protected Character OwnerCharacter;
 
     protected Player _CurrentScenePlayer;
 
@@ -12,10 +12,18 @@ public abstract partial class BaseMovementBehavior : Node, IMovementBehavior
 
     public override void _Ready()
     {
-        _CurrentScenePlayer = GetTree().GetNodesInGroup("Player")[0] as Player;
-        if (_CurrentScenePlayer != null)
+        var players = GetTree()?.GetNodesInGroup("Player");
+        if (players != null && players.Count > 0)
         {
-            GD.Print("Player Found");
+            _CurrentScenePlayer = players[0] as Player;
+            if (_CurrentScenePlayer != null)
+            {
+                Logger.Debug("BaseMovementBehavior: Player found.");
+            }
+        }
+        else
+        {
+            Logger.Warning("BaseMovementBehavior: No player in group 'Player'. This is normal in editor or test scenes without a spawned player.");
         }
     }
 
@@ -23,8 +31,7 @@ public abstract partial class BaseMovementBehavior : Node, IMovementBehavior
 
     public void CallOnDirectionGot(Vector2 direction)
     {
-        GD.Print("I wanna call on Direction Got");
-        // _OnDirectionGot.Invoke(direction);
+        Logger.Debug("BaseMovementBehavior: Emitting OnDirectionGot.");
         EmitSignal(SignalName.OnDirectionGot, direction);
     }
 }

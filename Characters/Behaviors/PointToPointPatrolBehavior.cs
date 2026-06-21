@@ -12,43 +12,43 @@ public partial class PointToPointPatrolBehavior : BaseMovementBehavior
     **/
     public override Vector2 GetNextDirection()
     {
-        if (_CharacterParent == null)
+        if (OwnerCharacter == null)
         {
-            Logger.Error("_CharacterParent is null");
+            Logger.Error("OwnerCharacter is null");
             return Vector2.Zero;
         }
-        if (_CharacterParent.navigationAgent2D == null)
+        if (OwnerCharacter.navigationAgent2D == null)
         {
-            Logger.Error("_CharacterParent.navigationAgent2D is null");
+            Logger.Error("OwnerCharacter.navigationAgent2D is null");
             return Vector2.Zero;
         }
 
         // Check if the Character is near enough to the target position
 
-        if (_CharacterParent.navigationAgent2D.IsNavigationFinished())
+        if (OwnerCharacter.navigationAgent2D.IsNavigationFinished())
         {
             Logger.Debug("Calculating new Target Position");
-            _TargetPosition = NavigationServer2D.MapGetRandomPoint(_CharacterParent.navigationAgent2D.GetNavigationMap(), _CharacterParent.navigationAgent2D.NavigationLayers, false);
+            _TargetPosition = NavigationServer2D.MapGetRandomPoint(OwnerCharacter.navigationAgent2D.GetNavigationMap(), OwnerCharacter.navigationAgent2D.NavigationLayers, false);
         }
 
         // Set this target position as target for the NavigationAgent2D
-        _CharacterParent.navigationAgent2D.TargetPosition = _TargetPosition;
+        OwnerCharacter.navigationAgent2D.TargetPosition = _TargetPosition;
 
         // Get the next path point to the target from the NavigationAgent2D
-        Vector2 nextPathPoint = _CharacterParent.navigationAgent2D.GetNextPathPosition();
+        Vector2 nextPathPoint = OwnerCharacter.navigationAgent2D.GetNextPathPosition();
 
         // Calculate the direction Vector2 to the next path point
-        Vector2 direction = _CharacterParent.GlobalPosition.DirectionTo(nextPathPoint);
+        Vector2 direction = OwnerCharacter.GlobalPosition.DirectionTo(nextPathPoint);
 
         /*
         * Nur Gerade laufen
          // Ensure the movement is only vertical or horizontal
-       if (Math.Abs(_CharacterParent.GlobalPosition.X - nextPathPoint.X) > 1.0f)
+       if (Math.Abs(OwnerCharacter.GlobalPosition.X - nextPathPoint.X) > 1.0f)
        {
            // Move horizontally
            direction.Y = 0;
        }
-       else if (Math.Abs(_CharacterParent.GlobalPosition.Y - nextPathPoint.Y) > 1.0f)
+       else if (Math.Abs(OwnerCharacter.GlobalPosition.Y - nextPathPoint.Y) > 1.0f)
        {
            // Move vertically
            direction.X = 0;

@@ -3,39 +3,36 @@ using Godot;
 
 public partial class PlayerMovementComponent : Node, IMovementComponent
 {
-    //public event Action<string, Vector2> _OnMovingPerformed;
-
-    public Player _Player;
+    private CharacterBody2D _CharacterBody;
 
     [Export] private int _MovingSpeed = 100;
 
     public override void _Ready()
     {
-        _Player = GetParent() as Player;
-        if (_Player == null)
+        _CharacterBody = GetParent() as CharacterBody2D;
+        if (_CharacterBody == null)
         {
-            GD.PrintErr("PlayerMovementComponent: Parent is not a Player.");
+            Logger.Error("PlayerMovementComponent: Parent is not a CharacterBody2D. Movement disabled.");
         }
     }
 
     public void HandleMovement(Vector2 direction)
     {
-        if (_Player == null)
+        if (_CharacterBody == null)
         {
-            GD.PrintErr("PlayerMovementComponent: No Player to move.");
+            Logger.Error("PlayerMovementComponent: No CharacterBody2D to move.");
             return;
         }
 
         if (direction != Vector2.Zero)
         {
-            _Player.Velocity = direction * _MovingSpeed;
+            _CharacterBody.Velocity = direction * _MovingSpeed;
         }
         else
         {
-            _Player.Velocity = Vector2.Zero;
+            _CharacterBody.Velocity = Vector2.Zero;
         }
 
-        _Player.MoveAndSlide();
-        //_OnMovingPerformed?.Invoke("MoveState", direction);
+        _CharacterBody.MoveAndSlide();
     }
 }

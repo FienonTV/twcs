@@ -1,7 +1,6 @@
 using Godot;
 using System;
 
-
 /// <summary>
 /// Dependencies (What must be present for the class to work):
 /// - Tool 
@@ -12,11 +11,10 @@ using System;
 /// Sends a signal itself when the hitbox is activated.
 /// </summary>
 
-
 public partial class HitBoxComponent : Area2D
 {
     /****************************** EVENTS & SIGNALS ******************************/
-    public event Action<int> _OnHitboxActivated;
+    public event Action<int> OnHitboxActivated;
 
 
 
@@ -25,27 +23,27 @@ public partial class HitBoxComponent : Area2D
 
 
     /****************************** NODE VARIABLES ******************************/
-    public HandItem _Tool;
-    public Character _CharacterParent;
-    public CollisionShape2D _CollisionShape2D;
+    public HandItem Tool;
+    public Character OwnerCharacter;
+    public CollisionShape2D CollisionShape;
 
 
     /****************************** OTHER VARIABLES ******************************/
-    public bool _IsActive = false;
+    public bool IsActive = false;
 
 
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
         base._Ready();
-        _CollisionShape2D = FindChild("CollisionShape2D", recursive: true) as CollisionShape2D;
+        CollisionShape = FindChild("CollisionShape2D", recursive: true) as CollisionShape2D;
         FindHandItemParent();
         FindCharacterParent();
     }
 
     public override void _Process(double delta)
     {
-        if (_CharacterParent == null || _CollisionShape2D == null)
+        if (OwnerCharacter == null || CollisionShape == null)
         {
             return;
         }
@@ -57,24 +55,29 @@ public partial class HitBoxComponent : Area2D
 
 
     /****************************** OTHER METHODS ******************************/
-    public void ActivateHitBox()
+    public void ActivateHitBox(Character owner = null)
     {
-        Logger.Debug("HitBox activated and performing Hit");
-        _IsActive = true;
-        if (_CollisionShape2D != null)
+        if (owner != null)
         {
-            _CollisionShape2D.Disabled = false;
+            OwnerCharacter = owner;
         }
-        _OnHitboxActivated?.Invoke(_Tool?._Damage ?? 0);
+
+        Logger.Debug("HitBoxComponent: HitBox activated.");
+        IsActive = true;
+        if (CollisionShape != null)
+        {
+            CollisionShape.Disabled = false;
+        }
+        OnHitboxActivated?.Invoke(Tool?._Damage ?? 0);
     }
 
     public void DeactivateHitBox()
     {
-        Logger.Debug("Hitbox Deactivated");
-        _IsActive = false;
-        if (_CollisionShape2D != null)
+        Logger.Debug("HitBoxComponent: Hitbox deactivated.");
+        IsActive = false;
+        if (CollisionShape != null)
         {
-            _CollisionShape2D.Disabled = true;
+            CollisionShape.Disabled = true;
         }
     }
 
@@ -85,8 +88,8 @@ public partial class HitBoxComponent : Area2D
         {
             if (node is HandItem handItem)
             {
-                _Tool = handItem;
-                Logger.Debug("HandItem parent found for HitBoxComponent");
+                Tool = handItem;
+                Logger.Debug("HitBoxComponent: HandItem parent found.");
                 return;
             }
             node = node.GetParent();
@@ -101,8 +104,8 @@ public partial class HitBoxComponent : Area2D
         {
             if (node is Character character)
             {
-                _CharacterParent = character;
-                Logger.Debug("Character parent found for HitBoxComponent");
+                OwnerCharacter = character;
+                Logger.Debug("HitBoxComponent: Character parent found.");
                 return;
             }
             node = node.GetParent();
@@ -112,13 +115,12 @@ public partial class HitBoxComponent : Area2D
 
     private void ChangeCurrentHitboxPosition()
     {
-        if (_CharacterParent == null)
+        if (OwnerCharacter == null)
         {
             return;
         }
-        Position = _CharacterParent.CurrentLookingDirection * 20;
-        Rotation = _CharacterParent.CurrentLookingDirection.Angle();
-
+        Position = OwnerCharacter.CurrentLookingDirection * 20;
+        Rotation = OwnerCharacter.CurrentLookingDirection.Angle();
     }
 
     /****************************** GETTER & SETTER METHODS ******************************/

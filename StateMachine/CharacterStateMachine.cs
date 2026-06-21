@@ -11,15 +11,15 @@ public partial class CharacterStateMachine : Node2D
 
     public Vector2 _CurrentDirection;
     public AnimationPlayer AnimationPlayer { get; private set; }
-
-    protected AnimationController _AnimationController;
+    public AnimationController AnimationController { get; private set; }
 
     private Dictionary<string, CharacterState> _StateRegistry = new Dictionary<string, CharacterState>();
 
     public override void _Ready()
     {
         BuildStateRegistry();
-        AnimationPlayer = ResolveAnimationPlayer();
+        AnimationController = ResolveAnimationController();
+        AnimationPlayer = AnimationController?._AnimationPlayer ?? ResolveAnimationPlayer();
         _CurrentState = _DefaultState;
         _PreviousState = _CurrentState;
         CallDeferred(nameof(EnterDefaultState));
@@ -39,6 +39,11 @@ public partial class CharacterStateMachine : Node2D
                 }
             }
         }
+    }
+
+    protected virtual AnimationController ResolveAnimationController()
+    {
+        return Owner.GetNodeOrNull<AnimationController>("AnimationController");
     }
 
     protected virtual AnimationPlayer ResolveAnimationPlayer()

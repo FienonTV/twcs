@@ -4,7 +4,7 @@ using System;
 
 public partial class InventoryUI : Control
 {
-    static readonly PackedScene InventorySlot = ResourceLoader.Load<PackedScene>(ResourcePaths.InventorySlotScene);
+    private PackedScene _InventorySlotScene;
 
     [Export]
     InventoryDataResource _Data;
@@ -14,6 +14,19 @@ public partial class InventoryUI : Control
     public override void _Ready()
     {
         _InventoryMenu = Owner as inventory_menu;
+        if (_InventoryMenu == null)
+        {
+            Logger.Error("InventoryUI: Owner is not inventory_menu.");
+            return;
+        }
+
+        _InventorySlotScene = ResourceLoader.Load<PackedScene>(ResourcePaths.InventorySlotScene);
+        if (_InventorySlotScene == null)
+        {
+            Logger.Error($"InventoryUI: Failed to load inventory slot scene from '{ResourcePaths.InventorySlotScene}'.");
+            return;
+        }
+
         _InventoryMenu.InventoryActive += UpdateInventory;
         _InventoryMenu.InventoryHidden += ClearInventory;
         ClearInventory();
@@ -29,6 +42,13 @@ public partial class InventoryUI : Control
 
     public void UpdateInventory()
     {
+        if (_InventorySlotScene == null || _Data?._Slots == null)
+        {
+            return;
+        }
+
+        ClearInventory();
+
         Character currentUser = _InventoryMenu?.CurrentUser;
         foreach (SlotDataResource s in _Data._Slots)
         {
@@ -37,7 +57,7 @@ public partial class InventoryUI : Control
                 s.User = currentUser;
             }
 
-            InventorySlotUI slot = InventorySlot.Instantiate() as InventorySlotUI;
+            InventorySlotUI slot = _InventorySlotScene.Instantiate() as InventorySlotUI;
             AddChild(slot);
             slot.SlotData = s;
         }

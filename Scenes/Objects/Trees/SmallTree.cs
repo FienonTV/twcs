@@ -14,7 +14,7 @@ public partial class SmallTree : Sprite2D
 
 		if (_HurtBoxComponent != null)
 		{
-			_HurtBoxComponent._OnDamageRecived += ReceiveDamage;
+			_HurtBoxComponent.OnDamageReceived += ReceiveDamage;
 		}
 
 		if (_HealthComponent != null)

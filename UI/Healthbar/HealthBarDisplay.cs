@@ -2,34 +2,38 @@ using Godot;
 
 public partial class HealthBarDisplay : Control
 {
-    /****************************** EVENTS & SIGNALS ******************************/
-
-
-    /****************************** EXPORT VARIABLES ******************************/
-
-
-    /****************************** NODE VARIABLES ******************************/
     private ProgressBar _Hurtbar;
     private ProgressBar _Healthbar;
     private Timer _VisibleTimer;
-    private Character _CharacterParent;
+    private Character OwnerCharacter;
     private HealthComponent _HealthComponent;
 
-    /****************************** OTHER VARIABLES ******************************/
-
-
-    /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
         this.Hide();
-        //Inizialize node variables
-        FindCharacterParent();
 
-        _Hurtbar = GetNode<ProgressBar>("Hurtbar");
-        _Healthbar = GetNode<ProgressBar>("Healthbar");
-        _HealthComponent =
-            _CharacterParent.FindChild("HealthComponent", recursive: true) as HealthComponent;
-        _VisibleTimer = GetNode<Timer>("VisibleTimer");
+        if (!FindCharacterParent())
+        {
+            Logger.Error("HealthBarDisplay: No Character parent found. Disabling health bar.");
+            return;
+        }
+
+        _Hurtbar = GetNodeOrNull<ProgressBar>("Hurtbar");
+        _Healthbar = GetNodeOrNull<ProgressBar>("Healthbar");
+        _HealthComponent = OwnerCharacter.FindChild("HealthComponent", recursive: true) as HealthComponent;
+        _VisibleTimer = GetNodeOrNull<Timer>("VisibleTimer");
+
+        if (_Hurtbar == null || _Healthbar == null || _VisibleTimer == null)
+        {
+            Logger.Error("HealthBarDisplay: Required UI nodes missing.");
+            return;
+        }
+
+        if (_HealthComponent == null)
+        {
+            Logger.Error($"HealthBarDisplay: No HealthComponent found on '{OwnerCharacter.Name}'.");
+            return;
+        }
 
         _Healthbar.MaxValue = _HealthComponent.GetMaxHealth();
         _Healthbar.Value = _HealthComponent.GetHealth();
@@ -44,7 +48,6 @@ public partial class HealthBarDisplay : Control
         _HealthComponent._HealthEmpty += OnHealthEmpty;
     }
 
-    /****************************** EVENTHANDLER ******************************/
     private void OnHealthChanged(int health)
     {
         DisplayDamage(health);
@@ -61,9 +64,13 @@ public partial class HealthBarDisplay : Control
         HideHealthBar();
     }
 
-    /****************************** OTHER METHODS ******************************/
     public void DisplayDamage(int health)
     {
+        if (_Healthbar == null || _Hurtbar == null || _VisibleTimer == null)
+        {
+            return;
+        }
+
         if (_Healthbar.Value != health)
         {
             this.Show();
@@ -81,19 +88,19 @@ public partial class HealthBarDisplay : Control
         this.Hide();
     }
 
-    public void FindCharacterParent()
+    public bool FindCharacterParent()
     {
         Node node = this;
-        while (node != null) // Solange ein Parent existiert
+        while (node != null)
         {
-            if (node is Character character) // Prüfen, ob es vom Typ Character (oder abgeleitet) ist
+            if (node is Character character)
             {
-                _CharacterParent = character;
-                GD.Print("Parent gefunden"); // Charakter gefunden, zurückgeben
+                OwnerCharacter = character;
+                Logger.Debug($"HealthBarDisplay: Character parent '{character.Name}' found.");
+                return true;
             }
-            node = node.GetParent(); // Zum nächsten Parent wechseln
+            node = node.GetParent();
         }
+        return false;
     }
-
-    /****************************** GETTER & SETTER METHODS ******************************/
 }

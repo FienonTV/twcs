@@ -1,7 +1,6 @@
 using Godot;
 using System;
 
-
 /// <summary>
 /// Dependencies (What must be present for the class to work):
 /// - HealthComponent (Works without a HealtComponent, but makes no sense if no damage is to be processed.) 
@@ -10,12 +9,11 @@ using System;
 /// If one of these hitboxes sends a HitboxActivated signal, the hurtbox itself sends two signals.
 /// One to start visual effects and one to apply the damage taken.
 /// </summary>
-/// 
 
 public partial class HurtBoxComponent : Area2D
 {
     /****************************** EVENTS & SIGNALS ******************************/
-    public event Action<int> _OnDamageRecived;
+    public event Action<int> OnDamageReceived;
 
 
     /****************************** EXPORT VARIABLES ******************************/
@@ -43,16 +41,16 @@ public partial class HurtBoxComponent : Area2D
     private void OnAreaEntered(Area2D hitbox)
     {
         HitBoxComponent hitBoxComponent = hitbox as HitBoxComponent;
-        if (hitBoxComponent == null || hitBoxComponent._Tool == null)
+        if (hitBoxComponent == null || hitBoxComponent.Tool == null)
         {
             return;
         }
 
         if (hitBoxComponent.Owner is HandItem)
         {
-            if (_EffectiveItems.Contains(hitBoxComponent._Tool._HandItemCategory))
+            if (_EffectiveItems.Contains(hitBoxComponent.Tool._HandItemCategory))
             {
-                _OnDamageRecived?.Invoke(hitBoxComponent._Tool._Damage);
+                OnDamageReceived?.Invoke(hitBoxComponent.Tool._Damage);
             }
         }
     }

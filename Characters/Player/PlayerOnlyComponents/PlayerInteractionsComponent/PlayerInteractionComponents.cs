@@ -3,30 +3,29 @@ using System.Collections.Generic;
 
 public partial class PlayerInteractionComponents : Node2D
 {
-    Player _CharacterParent;
-    Interaction_Area InteractionArea;
-    CollisionShape2D _InteractionAreaCollisionShape;
+    private Character OwnerCharacter;
+    private Interaction_Area InteractionArea;
+    private CollisionShape2D _InteractionAreaCollisionShape;
 
-    private Vector2 _InteractionOffset = new Vector2(15, 0);
+    private Label _InteractLabel;
 
-    Label InteractLabel;
+    private bool _isLoaded = false;
 
-    bool _isLoaded = false;
-
-    private List<IInteractable> all_interactions = new List<IInteractable>();
+    private List<IInteractable> _AllInteractions = new List<IInteractable>();
 
     public override void _Ready()
     {
-        _CharacterParent = FindParent("Player") as Player;
-        if (_CharacterParent == null)
+        if (!FindCharacterParent())
         {
-            GD.PrintErr("PlayerInteractionComponents: No Player parent found.");
+            Logger.Error("PlayerInteractionComponents: No Character parent found.");
+            _isLoaded = true;
+            return;
         }
 
         InteractionArea = GetNodeOrNull<Interaction_Area>("InteractionArea");
         if (InteractionArea == null)
         {
-            GD.PrintErr("PlayerInteractionComponents: No InteractionArea found.");
+            Logger.Error("PlayerInteractionComponents: No InteractionArea found.");
             _isLoaded = true;
             return;
         }
@@ -34,15 +33,15 @@ public partial class PlayerInteractionComponents : Node2D
         _InteractionAreaCollisionShape = InteractionArea.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
         if (_InteractionAreaCollisionShape == null)
         {
-            GD.PrintErr("PlayerInteractionComponents: InteractionArea has no CollisionShape2D.");
+            Logger.Error("PlayerInteractionComponents: InteractionArea has no CollisionShape2D.");
         }
 
-        InteractLabel = FindChild("InteractLabel", recursive: true) as Label;
+        _InteractLabel = FindChild("InteractLabel", recursive: true) as Label;
 
-        InteractionArea.AreaEntered += on_interaction_area_entered;
-        InteractionArea.AreaExited += on_interaction_area_exited;
+        InteractionArea.AreaEntered += OnInteractionAreaEntered;
+        InteractionArea.AreaExited += OnInteractionAreaExited;
 
-        updateInteractions();
+        UpdateInteractions();
         _isLoaded = true;
     }
 
@@ -57,72 +56,87 @@ public partial class PlayerInteractionComponents : Node2D
 
         if (Input.IsActionJustPressed("interact"))
         {
-            executeInteraction();
+            ExecuteInteraction();
         }
     }
 
-    private void on_interaction_area_entered(Area2D area)
+    private void OnInteractionAreaEntered(Area2D area)
     {
         if (area is IInteractable interactable)
         {
-            all_interactions.Insert(0, interactable);
-            updateInteractions();
+            _AllInteractions.Insert(0, interactable);
+            UpdateInteractions();
         }
     }
 
-    private void on_interaction_area_exited(Area2D area)
+    private void OnInteractionAreaExited(Area2D area)
     {
         if (area is IInteractable interactable)
         {
-            all_interactions.Remove(interactable);
-            updateInteractions();
+            _AllInteractions.Remove(interactable);
+            UpdateInteractions();
         }
     }
 
     public void OnInterActionExecute()
     {
-        if (all_interactions.Count == 0)
+        if (_AllInteractions.Count == 0)
         {
             return;
         }
-        GD.Print(all_interactions[0]?.ToString());
+        Logger.Debug($"PlayerInteractionComponents: interacting with {_AllInteractions[0]?.GetInteractionLabel()}.");
     }
 
-    private void updateInteractions()
+    private void UpdateInteractions()
     {
-        if (InteractLabel == null)
+        if (_InteractLabel == null)
         {
             return;
         }
-        if (all_interactions.Count > 0)
+        if (_AllInteractions.Count > 0)
         {
-            InteractLabel.Text = all_interactions[0].GetInteractionLabel();
+            _InteractLabel.Text = _AllInteractions[0].GetInteractionLabel();
         }
         else
         {
-            InteractLabel.Text = "";
+            _InteractLabel.Text = "";
         }
     }
 
-    private void executeInteraction()
+    private void ExecuteInteraction()
     {
-        if (all_interactions.Count > 0)
+        if (_AllInteractions.Count > 0)
         {
-            IInteractable currentInteraction = all_interactions[0];
-            currentInteraction.Interact(_CharacterParent);
+            IInteractable currentInteraction = _AllInteractions[0];
+            currentInteraction.Interact(OwnerCharacter);
         }
     }
 
     private void ChangeCurrentInteractionCollisionShapeDirection()
     {
-        if (_InteractionAreaCollisionShape == null || _CharacterParent == null)
+        if (_InteractionAreaCollisionShape == null || OwnerCharacter == null)
         {
             return;
         }
-        if (_CharacterParent.CurrentLookingDirection != Vector2.Zero)
+        if (OwnerCharacter.CurrentLookingDirection != Vector2.Zero)
         {
-            _InteractionAreaCollisionShape.Position = _CharacterParent.CurrentLookingDirection * 10;
-            _InteractionAreaCollisionShape.Rotation = _CharacterParent.CurrentLookingDirection.Angle();
+            _InteractionAreaCollisionShape.Position = OwnerCharacter.CurrentLookingDirection * 10;
+            _InteractionAreaCollisionShape.Rotation = OwnerCharacter.CurrentLookingDirection.Angle();
         }
+    }
+
+    private bool FindCharacterParent()
+    {
+        Node node = this;
+        while (node != null)
+        {
+            if (node is Character character)
+            {
+                OwnerCharacter = character;
+                return true;
+            }
+            node = node.GetParent();
+        }
+        return false;
     }
 }

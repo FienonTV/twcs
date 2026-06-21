@@ -23,7 +23,7 @@ public partial class CollectableComponent : Area2D
             Player player = body as Player;
             if (_Item._ItemData != null)
             {
-                if (player._INVENTORY_DATA.addItem(_Item._ItemData) == true)
+                if (player._INVENTORY_DATA.AddItem(_Item._ItemData) == true)
                 {
                     EmitSignal("OnItemPickedUp");
                 }
