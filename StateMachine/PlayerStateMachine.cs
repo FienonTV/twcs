@@ -8,7 +8,7 @@ public partial class PlayerStateMachine : CharacterStateMachine
     public override void _Ready()
     {
         base._Ready();
-        _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
+        _InputHandler = Services.Get<InputHandler>();
 
         if (_InputHandler == null)
         {
@@ -30,7 +30,7 @@ public partial class PlayerStateMachine : CharacterStateMachine
 
     private void OnInputHandlerMoveInput(Vector2 direction)
     {
-        _CurrentDirection = direction.Normalized();
+        CurrentDirection = direction.Normalized();
 
         if (_CurrentState?.GetType() != typeof(WalkState))
         {

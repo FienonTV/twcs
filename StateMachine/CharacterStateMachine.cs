@@ -9,7 +9,7 @@ public partial class CharacterStateMachine : Node2D
     [Export]
     protected CharacterState _DefaultState;
 
-    public Vector2 _CurrentDirection;
+    public Vector2 CurrentDirection;
     public AnimationPlayer AnimationPlayer { get; private set; }
     public AnimationController AnimationController { get; private set; }
 
@@ -19,7 +19,7 @@ public partial class CharacterStateMachine : Node2D
     {
         BuildStateRegistry();
         AnimationController = ResolveAnimationController();
-        AnimationPlayer = AnimationController?._AnimationPlayer ?? ResolveAnimationPlayer();
+        AnimationPlayer = AnimationController?.AnimationPlayer ?? ResolveAnimationPlayer();
         _CurrentState = _DefaultState;
         _PreviousState = _CurrentState;
         CallDeferred(nameof(EnterDefaultState));
@@ -43,11 +43,21 @@ public partial class CharacterStateMachine : Node2D
 
     protected virtual AnimationController ResolveAnimationController()
     {
+        if (Owner == null)
+        {
+            Logger.Error("CharacterStateMachine: Owner is null; cannot resolve AnimationController.");
+            return null;
+        }
         return Owner.GetNodeOrNull<AnimationController>("AnimationController");
     }
 
     protected virtual AnimationPlayer ResolveAnimationPlayer()
     {
+        if (Owner == null)
+        {
+            Logger.Error("CharacterStateMachine: Owner is null; cannot resolve AnimationPlayer.");
+            return null;
+        }
         return Owner.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
     }
 

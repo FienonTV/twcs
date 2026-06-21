@@ -10,24 +10,26 @@ public partial class InventorySlotUI : Button
         get { return _SlotData; }
         set { SetSlotData(value); }
     }
-    TextureRect _TextureRect;
-    Label _QuantityLabel;
 
-    inventory_menu _InventoryMenu;
+    [Export]
+    private TextureRect TextureRect;
+
+    [Export]
+    private Label QuantityLabel;
+
+    private InventoryMenu _InventoryMenu;
 
     public override void _Ready()
     {
-        _TextureRect = GetNodeOrNull<TextureRect>("TextureRect");
-        _QuantityLabel = GetNodeOrNull<Label>("QuantityLabel");
-        _InventoryMenu = GetNodeOrNull<inventory_menu>(ResourcePaths.InventoryMenuAutoload);
+        _InventoryMenu = Services.Get<InventoryMenu>();
 
-        if (_TextureRect != null)
+        if (TextureRect != null)
         {
-            _TextureRect.Texture = null;
+            TextureRect.Texture = null;
         }
-        if (_QuantityLabel != null)
+        if (QuantityLabel != null)
         {
-            _QuantityLabel.Text = "";
+            QuantityLabel.Text = "";
         }
         FocusEntered += ItemFocused;
         FocusExited += ItemUnfocused;
@@ -43,23 +45,22 @@ public partial class InventorySlotUI : Button
             return;
         }
 
-        if (_TextureRect != null)
+        if (TextureRect != null)
         {
-            _TextureRect.Texture = _SlotData._ItemData._Texture;
+            TextureRect.Texture = _SlotData.ItemData.Texture;
         }
-        if (_QuantityLabel != null)
+        if (QuantityLabel != null)
         {
-            _QuantityLabel.Text = _SlotData._Quantity.ToString();
+            QuantityLabel.Text = _SlotData.Quantity.ToString();
         }
     }
 
     private void ItemFocused()
     {
-        if (_SlotData != null && _SlotData._ItemData != null && _InventoryMenu != null)
+        if (_SlotData != null && _SlotData.ItemData != null && _InventoryMenu != null)
         {
-            _InventoryMenu.updateItemDescription(_SlotData._ItemData._Description);
+            _InventoryMenu.updateItemDescription(_SlotData.ItemData.Description);
         }
-
     }
 
     private void ItemUnfocused()
@@ -72,7 +73,7 @@ public partial class InventorySlotUI : Button
 
     private void ItemPressed()
     {
-        if (_SlotData != null && _SlotData._ItemData != null)
+        if (_SlotData != null && _SlotData.ItemData != null)
         {
             Character user = _SlotData.User;
             if (user == null)
@@ -81,31 +82,28 @@ public partial class InventorySlotUI : Button
                 return;
             }
 
-            bool wasUsed = _SlotData._ItemData.Use(user);
+            bool wasUsed = _SlotData.ItemData.Use(user);
 
             if (wasUsed == false)
             {
                 return;
             }
-            _SlotData._Quantity -= 1;
+            _SlotData.Quantity -= 1;
 
-            if (_SlotData._Quantity <= 0)
+            if (_SlotData.Quantity <= 0)
             {
-                _SlotData._ItemData = null;
-                _SlotData._Quantity = 0;
-                if (_TextureRect != null)
+                _SlotData.ItemData = null;
+                _SlotData.Quantity = 0;
+                if (TextureRect != null)
                 {
-                    _TextureRect.Texture = null;
+                    TextureRect.Texture = null;
                 }
             }
 
-            if (_QuantityLabel != null)
+            if (QuantityLabel != null)
             {
-                _QuantityLabel.Text = _SlotData._Quantity > 0 ? _SlotData._Quantity.ToString() : "";
+                QuantityLabel.Text = _SlotData.Quantity > 0 ? _SlotData.Quantity.ToString() : "";
             }
-
         }
     }
-
-
 }

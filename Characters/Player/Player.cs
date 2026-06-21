@@ -8,15 +8,24 @@ public partial class Player : Character
 
     /****************************** EXPORT VARIABLES ******************************/
     [Export]
-    string _Name = "Player";
+    string DisplayName = "Player";
+
+    [Export]
+    private PlayerMovementComponent MovementComponent;
+
+    [Export]
+    private AttackComponent AttackComponent;
+
+    [Export]
+    private InputHandler InputHandler;
+
+    [Export]
+    private PlayerInteractionComponents InteractionComponents;
+
+    [Export]
+    private Node ToolNode;
 
     /****************************** NODE VARIABLES ******************************/
-    private PlayerMovementComponent _PlayerMovementComponent;
-    private AttackComponent _AttackComponent;
-    private InputHandler _InputHandler;
-
-    private PlayerInteractionComponents _PlayerInteractionComponents;
-
     private HandItem _CurrentHandItem;
 
     private GameManager _GameManager;
@@ -24,7 +33,7 @@ public partial class Player : Character
 
     /****************************** OTHER VARIABLES ******************************/
 
-    public InventoryDataResource _INVENTORY_DATA = ResourceLoader.Load<InventoryDataResource>(ResourcePaths.InventoryTres) as InventoryDataResource;
+    public InventoryDataResource InventoryData { get; private set; }
 
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
@@ -32,61 +41,69 @@ public partial class Player : Character
         base._Ready();
         AddToGroup("Player");
 
-        _GameManager = GetNodeOrNull<GameManager>("/root/GameManager");
+        _GameManager = Services.Get<GameManager>();
         _GameManager?.RegisterPlayer(this);
 
-        HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
+        if (HealthComponent == null)
+        {
+            HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
+        }
         if (HealthComponent == null)
         {
             Logger.Error("Player: Can't find HealthComponent");
         }
 
-        _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
-        if (_InputHandler == null)
+        if (InputHandler == null)
         {
-            Logger.Error("Player: InputHandler autoload not found.");
+            InputHandler = Services.Get<InputHandler>();
         }
 
-        _PlayerInteractionComponents = GetNodeOrNull<PlayerInteractionComponents>(
-            "Interaction Components"
-        );
-        if (_PlayerInteractionComponents == null)
+        if (MovementComponent == null)
         {
-            Logger.Error("Player: Interaction Components not found.");
+            MovementComponent = FindChild("MovementComponent") as PlayerMovementComponent;
+        }
+        if (MovementComponent == null)
+        {
+            Logger.Error("Player: MovementComponent not found.");
         }
 
-        _AttackComponent = GetNodeOrNull<AttackComponent>("AttackComponent");
-        if (_AttackComponent == null)
+        if (AttackComponent == null)
+        {
+            AttackComponent = FindChild("AttackComponent") as AttackComponent;
+        }
+        if (AttackComponent == null)
         {
             Logger.Error("Player: AttackComponent not found.");
         }
 
-        _PlayerMovementComponent = FindChild("MovementComponent") as PlayerMovementComponent;
-        if (_PlayerMovementComponent == null)
+        if (InteractionComponents == null)
         {
-            Logger.Error("Player: MovementComponent not found.");
+            InteractionComponents = FindChild("Interaction Components") as PlayerInteractionComponents;
+        }
+        if (InteractionComponents == null)
+        {
+            Logger.Error("Player: Interaction Components not found.");
         }
 
         EquipHandItemFromToolNode();
 
         HealthComponent?.SetHealth(HealthComponent.GetMaxHealth());
 
-        if (_PlayerMovementComponent != null && _InputHandler != null)
+        if (MovementComponent != null && InputHandler != null)
         {
-            _InputHandler._OnMoveInput += _PlayerMovementComponent.HandleMovement;
+            InputHandler._OnMoveInput += MovementComponent.HandleMovement;
         }
     }
 
     private void EquipHandItemFromToolNode()
     {
-        Node toolNode = GetNodeOrNull("Tool");
-        if (toolNode == null)
+        if (ToolNode == null)
         {
-            Logger.Error("Player: No Tool node found.");
+            Logger.Error("Player: No Tool node assigned.");
             return;
         }
 
-        foreach (Node child in toolNode.GetChildren())
+        foreach (Node child in ToolNode.GetChildren())
         {
             if (child is HandItem handItem)
             {

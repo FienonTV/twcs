@@ -11,7 +11,7 @@ public partial class ToolStateMachine : CharacterStateMachine
     {
         base._Ready();
         Logger.Debug("This tool is part of " + Owner?.Name);
-        _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
+        _InputHandler = Services.Get<InputHandler>();
         if (_InputHandler != null)
         {
             _InputHandler._OnUseInput += OnUseInput;
@@ -33,7 +33,7 @@ public partial class ToolStateMachine : CharacterStateMachine
 
         if (_OwnerStateMachine != null)
         {
-            _CurrentDirection = _OwnerStateMachine._CurrentDirection;
+            CurrentDirection = _OwnerStateMachine.CurrentDirection;
         }
     }
 

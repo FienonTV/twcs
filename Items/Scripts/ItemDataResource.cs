@@ -6,11 +6,11 @@ using System;
 public partial class ItemDataResource : Resource
 {
     [Export]
-    String _Name = "";
+    public string ItemName = "";
     [Export(PropertyHint.MultilineText)]
-    public String _Description = "";
+    public string Description = "";
     [Export]
-    public Texture2D _Texture;
+    public Texture2D Texture;
 
     [ExportCategory("Item Use Effects")]
     [Export]
@@ -18,7 +18,7 @@ public partial class ItemDataResource : Resource
 
     [ExportCategory("Inventory Properties")]
     [Export]
-    public int _MaxStackSize = 99;
+    public int MaxStackSize = 99;
 
     public bool Use(Character user)
     {

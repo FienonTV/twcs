@@ -36,8 +36,8 @@ public partial class CharacterState : Node2D
     public virtual void StartAnimation(string animationName)
     {
         Vector2 roundedDirection = new Vector2(
-            Mathf.Round(StateMachine._CurrentDirection.X),
-            Mathf.Round(StateMachine._CurrentDirection.Y)
+            Mathf.Round(StateMachine.CurrentDirection.X),
+            Mathf.Round(StateMachine.CurrentDirection.Y)
         );
 
         AnimationPlayer player = StateMachine.AnimationPlayer;
@@ -51,11 +51,11 @@ public partial class CharacterState : Node2D
             if (player.HasAnimation(animationName + animationDirection))
             {
                 player.Play(animationName + animationDirection);
-                _LastAnimationDirection = StateMachine._CurrentDirection;
+                _LastAnimationDirection = StateMachine.CurrentDirection;
                 var owner = StateMachine.Owner as Character;
                 if (owner != null)
                 {
-                    owner.CurrentLookingDirection = StateMachine._CurrentDirection;
+                    owner.CurrentLookingDirection = StateMachine.CurrentDirection;
                 }
             }
             else

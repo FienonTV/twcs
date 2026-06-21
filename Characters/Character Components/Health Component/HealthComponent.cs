@@ -4,15 +4,15 @@ using Godot;
 public partial class HealthComponent : Node
 {
     /****************************** EVENTS & SIGNALS ******************************/
-    public event Action<int> _MaxHealthChanged;
-    public event Action<int> _HealthChanged;
-    public event Action _HealthEmpty;
+    public event Action<int> MaxHealthChanged;
+    public event Action<int> HealthChanged;
+    public event Action HealthEmpty;
 
 
 
     /****************************** EXPORT VARIABLES ******************************/
     [Export]
-    private int _MaxHealth;
+    private int MaxHealth;
 
     [Export]
     private bool _Invulnerable = false;
@@ -32,7 +32,7 @@ public partial class HealthComponent : Node
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
-        _Health = _MaxHealth;
+        _Health = MaxHealth;
         _InvulnerableTimer = GetNodeOrNull<Timer>("InvulnerableTimer");
         if (_InvulnerableTimer != null)
         {
@@ -52,8 +52,8 @@ public partial class HealthComponent : Node
     //Increases or decreases MaxHealth depended on the passed Variable (+/-)
     public void ChangeMaxHealth(int change)
     {
-        _MaxHealth += change;
-        _MaxHealthChanged?.Invoke(_MaxHealth);
+        MaxHealth += change;
+        MaxHealthChanged?.Invoke(MaxHealth);
     }
 
     public void ChangeCurrentHealth(int change)
@@ -61,7 +61,7 @@ public partial class HealthComponent : Node
         Logger.Debug("Changed Current Health");
         _Health += change;
         ClampHealth();
-        _HealthChanged?.Invoke(_Health);
+        HealthChanged?.Invoke(_Health);
         Logger.Debug("Current Health is: " + _Health);
     }
 
@@ -86,12 +86,12 @@ public partial class HealthComponent : Node
         }
 
         ClampHealth();
-        _HealthChanged?.Invoke(_Health);
+        HealthChanged?.Invoke(_Health);
 
         //Currently Setting the Health to maxHealt if Health is 0 (Dead)
         if (_Health <= 0)
         {
-            _HealthEmpty?.Invoke();
+            HealthEmpty?.Invoke();
         }
 
         Logger.Debug("Current Health: " + _Health);
@@ -99,7 +99,7 @@ public partial class HealthComponent : Node
 
     private void ClampHealth()
     {
-        _Health = Mathf.Clamp(_Health, 0, _MaxHealth);
+        _Health = Mathf.Clamp(_Health, 0, MaxHealth);
     }
 
     //Makes the Parent Invulnerable for specific time
@@ -124,7 +124,7 @@ public partial class HealthComponent : Node
     /****************************** GETTER & SETTER METHODS ******************************/
     public int GetMaxHealth()
     {
-        return _MaxHealth;
+        return MaxHealth;
     }
 
     public int GetHealth()

@@ -20,12 +20,13 @@ public partial class HitBoxComponent : Area2D
 
 
     /****************************** EXPORT VARIABLES ******************************/
+    [Export]
+    public CollisionShape2D CollisionShape;
 
 
     /****************************** NODE VARIABLES ******************************/
     public HandItem Tool;
     public Character OwnerCharacter;
-    public CollisionShape2D CollisionShape;
 
 
     /****************************** OTHER VARIABLES ******************************/
@@ -36,7 +37,10 @@ public partial class HitBoxComponent : Area2D
     public override void _Ready()
     {
         base._Ready();
-        CollisionShape = FindChild("CollisionShape2D", recursive: true) as CollisionShape2D;
+        if (CollisionShape == null)
+        {
+            CollisionShape = FindChild("CollisionShape2D", recursive: true) as CollisionShape2D;
+        }
         FindHandItemParent();
         FindCharacterParent();
     }
@@ -68,7 +72,7 @@ public partial class HitBoxComponent : Area2D
         {
             CollisionShape.Disabled = false;
         }
-        OnHitboxActivated?.Invoke(Tool?._Damage ?? 0);
+        OnHitboxActivated?.Invoke(Tool?.Damage ?? 0);
     }
 
     public void DeactivateHitBox()

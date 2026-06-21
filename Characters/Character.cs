@@ -6,13 +6,16 @@ public partial class Character : CharacterBody2D
 
 
     /****************************** EXPORT VARIABLES ******************************/
-    [Export] public NavigationAgent2D navigationAgent2D;
+    [Export]
+    public NavigationAgent2D NavigationAgent2D;
+
+    [Export]
+    public HealthComponent HealthComponent;
 
     /****************************** NODE VARIABLES ******************************/
     protected CharacterStateMachine StateMachine;
-    protected AnimationController _AnimationController;
-    public HealthComponent HealthComponent;
-    protected HurtBoxComponent _HurtBoxComponent;
+    protected AnimationController AnimationController;
+    protected HurtBoxComponent HurtBoxComponent;
 
     /****************************** OTHER VARIABLES ******************************/
     public Vector2 CurrentLookingDirection = Vector2.Down;
@@ -21,10 +24,13 @@ public partial class Character : CharacterBody2D
     public override void _Ready()
     {
         base._Ready();
-        HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
         if (HealthComponent == null)
         {
-            Logger.Error("Character: Can't find HealthComponent");
+            HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
+            if (HealthComponent == null)
+            {
+                Logger.Error($"Character: Can't find HealthComponent on '{Name}'.");
+            }
         }
     }
 

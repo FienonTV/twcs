@@ -3,11 +3,11 @@ using Godot;
 
 public partial class World : Node2D
 {
-    public TileMapLayer[] _TileMapLayers;
+    public TileMapLayer[] TileMapLayers { get; private set; }
 
     public override void _EnterTree()
     {
-        _TileMapLayers = FindAllMapLayers();
+        TileMapLayers = FindAllMapLayers();
     }
 
     private TileMapLayer[] FindAllMapLayers()
@@ -25,13 +25,13 @@ public partial class World : Node2D
 
     public bool IsPointWalkable(Vector2I position)
     {
-        if (_TileMapLayers == null || _TileMapLayers.Length == 0)
+        if (TileMapLayers == null || TileMapLayers.Length == 0)
         {
             return false;
         }
 
-        var mapPosition = _TileMapLayers[0].LocalToMap(position);
-        var tileData = _TileMapLayers[0].GetCellTileData(mapPosition);
+        var mapPosition = TileMapLayers[0].LocalToMap(position);
+        var tileData = TileMapLayers[0].GetCellTileData(mapPosition);
         if (tileData == null)
         {
             return true;

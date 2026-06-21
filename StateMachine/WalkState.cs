@@ -3,17 +3,25 @@ using Godot;
 public partial class WalkState : CharacterState
 {
     [Export]
-    public BaseMovementBehavior _MovementBehavior; //Movement Behavior of the Character, for possible individual behave on individual Characters
+    public BaseMovementBehavior MovementBehavior;
 
     private IMovementComponent _MovementComponent;
 
     public override void _Ready()
     {
         base._Ready();
-        _MovementComponent = Owner.FindChild("MovementComponent", recursive: true) as IMovementComponent;
+        if (Owner == null)
+        {
+            Logger.Error("WalkState: Owner is null. State will not function.");
+            return;
+        }
         if (_MovementComponent == null)
         {
-            Logger.Error("WalkState: No IMovementComponent found on " + Owner.Name);
+            _MovementComponent = Owner.FindChild("MovementComponent", recursive: true) as IMovementComponent;
+            if (_MovementComponent == null)
+            {
+                Logger.Error($"WalkState: No IMovementComponent found on '{Owner.Name}'.");
+            }
         }
     }
 
@@ -42,12 +50,12 @@ public partial class WalkState : CharacterState
             return;
         }
 
-        if (_MovementBehavior != null)
+        if (MovementBehavior != null)
         {
-            StateMachine._CurrentDirection = _MovementBehavior.GetNextDirection();
+            StateMachine.CurrentDirection = MovementBehavior.GetNextDirection();
         }
 
-        _MovementComponent.HandleMovement(StateMachine._CurrentDirection);
+        _MovementComponent.HandleMovement(StateMachine.CurrentDirection);
         StartAnimation("move_");
     }
 }

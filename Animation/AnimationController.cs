@@ -18,10 +18,10 @@ using Godot;
 public partial class AnimationController : Node
 {
     // Reference to the AnimationPlayer node that handles character animations
-    public AnimationPlayer _AnimationPlayer;
+    public AnimationPlayer AnimationPlayer;
 
     // Reference to the AnimationPlayer node that handles effect animations
-    public AnimationPlayer _EffectPlayer;
+    public AnimationPlayer EffectPlayer;
 
     // Timer used for handling hurt effect duration
     private Timer _HurtEffectTimer;
@@ -30,16 +30,16 @@ public partial class AnimationController : Node
     {
         base._Ready();
         // Find and store the reference to the AnimationPlayer node
-        _AnimationPlayer = FindChild("AnimationPlayer") as AnimationPlayer;
+        AnimationPlayer = FindChild("AnimationPlayer") as AnimationPlayer;
 
         // Get the reference to the EffectPlayer node
-        _EffectPlayer = GetNodeOrNull<AnimationPlayer>("EffectPlayer");
+        EffectPlayer = GetNodeOrNull<AnimationPlayer>("EffectPlayer");
 
         // Find and store the reference to the HurtEffectTimer node
         _HurtEffectTimer = FindChild("HurtEffectTimer") as Timer;
 
         // Check if the AnimationPlayer node was found
-        if (_AnimationPlayer == null)
+        if (AnimationPlayer == null)
         {
             Logger.Debug("AnimationPlayer == null");
         }
@@ -60,35 +60,35 @@ public partial class AnimationController : Node
     {
         Logger.Debug("Playing: " + animationName);
         // Check if the AnimationPlayer has the specified animation
-        if (_AnimationPlayer.HasAnimation(animationName))
+        if (AnimationPlayer.HasAnimation(animationName))
         {
             // Play the specified animation
-            _AnimationPlayer?.Play(animationName);
+            AnimationPlayer?.Play(animationName);
         }
     }
 
     // Method to stop the currently playing animation
     public void StopAnimation()
     {
-        _AnimationPlayer?.Stop();
+        AnimationPlayer?.Stop();
     }
 
     // Method to check if any animation is currently playing
     public bool IsAnimationPlaying()
     {
-        return _AnimationPlayer != null && _AnimationPlayer.IsPlaying();
+        return AnimationPlayer != null && AnimationPlayer.IsPlaying();
     }
 
     // Method to play a specified effect animation
     public void PlayEffect(string effectName)
     {
-        _EffectPlayer?.Play(effectName);
+        EffectPlayer?.Play(effectName);
         _HurtEffectTimer?.Start();
     }
 
     // Method to stop the effect animation
     private void StopEffect()
     {
-        _EffectPlayer?.Play("RESET");
+        EffectPlayer?.Play("RESET");
     }
 }
