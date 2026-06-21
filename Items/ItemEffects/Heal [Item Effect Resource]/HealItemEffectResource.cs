@@ -9,18 +9,19 @@ public partial class HealItemEffectResource : ItemEffectResource
 
     public override void Use()
     {
+        Player targetPlayer = GameManager.getPlayer();
+        if (targetPlayer == null)
+        {
+            GD.PrintErr("HealItemEffectResource: No target player found.");
+            return;
+        }
 
-        if (GameManager.getPlayer() == null)
+        if (targetPlayer._HealthComponent == null)
         {
-            GD.PrintErr("Cant find Global Player");
+            GD.PrintErr("HealItemEffectResource: Target player has no HealthComponent.");
+            return;
         }
-        if (GameManager.getPlayer()._HealthComponent == null)
-        {
-            GD.PrintErr("Cant find Global Player HealthComponent");
-        }
-        else
-        {
-            GameManager.getPlayer()._HealthComponent.ChangeCurrentHealth(_HealAmount);
-        }
+
+        targetPlayer._HealthComponent.ChangeCurrentHealth(_HealAmount);
     }
 }

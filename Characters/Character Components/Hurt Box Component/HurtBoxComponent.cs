@@ -43,12 +43,16 @@ public partial class HurtBoxComponent : Area2D
     private void OnAreaEntered(Area2D hitbox)
     {
         HitBoxComponent hitBoxComponent = hitbox as HitBoxComponent;
+        if (hitBoxComponent == null || hitBoxComponent._Tool == null)
+        {
+            return;
+        }
 
         if (hitBoxComponent.Owner is HandItem)
         {
             if (_EffectiveItems.Contains(hitBoxComponent._Tool._HandItemCategory))
             {
-                _OnDamageRecived.Invoke(hitBoxComponent._Tool._Damage);
+                _OnDamageRecived?.Invoke(hitBoxComponent._Tool._Damage);
             }
         }
     }

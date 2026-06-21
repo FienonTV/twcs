@@ -17,7 +17,7 @@
 using System;
 using Godot;
 
-public partial class CharacterMovementComponent : Node
+public partial class CharacterMovementComponent : Node, IMovementComponent
 {
     /****************************** EVENTS & SIGNALS ******************************/
     // Event that is triggered when the character's movement direction changes
@@ -41,8 +41,16 @@ public partial class CharacterMovementComponent : Node
     public override void _Ready()
     {
         _Character = GetParent<Character>(); // Get the parent character node
+        if (_Character == null)
+        {
+            GD.PrintErr("CharacterMovementComponent: Parent is not a Character.");
+            return;
+        }
         _StartPosition = _Character.GlobalPosition; // Set the start position to the character's initial position
-        _Character.navigationAgent2D.VelocityComputed += SafeVelocityComputed; // Connect the VelocityComputed signal to the SafeVelocityComputed method
+        if (_Character.navigationAgent2D != null)
+        {
+            _Character.navigationAgent2D.VelocityComputed += SafeVelocityComputed; // Connect the VelocityComputed signal to the SafeVelocityComputed method
+        }
     }
 
     /****************************** EVENTHANDLER ******************************/
@@ -53,9 +61,14 @@ public partial class CharacterMovementComponent : Node
     }
 
     /****************************** OTHER METHODS ******************************/
-    // Method to handle character movement
-    public void HandleMovement()
+    public void HandleMovement(Vector2 direction)
     {
+        if (_Character == null)
+        {
+            GD.PrintErr("CharacterMovementComponent: Parent is null.");
+            return;
+        }
+
         // Check if the character has reached the left patrol boundary
         if (_CurrentPosition.X <= _StartPosition.X - _PatrolRadius)
         {
@@ -89,7 +102,7 @@ public partial class CharacterMovementComponent : Node
         Vector2 velocity = _WalkingDirection * _CharacterSpeed;
 
         // Update the character's velocity based on whether avoidance is enabled
-        if (_Character.navigationAgent2D.AvoidanceEnabled)
+        if (_Character.navigationAgent2D != null && _Character.navigationAgent2D.AvoidanceEnabled)
         {
             _Character.navigationAgent2D.Velocity = velocity;
         }

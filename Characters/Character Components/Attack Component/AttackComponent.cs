@@ -30,9 +30,19 @@ public partial class AttackComponent : Node
         _HitBoxTimer = FindChild("HitBoxTimer") as Timer;
         _HitBoxComponent =
             GetParent().FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
-        _HitBoxTimer.Timeout += _HitBoxComponent.DeactivateHitBox;
+
         if (_HitBoxComponent != null)
+        {
+            if (_HitBoxTimer != null)
+            {
+                _HitBoxTimer.Timeout += _HitBoxComponent.DeactivateHitBox;
+            }
             GD.Print("HitBoxComponent found");
+        }
+        else
+        {
+            GD.PrintErr("AttackComponent: No HitBoxComponent found.");
+        }
     }
 
     public override void _Process(double delta)
@@ -44,8 +54,10 @@ public partial class AttackComponent : Node
     public void OnAttackRequest()
     {
         _HitBoxComponent?.ActivateHitBox();
-        _StartAttackAnimation.Invoke(GetParent<Player>()._CurrentLookingDirection);
-        _HitBoxTimer.Start();
+        Character ownerCharacter = GetParent<Character>();
+        Vector2 direction = ownerCharacter?._CurrentLookingDirection ?? Vector2.Down;
+        _StartAttackAnimation?.Invoke(direction);
+        _HitBoxTimer?.Start();
     }
 
     /****************************** OTHER METHODS ******************************/

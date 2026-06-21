@@ -35,8 +35,10 @@ public partial class PlayerInteractionComponents : Node2D
         if (InteractionArea == null)
         {
             GD.Print("InteractionArea is null");
+            _isLoaded = true;
+            return;
         }
-        _InteractionAreaCollisionShape = InteractionArea.GetNode<CollisionShape2D>("CollisionShape2D");
+        _InteractionAreaCollisionShape = InteractionArea.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
         if (_InteractionAreaCollisionShape == null)
         {
             GD.Print("= null");
@@ -101,6 +103,10 @@ public partial class PlayerInteractionComponents : Node2D
 
     private void updateInteractions()
     {
+        if (InteractLabel == null)
+        {
+            return;
+        }
         if (all_interactions.Count > 0)
         {
             InteractLabel.Text = all_interactions[0].getInteractLabel();
@@ -133,6 +139,10 @@ public partial class PlayerInteractionComponents : Node2D
 
     private void ChangeCurrentInteractionCollisionShapeDirection()
     {
+        if (_InteractionAreaCollisionShape == null || _CharacterParent == null)
+        {
+            return;
+        }
         if (_CharacterParent._CurrentLookingDirection != Vector2.Zero)
         {
             _InteractionAreaCollisionShape.Position = _CharacterParent._CurrentLookingDirection * 10;
