@@ -1,10 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://c5qfwkvys4upc"]
+[gd_scene load_steps=28 format=3 uid="uid://c5qfwkvys4upc"]
 
 [ext_resource type="Texture2D" uid="uid://uu63gnfo6gex" path="res://Characters/Enemies/Minotaur/Minotaur - Sprite Sheet.png" id="1_51g7n"]
 [ext_resource type="Script" path="res://Characters/Player/Enemy.cs" id="1_ia6kf"]
-[ext_resource type="PackedScene" uid="uid://byysjab60oehf" path="res://State Machine/State_Machine.tscn" id="2_rlqpn"]
-[ext_resource type="PackedScene" uid="uid://dnsisjxi3m37g" path="res://State Machine/States/Idle/Idle_State.tscn" id="3_dgy1b"]
-[ext_resource type="PackedScene" uid="uid://jn47fs3qyuh7" path="res://State Machine/States/Move/Move_State.tscn" id="4_53xgx"]
+[ext_resource type="Script" path="res://StateMachine/NPCStateMachine.cs" id="2_rlqpn"]
+[ext_resource type="Script" path="res://StateMachine/IdleState.cs" id="3_dgy1b"]
+[ext_resource type="Script" path="res://StateMachine/WalkState.cs" id="4_53xgx"]
+[ext_resource type="Script" path="res://StateMachine/FollowState.cs" id="4_ymd4n"]
 [ext_resource type="PackedScene" uid="uid://brd84b2jkkins" path="res://Animation/Animation_Controller.tscn" id="5_itcxp"]
 [ext_resource type="PackedScene" uid="uid://cl1vlioksrw52" path="res://Characters/Character Components/Health Component/Health_Component.tscn" id="6_v836c"]
 [ext_resource type="PackedScene" uid="uid://c2mwj55ha43j6" path="res://Characters/Character Components/Hurt Box Component/Hurt_Box_Component.tscn" id="7_au56f"]
@@ -12,8 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://c73ejqotojfb" path="res://UI/Healthbar/Health_Bar_Display.tscn" id="10_lytja"]
 [ext_resource type="Script" path="res://Characters/NPCInputHandler.cs" id="11_6me5p"]
 [ext_resource type="Script" path="res://Characters/Behaviors/PointToPointPatrolBehavior.cs" id="12_uoiab"]
-[ext_resource type="Script" path="res://Characters/Behaviors/RadiusAttackBehavior.cs" id="13_qgx3r"]
-[ext_resource type="Script" path="res://Characters/Behaviors/SimpleAttackExecution.cs" id="14_uan73"]
+[ext_resource type="Script" path="res://Characters/Behaviors/FollowPlayerBehavior.cs" id="13_qgx3r"]
 [ext_resource type="PackedScene" uid="uid://dgawkbyts0ufv" path="res://Characters/Character Components/Movement Component/Movement_Component.tscn" id="15_omrkc"]
 [ext_resource type="Script" path="res://Characters/Character Components/EnemyDetectionArea.cs" id="16_ewyaq"]
 
@@ -277,13 +277,28 @@ shape = SubResource("CapsuleShape2D_swatg")
 avoidance_enabled = true
 debug_enabled = true
 
-[node name="StateMachine" parent="." instance=ExtResource("2_rlqpn")]
+[node name="StateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_DefaultState")]
+script = ExtResource("2_rlqpn")
+_DefaultState = NodePath("Idle")
 
-[node name="IdleState" parent="StateMachine" instance=ExtResource("3_dgy1b")]
+[node name="Idle" type="Node2D" parent="StateMachine"]
+script = ExtResource("3_dgy1b")
 
-[node name="MoveState" parent="StateMachine" instance=ExtResource("4_53xgx")]
+[node name="Walk" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_MovementBehavior")]
+script = ExtResource("4_53xgx")
+_MovementBehavior = NodePath("Patrol")
 
-[node name="HurtState" type="Node" parent="StateMachine"]
+[node name="Patrol" type="Node" parent="StateMachine/Walk" node_paths=PackedStringArray("_CharacterParent")]
+script = ExtResource("12_uoiab")
+_CharacterParent = NodePath("../../..")
+
+[node name="Follow" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_MovementBehavior")]
+script = ExtResource("4_ymd4n")
+_MovementBehavior = NodePath("Follow")
+
+[node name="Follow" type="Node" parent="StateMachine/Follow" node_paths=PackedStringArray("_CharacterParent")]
+script = ExtResource("13_qgx3r")
+_CharacterParent = NodePath("../../..")
 
 [node name="AnimationController" parent="." instance=ExtResource("5_itcxp")]
 
@@ -328,14 +343,6 @@ script = ExtResource("11_6me5p")
 script = ExtResource("12_uoiab")
 _CharacterParent = NodePath("../..")
 
-[node name="RadiusAttackBehavior" type="Node" parent="NPCInputHandler" node_paths=PackedStringArray("_EnemyDetectionArea", "_CharacterParent")]
-script = ExtResource("13_qgx3r")
-_EnemyDetectionArea = NodePath("../../Enemy Detection Area")
-_CharacterParent = NodePath("../..")
-
-[node name="SimpleAttackBehavior" type="Node" parent="NPCInputHandler"]
-script = ExtResource("14_uan73")
-
 [node name="Enemy Detection Area" type="Area2D" parent="."]
 script = ExtResource("16_ewyaq")
 
@@ -343,6 +350,6 @@ script = ExtResource("16_ewyaq")
 shape = SubResource("CircleShape2D_0f0en")
 debug_color = Color(0.650482, 0, 0.0713455, 0.42)
 
-[connection signal="area_entered" from="HurtBoxComponent" to="HurtBoxComponent" method="_on_area_entered"]
+[connection signal="area_entered" from="Enemy Detection Area" to="Enemy Detection Area" method="_on_area_entered"]
 
 [editable path="HurtBoxComponent"]

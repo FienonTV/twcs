@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class newWalkState : newState
+public partial class WalkState : CharacterState
 {
     [Export]
     public BaseMovementBehavior _MovementBehavior; //Movement Behavior of the Character, for possible individual behave on individual Characters
@@ -11,7 +11,6 @@ public partial class newWalkState : newState
     {
         //GD.Print("Walk State Entered with" + _MovementBehavior.Name);
         base.Enter();
-        Owner.SetPhysicsProcess(true);
         if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
         {
             _StateMachine._AnimationPlayer.Play("Idle");
@@ -20,12 +19,6 @@ public partial class newWalkState : newState
         {
             _StateMachine._AnimationPlayer.Play("idle_down");
         }
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-        Owner.SetPhysicsProcess(false);
     }
 
     public override void _PhysicsProcess(double delta)

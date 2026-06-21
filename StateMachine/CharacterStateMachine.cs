@@ -1,11 +1,11 @@
 using Godot;
 
-public partial class newStateMachine : Node2D
+public partial class CharacterStateMachine : Node2D
 {
-	protected newState _CurrentState;
-	protected newState _PreviousState;
+	protected CharacterState _CurrentState;
+	protected CharacterState _PreviousState;
 	[Export]
-	protected newState _DefaultState;
+	protected CharacterState _DefaultState;
 	public Vector2 _CurrentDirection;
 	protected Player _CurrentScenePlayer;
 	public AnimationPlayer _AnimationPlayer;
@@ -32,12 +32,13 @@ public partial class newStateMachine : Node2D
 
 	protected void ChangeState(string state)
 	{
-		_CurrentState = FindChild(state) as newState;
+		CharacterState newState = FindChild(state) as CharacterState;
 
-		if (_CurrentState != null)
+		if (newState != null)
 		{
-			_CurrentState.Enter();
 			_PreviousState.Exit();
+			newState.Enter();
+			_CurrentState = newState;
 			_PreviousState = _CurrentState;
 		}
 		else

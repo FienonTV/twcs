@@ -2,12 +2,12 @@
 
 [ext_resource type="Texture2D" uid="uid://byhocpfn00hy4" path="res://Characters/Enemies/Character_sheet.png" id="1_lowxj"]
 [ext_resource type="Script" path="res://Characters/Player/Enemy.cs" id="1_mex74"]
-[ext_resource type="Script" path="res://New State Machine/newIdleState.cs" id="3_1pdio"]
-[ext_resource type="Script" path="res://New State Machine/NPCStateMachine.cs" id="3_u8td5"]
-[ext_resource type="Script" path="res://New State Machine/newWalkState.cs" id="4_lvt5w"]
+[ext_resource type="Script" path="res://StateMachine/IdleState.cs" id="3_1pdio"]
+[ext_resource type="Script" path="res://StateMachine/NPCStateMachine.cs" id="3_u8td5"]
+[ext_resource type="Script" path="res://StateMachine/WalkState.cs" id="4_lvt5w"]
 [ext_resource type="PackedScene" uid="uid://dgawkbyts0ufv" path="res://Characters/Character Components/Movement Component/Movement_Component.tscn" id="5_e3xep"]
 [ext_resource type="Script" path="res://Characters/Behaviors/PointToPointPatrolBehavior.cs" id="5_jskl2"]
-[ext_resource type="Script" path="res://New State Machine/newFollowState.cs" id="7_f3uy7"]
+[ext_resource type="Script" path="res://StateMachine/FollowState.cs" id="7_f3uy7"]
 [ext_resource type="Script" path="res://Characters/Behaviors/FollowPlayerBehavior.cs" id="7_x07ld"]
 
 [sub_resource type="Animation" id="Animation_qm2lh"]

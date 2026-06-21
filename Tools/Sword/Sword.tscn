@@ -1,11 +1,11 @@
 [gd_scene load_steps=18 format=3 uid="uid://cdtm0fgo0w66y"]
 
 [ext_resource type="Script" path="res://Tools/Sword/Sword.cs" id="1_l0nie"]
-[ext_resource type="Script" path="res://New State Machine/ToolStateMachine.cs" id="3_1grpf"]
-[ext_resource type="Script" path="res://New State Machine/newIdleState.cs" id="5_s51db"]
+[ext_resource type="Script" path="res://StateMachine/ToolStateMachine.cs" id="3_1grpf"]
+[ext_resource type="Script" path="res://StateMachine/IdleState.cs" id="5_s51db"]
 [ext_resource type="Texture2D" uid="uid://cwd08n487p1vw" path="res://Tools/Sword/frame_0_delay-0.1s.png" id="6_yevxp"]
 [ext_resource type="PackedScene" uid="uid://bldeemqloa4nf" path="res://Characters/Character Components/Hit Box Component/Hit_Box_Component.tscn" id="7_854t4"]
-[ext_resource type="Script" path="res://New State Machine/newUseToolState.cs" id="7_s202l"]
+[ext_resource type="Script" path="res://StateMachine/UseToolState.cs" id="7_s202l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a363n"]
 size = Vector2(9.66636, 2.47577)

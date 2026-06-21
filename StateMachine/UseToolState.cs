@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class newUseToolState : newState
+public partial class UseToolState : CharacterState
 {
 
     private HitBoxComponent _HitBoxComponent;
@@ -20,7 +20,6 @@ public partial class newUseToolState : newState
     {
         base.Enter();
 
-        Owner.SetPhysicsProcess(true);
         if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
             _StateMachine._AnimationPlayer.Play("Idle");
         else
@@ -34,8 +33,6 @@ public partial class newUseToolState : newState
     {
         base.Exit();
         _HitBoxComponent._CollisionShape2D.Disabled = true;
-        Owner.SetPhysicsProcess(false);
-
     }
 
     public override void _PhysicsProcess(double delta)

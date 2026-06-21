@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public partial class PlayerStateMachine : newStateMachine
+public partial class PlayerStateMachine : CharacterStateMachine
 {
     InputHandler _InputHandler;
 
@@ -16,7 +16,7 @@ public partial class PlayerStateMachine : newStateMachine
 
     private void OnInputHandlerNoMovement()
     {
-        if (_CurrentState.GetType() != typeof(newIdleState))
+        if (_CurrentState.GetType() != typeof(IdleState))
         {
             ChangeState("Idle");
         }
@@ -26,7 +26,7 @@ public partial class PlayerStateMachine : newStateMachine
     {
         _CurrentDirection = direction.Normalized();
 
-        if (_CurrentState.GetType() != typeof(newWalkState))
+        if (_CurrentState.GetType() != typeof(WalkState))
         {
             ChangeState("Walk");
         }

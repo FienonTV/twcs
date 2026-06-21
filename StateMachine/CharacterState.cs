@@ -1,14 +1,14 @@
 using Godot;
 using System.Collections.Generic;
-public partial class newState : Node2D
+public partial class CharacterState : Node2D
 {
-    protected newStateMachine _StateMachine;
+    protected CharacterStateMachine _StateMachine;
 
     protected Vector2 _LastAnimationDirection = Vector2.Down;
     public override void _Ready()
     {
         SetPhysicsProcess(false);
-        _StateMachine = GetParent<newStateMachine>();
+        _StateMachine = GetParent<CharacterStateMachine>();
     }
 
     public virtual void Enter()

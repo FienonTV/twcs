@@ -9,7 +9,7 @@ public partial class Character : CharacterBody2D
     [Export] public NavigationAgent2D navigationAgent2D;
 
     /****************************** NODE VARIABLES ******************************/
-    protected newStateMachine _StateMachine;
+    protected CharacterStateMachine _StateMachine;
     protected AnimationController _AnimationController;
     public HealthComponent _HealthComponent;
     protected HurtBoxComponent _HurtBoxComponent;
@@ -20,7 +20,7 @@ public partial class Character : CharacterBody2D
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
-        // _StateMachine = GetNode<newStateMachine>("StateMachine");
+        // _StateMachine = GetNode<CharacterStateMachine>("StateMachine");
         //_AnimationController = GetNode<AnimationController>("AnimationController");
         _HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
         if (_HealthComponent == null)

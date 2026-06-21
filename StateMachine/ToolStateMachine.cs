@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class ToolStateMachine : newStateMachine
+public partial class ToolStateMachine : CharacterStateMachine
 {
     InputHandler _InputHandler;
 
@@ -17,7 +17,7 @@ public partial class ToolStateMachine : newStateMachine
     public override void _Process(double delta)
     {
         base._Process(delta);
-        _CurrentDirection = Owner.Owner.GetNode<newStateMachine>("StateMachine")._CurrentDirection;
+        _CurrentDirection = Owner.Owner.GetNode<CharacterStateMachine>("StateMachine")._CurrentDirection;
     }
 
     private async void OnUseInput()

@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://Tools/Sword/Sword.cs" id="1_ifbn5"]
 [ext_resource type="Texture2D" uid="uid://dims0lgoe480o" path="res://Tools/Farming Tools spritesheet.png" id="2_26jgb"]
 [ext_resource type="PackedScene" uid="uid://bldeemqloa4nf" path="res://Characters/Character Components/Hit Box Component/Hit_Box_Component.tscn" id="3_dkwuu"]
-[ext_resource type="Script" path="res://New State Machine/ToolStateMachine.cs" id="4_yvbyw"]
-[ext_resource type="Script" path="res://New State Machine/newIdleState.cs" id="5_i5jg8"]
-[ext_resource type="Script" path="res://New State Machine/newUseToolState.cs" id="6_eqram"]
+[ext_resource type="Script" path="res://StateMachine/ToolStateMachine.cs" id="4_yvbyw"]
+[ext_resource type="Script" path="res://StateMachine/IdleState.cs" id="5_i5jg8"]
+[ext_resource type="Script" path="res://StateMachine/UseToolState.cs" id="6_eqram"]
 
 [sub_resource type="Animation" id="Animation_3j150"]
 length = 0.001
