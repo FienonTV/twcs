@@ -13,12 +13,32 @@ public partial class inventory_menu : CanvasLayer
 
     Label _ItemDescriptionLabel;
 
-
-
     public override void _Ready()
     {
         _ItemDescriptionLabel = FindChild("ItemDescription", true) as Label;
         hideInventory();
+
+        InputHandler inputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
+        if (inputHandler != null)
+        {
+            inputHandler._ToggleInventoryRequested += OnToggleInventoryRequested;
+        }
+        else
+        {
+            GD.PrintErr("inventory_menu: InputHandler autoload not found.");
+        }
+    }
+
+    private void OnToggleInventoryRequested()
+    {
+        if (_IsOpen)
+        {
+            hideInventory();
+        }
+        else
+        {
+            showInventory();
+        }
     }
 
     public void showInventory()
@@ -39,6 +59,19 @@ public partial class inventory_menu : CanvasLayer
 
     public void updateItemDescription(String newText)
     {
-        _ItemDescriptionLabel.Text = newText;
+        if (_ItemDescriptionLabel != null)
+        {
+            _ItemDescriptionLabel.Text = newText;
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        InputHandler inputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
+        if (inputHandler != null)
+        {
+            inputHandler._ToggleInventoryRequested -= OnToggleInventoryRequested;
+        }
+        base._ExitTree();
     }
 }

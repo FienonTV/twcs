@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=4 uid="uid://d3spfro1wkgsd"]
 
-[ext_resource type="PackedScene" uid="uid://c5qfwkvys4upc" path="res://Characters/Enemies/Minotaur/Minotaur.tscn" id="1_2obom"]
 [ext_resource type="Script" path="res://World/World.cs" id="1_5t3va"]
 [ext_resource type="TileSet" uid="uid://dr00o7vamxu4x" path="res://World/TileSet.tres" id="1_gcp2k"]
-[ext_resource type="PackedScene" uid="uid://cam4uru82utqr" path="res://Characters/Player/Player.tscn" id="1_r4y16"]
+[ext_resource type="PackedScene" uid="uid://c5qfwkvys4upc" path="res://Characters/Enemies/Minotaur/Minotaur.tscn" id="1_2obom"]
+[ext_resource type="Script" path="res://Scenes/Testing/WorldInitialization.cs" id="2_hl7jq"]
 [ext_resource type="PackedScene" uid="uid://7dio4dwpx3bn" path="res://Interaction_Area.tscn" id="2_4amsv"]
 [ext_resource type="PackedScene" uid="uid://cguwfawxdljb0" path="res://Chest.tscn" id="6_uo0lx"]
 [ext_resource type="PackedScene" uid="uid://3i6p0cd74cda" path="res://TestStateMachine.tscn" id="7_dmllt"]
@@ -25,12 +25,12 @@ metadata/_edit_vertical_guides_ = [-8.0, -145.0]
 y_sort_enabled = true
 position = Vector2(67, -88)
 
+[node name="WorldInitialization" type="Node2D" parent="."]
+script = ExtResource("2_hl7jq")
+_PlayerSpawnPosition = Vector2(45, 50)
+
 [node name="Y Sorted" type="Node2D" parent="."]
 y_sort_enabled = true
-
-[node name="Player" parent="Y Sorted" instance=ExtResource("1_r4y16")]
-y_sort_enabled = true
-position = Vector2(45, 50)
 
 [node name="Area2D" parent="Y Sorted" instance=ExtResource("2_4amsv")]
 position = Vector2(-147, 44)

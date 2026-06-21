@@ -14,7 +14,6 @@ public partial class Player : Character
     private PlayerMovementComponent _PlayerMovementComponent;
     private AttackComponent _AttackComponent;
     private InputHandler _InputHandler;
-    private HitBoxComponent _HitBoxComponent;
 
     private PlayerInteractionComponents _PlayerInteractionComponents;
 
@@ -38,8 +37,6 @@ public partial class Player : Character
         {
             GD.PrintErr("Player: Can't find HealthComponent");
         }
-
-        _HitBoxComponent = FindChild("HitBoxComponent", true) as HitBoxComponent;
 
         _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
         if (_InputHandler == null)

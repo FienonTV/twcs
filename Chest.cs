@@ -2,11 +2,28 @@ using Godot;
 
 public partial class Chest : StaticBody2D, IInteractable
 {
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready() { }
+    [Export]
+    public string _InteractionLabel = "Open Chest";
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta) { }
+    public override void _Ready()
+    {
+        // Initialization can go here, e.g. populate inventory.
+    }
 
-    public void Interact() { }
+    public string GetInteractionLabel()
+    {
+        return _InteractionLabel;
+    }
+
+    public void Interact(Character user)
+    {
+        GD.Print("Chest opened by " + user.Name);
+        // TODO: open chest UI / give loot
+    }
+
+    // Legacy signature kept for backward compatibility with any direct callers.
+    public void Interact()
+    {
+        GD.Print("Chest opened.");
+    }
 }

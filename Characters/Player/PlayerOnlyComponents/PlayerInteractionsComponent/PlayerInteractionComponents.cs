@@ -13,8 +13,7 @@ public partial class PlayerInteractionComponents : Node2D
 
     bool _isLoaded = false;
 
-    private List<Interaction_Area> all_interactions = new List<Interaction_Area>();
-
+    private List<IInteractable> all_interactions = new List<IInteractable>();
 
     public override void _Ready()
     {
@@ -62,22 +61,18 @@ public partial class PlayerInteractionComponents : Node2D
         }
     }
 
-
-    ////////////Interaction Methods////////////
     private void on_interaction_area_entered(Area2D area)
     {
-
-        if (area is Interaction_Area interactable)
+        if (area is IInteractable interactable)
         {
             all_interactions.Insert(0, interactable);
             updateInteractions();
         }
-
     }
 
     private void on_interaction_area_exited(Area2D area)
     {
-        if (area is Interaction_Area interactable)
+        if (area is IInteractable interactable)
         {
             all_interactions.Remove(interactable);
             updateInteractions();
@@ -101,7 +96,7 @@ public partial class PlayerInteractionComponents : Node2D
         }
         if (all_interactions.Count > 0)
         {
-            InteractLabel.Text = all_interactions[0].getInteractLabel();
+            InteractLabel.Text = all_interactions[0].GetInteractionLabel();
         }
         else
         {
@@ -113,21 +108,10 @@ public partial class PlayerInteractionComponents : Node2D
     {
         if (all_interactions.Count > 0)
         {
-            Interaction_Area currentInteraction = all_interactions[0];
-
-            switch (currentInteraction.getInteractionType())
-            {
-                case "print_text":
-                    GD.Print(currentInteraction.getInteractionValue());
-                    break;
-
-                default:
-                    GD.Print("Default");
-                    break;
-            }
+            IInteractable currentInteraction = all_interactions[0];
+            currentInteraction.Interact(_CharacterParent);
         }
     }
-
 
     private void ChangeCurrentInteractionCollisionShapeDirection()
     {
@@ -140,6 +124,5 @@ public partial class PlayerInteractionComponents : Node2D
             _InteractionAreaCollisionShape.Position = _CharacterParent._CurrentLookingDirection * 10;
             _InteractionAreaCollisionShape.Rotation = _CharacterParent._CurrentLookingDirection.Angle();
         }
-
     }
 }
