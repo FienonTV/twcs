@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://btf5duwpl2um3"]
+
+[ext_resource type="Script" path="res://CollectableComponent.cs" id="1_mf166"]
+
+[node name="CollectableComponent" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_mf166")

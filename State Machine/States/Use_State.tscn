@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://6we107n6mmp6"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_vg4ut"]
+script/source = "using Godot;
+
+public partial class UseState : State 
+{
+	public override void Enter(Vector2 lastMovingDirection, AnimationController animationController) 
+	{
+		GD.Print(\"Entering Use State\");
+		_LastMovementeDirection = lastMovingDirection;
+		StartAnimation();
+	}
+
+	public override void StartAnimation()
+	{
+		//GD.Print(\"Animation Started! Move Direction: \" + MovementDirection);
+		 if(DirectionForAnimation.TryGetValue(_MovementDirection, out string animationName)) {
+			//GD.Print(\"Idle: I will Print following Animation now: \" + \"use_\" + animationName );
+
+			if(_AnimationController == null) GD.Print(\"AnimContr == null\");
+			_AnimationController?.PlayAnimation(\"use_\" + animationName);
+		}
+
+		else {
+			if(_MovementDirection == Vector2.Zero) {
+				_AnimationController?.PlayAnimation(\"use_down\");
+			}
+		}
+	}
+}
+"
+
+[node name="UseState" type="Node"]
+script = SubResource("CSharpScript_vg4ut")

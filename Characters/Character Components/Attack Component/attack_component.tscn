@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://l451ewecvr1m"]
+
+[ext_resource type="Script" path="res://Characters/Character Components/Attack Component/AttackComponent.cs" id="1_ft75d"]
+
+[node name="AttackComponent" type="Node"]
+script = ExtResource("1_ft75d")
+
+[node name="HitBoxTimer" type="Timer" parent="."]
+wait_time = 0.001
+one_shot = true

@@ -1,0 +1,177 @@
+[gd_scene load_steps=16 format=3 uid="uid://3i6p0cd74cda"]
+
+[ext_resource type="Texture2D" uid="uid://byhocpfn00hy4" path="res://Characters/Enemies/Character_sheet.png" id="1_lowxj"]
+[ext_resource type="Script" path="res://Characters/Player/Enemy.cs" id="1_mex74"]
+[ext_resource type="Script" path="res://New State Machine/newIdleState.cs" id="3_1pdio"]
+[ext_resource type="Script" path="res://New State Machine/NPCStateMachine.cs" id="3_u8td5"]
+[ext_resource type="Script" path="res://New State Machine/newWalkState.cs" id="4_lvt5w"]
+[ext_resource type="PackedScene" uid="uid://dgawkbyts0ufv" path="res://Characters/Character Components/Movement Component/Movement_Component.tscn" id="5_e3xep"]
+[ext_resource type="Script" path="res://Characters/Behaviors/PointToPointPatrolBehavior.cs" id="5_jskl2"]
+[ext_resource type="Script" path="res://New State Machine/newFollowState.cs" id="7_f3uy7"]
+[ext_resource type="Script" path="res://Characters/Behaviors/FollowPlayerBehavior.cs" id="7_x07ld"]
+
+[sub_resource type="Animation" id="Animation_qm2lh"]
+resource_name = "Idle"
+length = 0.500013
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Texutre:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_1laj8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Texutre:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Texutre:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_vnalb"]
+resource_name = "move_left"
+length = 0.500013
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Texutre:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Texutre:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_wu2md"]
+resource_name = "move_right"
+length = 0.500013
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Texutre:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Texutre:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y4xeh"]
+_data = {
+"Idle": SubResource("Animation_qm2lh"),
+"RESET": SubResource("Animation_1laj8"),
+"move_left": SubResource("Animation_vnalb"),
+"move_right": SubResource("Animation_wu2md")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aktye"]
+radius = 8.06226
+
+[node name="New State Machine Test Character" type="CharacterBody2D" node_paths=PackedStringArray("navigationAgent2D")]
+script = ExtResource("1_mex74")
+navigationAgent2D = NodePath("NavigationAgent2D")
+
+[node name="Texutre" type="Sprite2D" parent="."]
+texture = ExtResource("1_lowxj")
+flip_h = true
+hframes = 10
+vframes = 10
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_y4xeh")
+}
+
+[node name="StateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_DefaultState")]
+script = ExtResource("3_u8td5")
+_DefaultState = NodePath("Idle")
+
+[node name="Idle" type="Node2D" parent="StateMachine"]
+script = ExtResource("3_1pdio")
+
+[node name="Walk" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_MovementBehavior")]
+script = ExtResource("4_lvt5w")
+_MovementBehavior = NodePath("Patrol")
+
+[node name="Patrol" type="Node" parent="StateMachine/Walk" node_paths=PackedStringArray("_CharacterParent")]
+script = ExtResource("5_jskl2")
+_CharacterParent = NodePath("../../..")
+
+[node name="Follow" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("_MovementBehavior")]
+script = ExtResource("7_f3uy7")
+_MovementBehavior = NodePath("Follow")
+
+[node name="Follow" type="Node" parent="StateMachine/Follow" node_paths=PackedStringArray("_CharacterParent")]
+script = ExtResource("7_x07ld")
+_CharacterParent = NodePath("../../..")
+
+[node name="MovementComponent" parent="." instance=ExtResource("5_e3xep")]
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 10.0
+path_postprocessing = 1
+avoidance_enabled = true
+debug_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_aktye")

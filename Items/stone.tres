@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDataResource" load_steps=5 format=3 uid="uid://dfqskjygic0ps"]
+
+[ext_resource type="Texture2D" uid="uid://d28bjc742yivo" path="res://Items/Sprites/objects.png" id="1_npwpf"]
+[ext_resource type="Resource" uid="uid://scnm58o5gtcb" path="res://Items/ItemEffects/Heal [Item Effect Resource]/HealItemEffect.tres" id="1_pxtqu"]
+[ext_resource type="Script" path="res://Items/Scripts/ItemDataResource.cs" id="1_yu84c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjuep"]
+atlas = ExtResource("1_npwpf")
+region = Rect2(0, 17, 15, 15)
+
+[resource]
+script = ExtResource("1_yu84c")
+_Name = "Stone"
+_Description = "A little stone, dropped by a Rock"
+_Texture = SubResource("AtlasTexture_qjuep")
+_ItemEffects = Array[Resource]([ExtResource("1_pxtqu")])

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDataResource" load_steps=4 format=3 uid="uid://bkhvetl4oc1kq"]
+
+[ext_resource type="Texture2D" uid="uid://d28bjc742yivo" path="res://Items/Sprites/objects.png" id="1_imect"]
+[ext_resource type="Script" path="res://Items/Scripts/ItemDataResource.cs" id="2_hk234"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_73cks"]
+atlas = ExtResource("1_imect")
+region = Rect2(131, 84, 11, 11)
+
+[resource]
+script = ExtResource("2_hk234")
+_Name = "Tree seed"
+_Description = "A seed, dropped by a chopped Tree!"
+_Texture = SubResource("AtlasTexture_73cks")
+_ItemEffects = null

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="HealItemEffectResource" load_steps=2 format=3 uid="uid://scnm58o5gtcb"]
+
+[ext_resource type="Script" path="res://Items/ItemEffects/Heal [Item Effect Resource]/HealItemEffectResource.cs" id="1_3384t"]
+
+[resource]
+script = ExtResource("1_3384t")
+_HealAmount = 1
+_EffectDescription = "This effects heals the user"

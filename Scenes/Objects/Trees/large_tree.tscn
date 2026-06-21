@@ -1,0 +1,47 @@
+[gd_scene load_steps=10 format=3 uid="uid://bxptushg2uo88"]
+
+[ext_resource type="Texture2D" uid="uid://ba0mqscs4ktuw" path="res://World/MysticWoods/objects/objects.png" id="1_3remf"]
+[ext_resource type="Shader" path="res://Scenes/Objects/Trees/tree_shake_shader.gdshader" id="1_wm437"]
+[ext_resource type="Script" path="res://Scenes/Objects/Trees/SmallTree.cs" id="2_yy7tp"]
+[ext_resource type="PackedScene" uid="uid://c2mwj55ha43j6" path="res://Characters/Character Components/Hurt Box Component/Hurt_Box_Component.tscn" id="3_18teq"]
+[ext_resource type="PackedScene" uid="uid://cl1vlioksrw52" path="res://Characters/Character Components/Health Component/Health_Component.tscn" id="4_hmcrn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbq3g"]
+resource_local_to_scene = true
+shader = ExtResource("1_wm437")
+shader_parameter/shake_intensity = 0.0
+shader_parameter/shake_speed = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ysqrl"]
+atlas = ExtResource("1_3remf")
+region = Rect2(0, 80, 48, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_341wl"]
+radius = 10.0499
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c4yi4"]
+size = Vector2(21, 42)
+
+[node name="LargeTree" type="Sprite2D"]
+material = SubResource("ShaderMaterial_qbq3g")
+position = Vector2(0, -17)
+texture = SubResource("AtlasTexture_ysqrl")
+script = ExtResource("2_yy7tp")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 18)
+shape = SubResource("CircleShape2D_341wl")
+
+[node name="HurtboxComponent" parent="." instance=ExtResource("3_18teq")]
+_EffectiveItems = [1]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+position = Vector2(-0.5, 3)
+shape = SubResource("RectangleShape2D_c4yi4")
+debug_color = Color(0.337547, 0.00140734, 0.620982, 0.42)
+
+[node name="HealthComponent" parent="." instance=ExtResource("4_hmcrn")]
+_MaxHealth = 25
+_InvulnerableDuration = 0.001

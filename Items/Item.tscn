@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://ofcpmeeu38y1"]
+
+[ext_resource type="Script" path="res://Item.cs" id="1_30vnm"]
+[ext_resource type="PackedScene" uid="uid://btf5duwpl2um3" path="res://collectable_component.tscn" id="2_iij6g"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pho5p"]
+
+[node name="Item" type="CharacterBody2D"]
+script = ExtResource("1_30vnm")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollectableComponent" parent="." instance=ExtResource("2_iij6g")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectableComponent"]
+shape = SubResource("CircleShape2D_pho5p")

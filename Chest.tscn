@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=3 uid="uid://cguwfawxdljb0"]
+
+[ext_resource type="Script" path="res://Chest.cs" id="1_8inft"]
+[ext_resource type="Texture2D" uid="uid://5krxtp2f2np7" path="res://Chests.png" id="1_hu2br"]
+[ext_resource type="PackedScene" uid="uid://7dio4dwpx3bn" path="res://Interaction_Area.tscn" id="2_7rsal"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxmde"]
+atlas = ExtResource("1_hu2br")
+region = Rect2(0, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqoa0"]
+atlas = ExtResource("1_hu2br")
+region = Rect2(48, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0rew"]
+atlas = ExtResource("1_hu2br")
+region = Rect2(96, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xme2d"]
+atlas = ExtResource("1_hu2br")
+region = Rect2(144, 0, 48, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgukc"]
+atlas = ExtResource("1_hu2br")
+region = Rect2(192, 0, 48, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p5uba"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kxmde")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqoa0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e0rew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xme2d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lgukc")
+}],
+"loop": true,
+"name": &"closed",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fypvp"]
+size = Vector2(22, 5.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_in532"]
+radius = 15.5242
+
+[node name="Chest" type="StaticBody2D"]
+script = ExtResource("1_8inft")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_p5uba")
+animation = &"closed"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-8, 8.25)
+shape = SubResource("RectangleShape2D_fypvp")
+
+[node name="InteractionArea" parent="." instance=ExtResource("2_7rsal")]
+InteractLabel = "[E] to open"
+InteractType = "PrintText"
+InteractValue = "Openend"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-9, 6)
+shape = SubResource("CircleShape2D_in532")

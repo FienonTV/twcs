@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://c226i48kuke8p"]
+
+[node name="IsInteractableComponent" type="Node2D"]

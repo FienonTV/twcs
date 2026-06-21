@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://c73ejqotojfb"]
+
+[ext_resource type="Script" path="res://UI/Healthbar/HealthBarDisplay.cs" id="1_mf4kf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjiup"]
+bg_color = Color(0.118581, 0.118581, 0.118581, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j23uw"]
+bg_color = Color(0.588562, 0.585734, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_umuco"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g2gp"]
+bg_color = Color(0.811765, 0, 0.133333, 1)
+
+[node name="HealthBarDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 20.0
+offset_bottom = 4.0
+script = ExtResource("1_mf4kf")
+
+[node name="Outline" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Hurtbar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_hjiup")
+theme_override_styles/fill = SubResource("StyleBoxFlat_j23uw")
+value = 75.0
+show_percentage = false
+
+[node name="Healthbar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_umuco")
+theme_override_styles/fill = SubResource("StyleBoxFlat_0g2gp")
+value = 50.0
+show_percentage = false
+
+[node name="VisibleTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
