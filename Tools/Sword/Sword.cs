@@ -6,8 +6,6 @@ public partial class Sword : HandItem
 
 
     /****************************** EXPORT VARIABLES ******************************/
-    [Export]
-    public int _Damage;
 
 
     /****************************** NODE VARIABLES ******************************/
@@ -20,7 +18,12 @@ public partial class Sword : HandItem
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
+        base._Ready();
         _HitBoxComponent = FindChild("HitBoxComponent", recursive: true) as HitBoxComponent;
+        if (_HitBoxComponent == null)
+        {
+            GD.PrintErr("Sword: No HitBoxComponent found.");
+        }
     }
 
     /****************************** EVENTHANDLER ******************************/

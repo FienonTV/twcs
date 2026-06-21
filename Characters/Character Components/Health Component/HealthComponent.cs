@@ -33,8 +33,15 @@ public partial class HealthComponent : Node
     public override void _Ready()
     {
         _Health = _MaxHealth;
-        _InvulnerableTimer = GetNode<Timer>("InvulnerableTimer");
-        _InvulnerableTimer.Timeout += StopTemporaryInvulnerability;
+        _InvulnerableTimer = GetNodeOrNull<Timer>("InvulnerableTimer");
+        if (_InvulnerableTimer != null)
+        {
+            _InvulnerableTimer.Timeout += StopTemporaryInvulnerability;
+        }
+        else
+        {
+            GD.PrintErr("HealthComponent: InvulnerableTimer not found.");
+        }
     }
 
     /****************************** EVENTHANDLER ******************************/

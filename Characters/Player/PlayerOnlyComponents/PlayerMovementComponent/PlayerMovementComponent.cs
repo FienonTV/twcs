@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public partial class PlayerMovementComponent : Node
+public partial class PlayerMovementComponent : Node, IMovementComponent
 {
     //public event Action<string, Vector2> _OnMovingPerformed;
 
@@ -12,22 +12,30 @@ public partial class PlayerMovementComponent : Node
     public override void _Ready()
     {
         _Player = GetParent() as Player;
+        if (_Player == null)
+        {
+            GD.PrintErr("PlayerMovementComponent: Parent is not a Player.");
+        }
     }
 
     public void HandleMovement(Vector2 direction)
     {
-        //Already checked before sending Singal in InputHandler, but double check if the Method is called somewhere else
+        if (_Player == null)
+        {
+            GD.PrintErr("PlayerMovementComponent: No Player to move.");
+            return;
+        }
+
         if (direction != Vector2.Zero)
         {
             _Player.Velocity = direction * _MovingSpeed;
         }
-
         else
         {
             _Player.Velocity = Vector2.Zero;
         }
 
         _Player.MoveAndSlide();
-        //_OnMovingPerformed.Invoke("MoveState", direction);
+        //_OnMovingPerformed?.Invoke("MoveState", direction);
     }
 }

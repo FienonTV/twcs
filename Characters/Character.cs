@@ -20,20 +20,12 @@ public partial class Character : CharacterBody2D
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
     {
-        // _StateMachine = GetNode<CharacterStateMachine>("StateMachine");
-        //_AnimationController = GetNode<AnimationController>("AnimationController");
+        base._Ready();
         _HealthComponent = FindChild("HealthComponent", true) as HealthComponent;
         if (_HealthComponent == null)
         {
-            GD.PrintErr("Can't find HealtComponent");
+            GD.PrintErr("Character: Can't find HealthComponent");
         }
-        // _HurtBoxComponent = GetNode<HurtBoxComponent>("HurtBoxComponent");
-
-
-
-
-        //_HurtBoxComponent.OnDamageRecived += _StateMachine.StartStateEffect;
-        //_HurtBoxComponent.ReduceHealth += _HealthComponent.ChangeHealth;
     }
 
     /****************************** EVENTHANDLER ******************************/

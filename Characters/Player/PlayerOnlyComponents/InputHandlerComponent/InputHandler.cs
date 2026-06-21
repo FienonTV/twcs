@@ -14,7 +14,11 @@ public partial class InputHandler : Node
 
     public override void _Ready()
     {
-        _InventoryMenu = GetNode<inventory_menu>("/root/InventoryMenu");
+        _InventoryMenu = GetNodeOrNull<inventory_menu>("/root/InventoryMenu");
+        if (_InventoryMenu == null)
+        {
+            GD.PrintErr("InputHandler: InventoryMenu autoload not found.");
+        }
         ProcessMode = ProcessModeEnum.Always;
     }
 
@@ -22,6 +26,12 @@ public partial class InputHandler : Node
     {
         if (@event.IsActionPressed("inventory"))
         {
+            if (_InventoryMenu == null)
+            {
+                GD.PrintErr("InputHandler: InventoryMenu is null, cannot open inventory.");
+                return;
+            }
+
             if (_InventoryMenu._IsOpen == false)
             {
                 _InventoryMenu.showInventory();
@@ -58,12 +68,12 @@ public partial class InputHandler : Node
         //If Attack / UseItem Input is pressed, trigger the Event. 
         if (Input.IsActionJustPressed("UseEquippedItem") && GetTree().Paused == false)
         {
-            _OnUseInput.Invoke();
+            _OnUseInput?.Invoke();
         }
 
         if (Input.IsActionJustReleased("Interact"))
         {
-            _OnInteractionInput.Invoke();
+            _OnInteractionInput?.Invoke();
         }
     }
 }

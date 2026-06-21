@@ -1,5 +1,5 @@
-using System;
 using Godot;
+using System;
 
 
 /// <summary>
@@ -25,7 +25,7 @@ public partial class HitBoxComponent : Area2D
 
 
     /****************************** NODE VARIABLES ******************************/
-    public Sword _Tool;
+    public HandItem _Tool;
     public Character _CharacterParent;
     public CollisionShape2D _CollisionShape2D;
 
@@ -39,12 +39,16 @@ public partial class HitBoxComponent : Area2D
     {
         base._Ready();
         _CollisionShape2D = FindChild("CollisionShape2D", recursive: true) as CollisionShape2D;
-        FindSwordParent();
+        FindHandItemParent();
         FindCharacterParent();
     }
 
     public override void _Process(double delta)
     {
+        if (_CharacterParent == null || _CollisionShape2D == null)
+        {
+            return;
+        }
         ChangeCurrentHitboxPosition();
     }
 
@@ -57,24 +61,30 @@ public partial class HitBoxComponent : Area2D
     {
         GD.Print("HitBox activated and performing Hit");
         _IsActive = true;
-        _OnHitboxActivated?.Invoke(_Tool._Damage);
+        _CollisionShape2D.Disabled = false;
+        _OnHitboxActivated?.Invoke(_Tool?._Damage ?? 0);
     }
 
     public void DeactivateHitBox()
     {
         GD.Print("Hitbox Deactivated");
         _IsActive = false;
+        if (_CollisionShape2D != null)
+        {
+            _CollisionShape2D.Disabled = true;
+        }
     }
 
-    public void FindSwordParent()
+    public void FindHandItemParent()
     {
         Node node = this;
         while (node != null) // Solange ein Parent existiert
         {
-            if (node is Sword sword) // Prüfen, ob es vom Typ Character (oder abgeleitet) ist
+            if (node is HandItem handItem) // Prüfen, ob es vom Typ Character (oder abgeleitet) ist
             {
-                _Tool = sword;
+                _Tool = handItem;
                 GD.Print("Parent gefunden"); // Charakter gefunden, zurückgeben
+                return;
             }
             node = node.GetParent(); // Zum nächsten Parent wechseln
         }
@@ -89,6 +99,7 @@ public partial class HitBoxComponent : Area2D
             {
                 _CharacterParent = character;
                 GD.Print("Parent gefunden"); // Charakter gefunden, zurückgeben
+                return;
             }
             node = node.GetParent(); // Zum nächsten Parent wechseln
         }
@@ -96,6 +107,10 @@ public partial class HitBoxComponent : Area2D
 
     private void ChangeCurrentHitboxPosition()
     {
+        if (_CharacterParent == null)
+        {
+            return;
+        }
         Position = _CharacterParent._CurrentLookingDirection * 20;
         Rotation = _CharacterParent._CurrentLookingDirection.Angle();
 

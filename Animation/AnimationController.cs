@@ -26,9 +26,9 @@ public partial class AnimationController : Node
     // Timer used for handling hurt effect duration
     private Timer _HurtEffectTimer;
 
-    // This method is called when the node is added to the scene
     public override void _Ready()
     {
+        base._Ready();
         // Find and store the reference to the AnimationPlayer node
         _AnimationPlayer = FindChild("AnimationPlayer") as AnimationPlayer;
 
@@ -45,7 +45,14 @@ public partial class AnimationController : Node
         }
 
         // Connect the Timeout signal of the HurtEffectTimer to the StopEffect method
-        _HurtEffectTimer.Timeout += StopEffect;
+        if (_HurtEffectTimer != null)
+        {
+            _HurtEffectTimer.Timeout += StopEffect;
+        }
+        else
+        {
+            GD.PrintErr("AnimationController: HurtEffectTimer not found.");
+        }
     }
 
     // Method to play a specified animation
@@ -76,7 +83,7 @@ public partial class AnimationController : Node
     public void PlayEffect(string effectName)
     {
         _EffectPlayer?.Play(effectName);
-        _HurtEffectTimer.Start();
+        _HurtEffectTimer?.Start();
     }
 
     // Method to stop the effect animation

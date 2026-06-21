@@ -5,19 +5,32 @@ public partial class WalkState : CharacterState
     [Export]
     public BaseMovementBehavior _MovementBehavior; //Movement Behavior of the Character, for possible individual behave on individual Characters
 
-    //private Vector2 _TargetDirection;
+    private IMovementComponent _MovementComponent;
+
+    public override void _Ready()
+    {
+        base._Ready();
+        _MovementComponent = Owner.FindChild("MovementComponent", recursive: true) as IMovementComponent;
+        if (_MovementComponent == null)
+        {
+            GD.PrintErr("WalkState: No IMovementComponent found on " + Owner.Name);
+        }
+    }
 
     public override void Enter()
     {
         //GD.Print("Walk State Entered with" + _MovementBehavior.Name);
         base.Enter();
-        if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
+        if (_StateMachine._AnimationPlayer != null)
         {
-            _StateMachine._AnimationPlayer.Play("Idle");
-        }
-        else
-        {
-            _StateMachine._AnimationPlayer.Play("idle_down");
+            if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
+            {
+                _StateMachine._AnimationPlayer.Play("Idle");
+            }
+            else
+            {
+                _StateMachine._AnimationPlayer.Play("idle_down");
+            }
         }
     }
 
@@ -29,8 +42,8 @@ public partial class WalkState : CharacterState
         {
             _StateMachine._CurrentDirection = _MovementBehavior.GetNextDirection();
         }
-        PlayerMovementComponent cmc = Owner.GetNode<PlayerMovementComponent>("MovementComponent");
-        cmc.HandleMovement(_StateMachine._CurrentDirection);
+
+        _MovementComponent?.HandleMovement(_StateMachine._CurrentDirection);
         StartAnimation("move_");
     }
 }
