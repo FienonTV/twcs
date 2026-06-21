@@ -4,15 +4,15 @@ using System;
 public partial class Interaction_Area : Area2D, IInteractable
 {
     [Export]
-    public String InteractLabel = "none";
+    public string InteractLabel = "none";
 
     [Export]
-    private String InteractType = "none";
+    private string InteractType = "none";
 
     [Export]
-    private String InteractValue = "none";
+    private string InteractValue = "none";
 
-    public String GetInteractionLabel()
+    public string GetInteractionLabel()
     {
         return InteractLabel;
     }
@@ -26,23 +26,23 @@ public partial class Interaction_Area : Area2D, IInteractable
                 break;
 
             default:
-                Logger.Debug("Default interaction on " + Name);
+                Logger.Debug($"Default interaction on {Name}");
                 break;
         }
     }
 
     // Kept for backward compatibility with non-interactable consumers.
-    public String getInteractLabel()
+    public string getInteractLabel()
     {
         return InteractLabel;
     }
 
-    public String getInteractionType()
+    public string getInteractionType()
     {
         return InteractType;
     }
 
-    public String getInteractionValue()
+    public string getInteractionValue()
     {
         return InteractValue;
     }

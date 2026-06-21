@@ -2,51 +2,74 @@ using Godot;
 
 public partial class SmallTree : Sprite2D
 {
-	HurtBoxComponent _HurtBoxComponent;
-	HealthComponent _HealthComponent;
+    [Export]
+    private HurtBoxComponent HurtBoxComponent;
 
-	PackedScene _LogScene = ResourceLoader.Load<PackedScene>(ResourcePaths.LogScene);
+    [Export]
+    private HealthComponent HealthComponent;
 
-	public override void _Ready()
-	{
-		_HurtBoxComponent = FindChild("HurtboxComponent", recursive: true) as HurtBoxComponent;
-		_HealthComponent = FindChild("HealthComponent", recursive: true) as HealthComponent;
+    private PackedScene _LogScene = ResourceLoader.Load<PackedScene>(ResourcePaths.LogScene);
 
-		if (_HurtBoxComponent != null)
-		{
-			_HurtBoxComponent.OnDamageReceived += ReceiveDamage;
-		}
+    public override void _Ready()
+    {
+        if (HurtBoxComponent == null)
+        {
+            HurtBoxComponent = FindChild("HurtboxComponent", recursive: true) as HurtBoxComponent;
+        }
+        if (HealthComponent == null)
+        {
+            HealthComponent = FindChild("HealthComponent", recursive: true) as HealthComponent;
+        }
 
-		if (_HealthComponent != null)
-		{
-			_HealthComponent.HealthEmpty += ZeroHealthReached;
-		}
-	}
+        if (HurtBoxComponent != null)
+        {
+            HurtBoxComponent.OnDamageReceived += ReceiveDamage;
+        }
+        else
+        {
+            Logger.Error("SmallTree: HurtBoxComponent not found.");
+        }
 
-	public void ReceiveDamage(int damage)
-	{
-		_HealthComponent?.ChangeHealth(damage * -1);
-		ShaderMaterial material = (ShaderMaterial)this.Material;
-		material.SetShaderParameter("shake_intensity", 0.75f);
+        if (HealthComponent != null)
+        {
+            HealthComponent.HealthEmpty += ZeroHealthReached;
+        }
+        else
+        {
+            Logger.Error("SmallTree: HealthComponent not found.");
+        }
+    }
 
-		Tween tween = CreateTween();
-		tween.TweenInterval(0.5f);
-		tween.TweenCallback(Callable.From(() => material.SetShaderParameter("shake_intensity", 0.0f)));
-	}
+    public void ReceiveDamage(int damage)
+    {
+        HealthComponent?.ChangeHealth(damage * -1);
+        if (Material is ShaderMaterial material)
+        {
+            material.SetShaderParameter("shake_intensity", 0.75f);
+            Tween tween = CreateTween();
+            tween.TweenInterval(0.5f);
+            tween.TweenCallback(Callable.From(() => material.SetShaderParameter("shake_intensity", 0.0f)));
+        }
+    }
 
-	public void ZeroHealthReached()
-	{
-		CallDeferred("addLogScene");
-		Logger.Info("SmallTree: Tree destroyed.");
-		QueueFree();
-	}
+    public void ZeroHealthReached()
+    {
+        CallDeferred(nameof(addLogScene));
+        Logger.Info("SmallTree: Tree destroyed.");
+        QueueFree();
+    }
 
-	private void addLogScene()
-	{
-		Item logInstance = _LogScene.Instantiate() as Item;
-		RandomNumberGenerator rng = new RandomNumberGenerator();
-		logInstance.GlobalPosition = GlobalPosition;
-		logInstance.Velocity = Vector2.Right.Rotated(rng.RandfRange(-85, 85)) * rng.RandfRange(10, 100);
-		GetParent().AddChild(logInstance);
-	}
+    private void addLogScene()
+    {
+        Item logInstance = _LogScene.Instantiate() as Item;
+        if (logInstance == null)
+        {
+            Logger.Error("SmallTree: Failed to instantiate log scene.");
+            return;
+        }
+        RandomNumberGenerator rng = new RandomNumberGenerator();
+        logInstance.GlobalPosition = GlobalPosition;
+        logInstance.Velocity = Vector2.Right.Rotated(rng.RandfRange(-85, 85)) * rng.RandfRange(10, 100);
+        GetParent().AddChild(logInstance);
+    }
 }

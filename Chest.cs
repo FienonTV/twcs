@@ -17,7 +17,12 @@ public partial class Chest : StaticBody2D, IInteractable
 
     public void Interact(Character user)
     {
-        Logger.Debug("Chest opened by " + user.Name);
+        if (user == null)
+        {
+            Logger.Error("Chest: No user provided.");
+            return;
+        }
+        Logger.Debug($"Chest opened by {user.Name}");
         // TODO: open chest UI / give loot
     }
 
