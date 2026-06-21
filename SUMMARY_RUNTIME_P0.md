@@ -1,4 +1,4 @@
-# SUMMARY: Runtime P0 Fixes
+# SUMMARY: Runtime P0 & Architecture P1/P3 Fixes
 
 Branch: `fix/runtime-p0-issues`
 Status: Abgeschlossen
@@ -7,42 +7,80 @@ Build: 0 Warnungen, 0 Fehler
 ---
 
 ## Ziel
-Kritische Laufzeitfehler und Architekturrisiken (P0) aus der Analyse vom 2026-06-21 beheben.
+Kritische Laufzeitfehler (P0) sowie ausgewählte Architekturrisiken (P1) und Wartbarkeitsprobleme (P3) aus der Analyse vom 2026-06-21 beheben.
 
 ---
 
-## Durchgeführte Änderungen
+## Geänderte Dateien (Auswahl)
 
-### 1. Repository-Sauberkeit
-- `.gitignore` um `*.uid` ergänzt (Godot 4.4 Metadaten).
-- Alle `.uid`-Dateien und `TwoWorlds CSharp.csproj.old` entfernt.
-- Unstaged Änderungen vom vorherigen Branch zurückgesetzt.
+### Architektur / State Machine
+- `StateMachine/CharacterStateMachine.cs`
+- `StateMachine/PlayerStateMachine.cs`
+- `StateMachine/ToolStateMachine.cs`
+- `StateMachine/WalkState.cs`
+- `StateMachine/UseToolState.cs`
+- `StateMachine/FollowState.cs`
 
-### 2. `UseToolState` robust gemacht
-- `StateMachine/UseToolState.cs` nutzt jetzt `HitBoxComponent.ActivateHitBox()` / `DeactivateHitBox()`.
-- Kein direkter Zugriff mehr auf `_CollisionShape2D.Disabled`.
-- Null-Checks für `_AnimationPlayer` und `_HitBoxComponent` ergänzt.
+### Charaktere / Kampf
+- `Characters/Character.cs`
+- `Characters/Player/Player.cs`
+- `Characters/Player/Enemy.cs`
+- `Characters/Character Components/Attack Component/AttackComponent.cs`
+- `Characters/Character Components/Hit Box Component/HitBoxComponent.cs`
+- `Characters/Character Components/Health Component/HealthComponent.cs`
+- `Characters/Player/PlayerOnlyComponents/PlayerInteractionsComponent/PlayerInteractionComponents.cs`
 
-### 3. Heilitems zielorientiert
-- `ItemEffectResource.Use()` → `Use(Character user)`.
-- `ItemDataResource.Use()` → `Use(Character user)`.
-- `HealItemEffectResource` sucht die `HealthComponent` am übergebenen `Character` und heilt diesen.
-- `InventorySlotUI.ItemPressed` übergibt den aktuellen Player an das Item.
+### Items / Inventar
+- `Items/ItemEffects/ItemEffectResource.cs`
+- `Items/ItemEffects/Heal [Item Effect Resource]/HealItemEffectResource.cs`
+- `Items/Scripts/ItemDataResource.cs`
+- `UI/Inventory/InventorySlotUI.cs`
+- `UI/Inventory/Scripts/InventoryDataResource.cs`
 
-### 4. Verwaiste Signal-Verbindungen entfernt
-- `Characters/Player/Player.tscn`: `_FinishedAnimation`
-- `UI/Inventory/Inventory.tscn`: `_on_inventory_inventory_active`
-- `Characters/Enemies/Minotaur/Minotaur.tscn`: `_on_area_entered`
+### Welt / Manager
+- `GameManager.cs`
+- `Scenes/Objects/Trees/SmallTree.cs`
 
-### 5. Inventar konsistent gemacht
-- `ItemDataResource` erhält `_MaxStackSize = 99`.
-- `InventoryDataResource.addItem` beachtet Stapel-Limit, füllt auf und erstellt neue Slots.
-- `InventorySlotUI.ItemPressed` leert leere Slots sauber (`_ItemData = null`, Textur/Anzahl zurückgesetzt).
+### Szenen
+- `Characters/Player/Player.tscn`
+- `Characters/Enemies/Minotaur/Minotaur.tscn`
+- `UI/Inventory/Inventory.tscn`
+
+### Repository
+- `.gitignore`
+- `CHANGELOG_RUNTIME_P0.md` (neu)
+- `SUMMARY_RUNTIME_P0.md` (neu)
+
+---
+
+## Highlights
+
+1. **State Machine ist jetzt generisch**
+   - Player/NPC-Trennung über Input vs. Behavior, nicht über Type-Checks im WalkState.
+   - ToolStateMachine kennt seine Owner-StateMachine per Export.
+
+2. **Kampf-System arbeitet über Components, nicht über harte Player-Referenzen**
+   - `AttackComponent` nutzt `Character` statt `Player`.
+   - `HitBoxComponent` findet HandItem und Character dynamisch in der Hierarchie.
+
+3. **Items und Inventar sind robust**
+   - Heilitems wirken auf den richtigen Charakter.
+   - Stapel-Limit und leere Slots werden sauber behandelt.
+
+4. **GameManager vereinfacht**
+   - Player wird einmal zentral registriert.
+
+5. **Toter Code entfernt**
+   - `NPCInputHandler.cs` gelöscht.
+   - Auskommentierte Zeilen in `Enemy.cs` und `Character.cs` entfernt.
+
+6. **Typos behoben**
+   - `Invulnerarbility` → `Invulnerability`
+   - `ReciveDamage` → `ReceiveDamage`
 
 ---
 
 ## Build
-
 ```
 Der Buildvorgang wurde erfolgreich ausgeführt.
     0 Warnung(en)
@@ -51,24 +89,6 @@ Der Buildvorgang wurde erfolgreich ausgeführt.
 
 ---
 
-## Offene Punkte (P1/P2/P3)
-
-Folgende Punkte aus der Analyse wurden in diesem Branch absichtlich **nicht** angefasst, da sie keinen direkten Laufzeitabsturz verursachen:
-
-- `WalkState` trennt noch Player/NPC über `Owner.GetType()`.
-- `ToolStateMachine` sucht Owner-StateMachine über Baum-Suche (`Owner.Owner`).
-- `HitBoxComponent`/`AttackComponent` sind noch an `Player`/`Sword` gekoppelt.
-- `GameManager` hält weiterhin globale Player-Referenz.
-- `NPCStateMachine` läuft in `_Process` statt `_PhysicsProcess`.
-- Toter Code (`NPCInputHandler.cs`, auskommentierte Zeilen) ist noch vorhanden.
-- Namenskonventionen (`_`-Prefix) und `Nullable` wären noch zu modernisieren.
-
-Diese Punkte sollten in separaten Branches angegangen werden.
-
----
-
-## Verwandte Dokumente
-
-- `CHANGELOG_RUNTIME_P0.md` — detailliertes Änderungsprotokoll
-- `ARCHITECTURE_RECOMMENDATIONS_2026-06-21.md` — Ausgangs-Architekturanalyse
-
+## Nächste Schritte (Empfohlung)
+- Branch in GitHub öffnen und Pull Request gegen `feature/merged-state-machine-fixes` erstellen.
+- Optional: Szenen im Godot-Editor öffnen und die neuen Behavior-Nodes des Minotaurs visuell prüfen.

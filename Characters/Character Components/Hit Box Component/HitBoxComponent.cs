@@ -61,7 +61,10 @@ public partial class HitBoxComponent : Area2D
     {
         GD.Print("HitBox activated and performing Hit");
         _IsActive = true;
-        _CollisionShape2D.Disabled = false;
+        if (_CollisionShape2D != null)
+        {
+            _CollisionShape2D.Disabled = false;
+        }
         _OnHitboxActivated?.Invoke(_Tool?._Damage ?? 0);
     }
 
@@ -78,31 +81,33 @@ public partial class HitBoxComponent : Area2D
     public void FindHandItemParent()
     {
         Node node = this;
-        while (node != null) // Solange ein Parent existiert
+        while (node != null)
         {
-            if (node is HandItem handItem) // Prüfen, ob es vom Typ Character (oder abgeleitet) ist
+            if (node is HandItem handItem)
             {
                 _Tool = handItem;
-                GD.Print("Parent gefunden"); // Charakter gefunden, zurückgeben
+                GD.Print("HandItem parent found for HitBoxComponent");
                 return;
             }
-            node = node.GetParent(); // Zum nächsten Parent wechseln
+            node = node.GetParent();
         }
+        GD.PrintErr("HitBoxComponent: No HandItem parent found.");
     }
 
     public void FindCharacterParent()
     {
         Node node = this;
-        while (node != null) // Solange ein Parent existiert
+        while (node != null)
         {
-            if (node is Character character) // Prüfen, ob es vom Typ Character (oder abgeleitet) ist
+            if (node is Character character)
             {
                 _CharacterParent = character;
-                GD.Print("Parent gefunden"); // Charakter gefunden, zurückgeben
+                GD.Print("Character parent found for HitBoxComponent");
                 return;
             }
-            node = node.GetParent(); // Zum nächsten Parent wechseln
+            node = node.GetParent();
         }
+        GD.PrintErr("HitBoxComponent: No Character parent found.");
     }
 
     private void ChangeCurrentHitboxPosition()

@@ -16,22 +16,13 @@ public partial class CharacterStateMachine : Node2D
 
     private Dictionary<string, CharacterState> _StateRegistry = new Dictionary<string, CharacterState>();
 
-    public override async void _Ready()
+    public override void _Ready()
     {
-        await ToSignal(GetTree(), "process_frame");
         BuildStateRegistry();
+        _AnimationPlayer = ResolveAnimationPlayer();
         _CurrentState = _DefaultState;
         _PreviousState = _CurrentState;
-        _AnimationPlayer = Owner.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
-
-        if (_CurrentState != null)
-        {
-            _CurrentState.Enter();
-        }
-        else
-        {
-            GD.PrintErr("CharacterStateMachine: No default state assigned on " + Owner.Name);
-        }
+        CallDeferred(nameof(EnterDefaultState));
     }
 
     private void BuildStateRegistry()
@@ -47,6 +38,23 @@ public partial class CharacterStateMachine : Node2D
                     _StateRegistry.Add(key, state);
                 }
             }
+        }
+    }
+
+    protected virtual AnimationPlayer ResolveAnimationPlayer()
+    {
+        return Owner.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+    }
+
+    private void EnterDefaultState()
+    {
+        if (_CurrentState != null)
+        {
+            _CurrentState.Enter();
+        }
+        else
+        {
+            GD.PrintErr("CharacterStateMachine: No default state assigned on " + Owner?.Name);
         }
     }
 

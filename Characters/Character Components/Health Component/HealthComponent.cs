@@ -78,7 +78,7 @@ public partial class HealthComponent : Node
             {
                 _Health += change;
             }
-            StartTemporaryInvulnerarbility();
+            StartTemporaryInvulnerability();
         }
         else
         {
@@ -103,7 +103,7 @@ public partial class HealthComponent : Node
     }
 
     //Makes the Parent Invulnerable for specific time
-    public void StartTemporaryInvulnerarbility()
+    public void StartTemporaryInvulnerability()
     {
         GD.Print("Invulnerable");
         if (_InvulnerableTimer != null)

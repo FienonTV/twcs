@@ -6,31 +6,36 @@ public partial class SmallTree : Sprite2D
 	HealthComponent _HealthComponent;
 
 	PackedScene _LogScene = ResourceLoader.Load<PackedScene>("res://Scenes/Objects/Trees/log.tscn");
-	// Called when the node enters the scene tree for the first time.
+
 	public override void _Ready()
 	{
 		_HurtBoxComponent = FindChild("HurtboxComponent", recursive: true) as HurtBoxComponent;
 		_HealthComponent = FindChild("HealthComponent", recursive: true) as HealthComponent;
 
-		_HurtBoxComponent._OnDamageRecived += ReciveDamage;
-		_HealthComponent._HealthEmpty += ZeroHealthReached;
+		if (_HurtBoxComponent != null)
+		{
+			_HurtBoxComponent._OnDamageRecived += ReceiveDamage;
+		}
 
+		if (_HealthComponent != null)
+		{
+			_HealthComponent._HealthEmpty += ZeroHealthReached;
+		}
 	}
 
 
-	public async void ReciveDamage(int damage)
+	public async void ReceiveDamage(int damage)
 	{
-		_HealthComponent.ChangeHealth(damage * -1);
+		_HealthComponent?.ChangeHealth(damage * -1);
 		ShaderMaterial material = (ShaderMaterial)this.Material;
 		material.SetShaderParameter("shake_intensity", 0.75f);
 		await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
 		material.SetShaderParameter("shake_intensity", 0.0f);
 	}
 
-	public void ZeroHealthReached() {
-			CallDeferred("addLogScene");
-	
-		
+	public void ZeroHealthReached()
+	{
+		CallDeferred("addLogScene");
 		GD.Print("Tree is destroyed");
 		QueueFree();
 	}

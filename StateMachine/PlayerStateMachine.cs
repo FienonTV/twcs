@@ -8,7 +8,13 @@ public partial class PlayerStateMachine : CharacterStateMachine
     public override void _Ready()
     {
         base._Ready();
-        _InputHandler = GetNode("/root/InputHandler") as InputHandler;
+        _InputHandler = GetNodeOrNull<InputHandler>("/root/InputHandler");
+
+        if (_InputHandler == null)
+        {
+            GD.PrintErr("PlayerStateMachine: InputHandler autoload not found.");
+            return;
+        }
 
         _InputHandler._OnMoveInput += OnInputHandlerMoveInput;
         _InputHandler._NoMovement += OnInputHandlerNoMovement;
@@ -16,7 +22,7 @@ public partial class PlayerStateMachine : CharacterStateMachine
 
     private void OnInputHandlerNoMovement()
     {
-        if (_CurrentState.GetType() != typeof(IdleState))
+        if (_CurrentState?.GetType() != typeof(IdleState))
         {
             ChangeState("Idle");
         }
@@ -26,11 +32,19 @@ public partial class PlayerStateMachine : CharacterStateMachine
     {
         _CurrentDirection = direction.Normalized();
 
-        if (_CurrentState.GetType() != typeof(WalkState))
+        if (_CurrentState?.GetType() != typeof(WalkState))
         {
             ChangeState("Walk");
         }
     }
 
-
+    public override void _ExitTree()
+    {
+        if (_InputHandler != null)
+        {
+            _InputHandler._OnMoveInput -= OnInputHandlerMoveInput;
+            _InputHandler._NoMovement -= OnInputHandlerNoMovement;
+        }
+        base._ExitTree();
+    }
 }

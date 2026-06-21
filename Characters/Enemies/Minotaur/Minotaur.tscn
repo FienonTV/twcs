@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://c2mwj55ha43j6" path="res://Characters/Character Components/Hurt Box Component/Hurt_Box_Component.tscn" id="7_au56f"]
 [ext_resource type="Script" path="res://Characters/Character Components/CharacterMovementComponent.cs" id="9_sfvld"]
 [ext_resource type="PackedScene" uid="uid://c73ejqotojfb" path="res://UI/Healthbar/Health_Bar_Display.tscn" id="10_lytja"]
-[ext_resource type="Script" path="res://Characters/NPCInputHandler.cs" id="11_6me5p"]
 [ext_resource type="Script" path="res://Characters/Behaviors/PointToPointPatrolBehavior.cs" id="12_uoiab"]
 [ext_resource type="Script" path="res://Characters/Behaviors/FollowPlayerBehavior.cs" id="13_qgx3r"]
 [ext_resource type="PackedScene" uid="uid://dgawkbyts0ufv" path="res://Characters/Character Components/Movement Component/Movement_Component.tscn" id="15_omrkc"]
@@ -336,12 +335,13 @@ _MaxHealth = 100
 
 [node name="MovementComponent" parent="." instance=ExtResource("15_omrkc")]
 
-[node name="NPCInputHandler" type="Node" parent="."]
-script = ExtResource("11_6me5p")
-
-[node name="PointToPointPatrolBehavior" type="Node" parent="NPCInputHandler" node_paths=PackedStringArray("_CharacterParent")]
+[node name="PointToPointPatrolBehavior" type="Node" parent="." node_paths=PackedStringArray("_CharacterParent")]
 script = ExtResource("12_uoiab")
-_CharacterParent = NodePath("../..")
+_CharacterParent = NodePath("..")
+
+[node name="FollowPlayerBehavior" type="Node" parent="." node_paths=PackedStringArray("_CharacterParent")]
+script = ExtResource("13_qgx3r")
+_CharacterParent = NodePath("..")
 
 [node name="Enemy Detection Area" type="Area2D" parent="."]
 script = ExtResource("16_ewyaq")

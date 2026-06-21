@@ -2,10 +2,8 @@ using Godot;
 
 public partial class GameManager : Node
 {
-
     public static PackedScene _PlayerScene;
     private static Player _Player;
-
 
     public override void _Ready()
     {

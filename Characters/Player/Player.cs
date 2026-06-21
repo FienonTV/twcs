@@ -67,16 +67,7 @@ public partial class Player : Character
             GD.PrintErr("Player: MovementComponent not found.");
         }
 
-        Node toolNode = GetNodeOrNull("Tool");
-        if (toolNode != null && toolNode.GetChildCount() > 0)
-        {
-            _CurrentHandItem = toolNode.GetChild(0) as HandItem;
-        }
-
-        if (_CurrentHandItem == null)
-        {
-            GD.PrintErr("Player: No HandItem equipped under Tool.");
-        }
+        EquipHandItemFromToolNode();
 
         _HealthComponent?.SetHealth(_HealthComponent.GetMaxHealth());
 
@@ -84,14 +75,28 @@ public partial class Player : Character
         {
             _InputHandler._OnMoveInput += _PlayerMovementComponent.HandleMovement;
         }
-        //_InputHandler._OnAttackInput += _AttackComponent.OnAttackRequest;
-        //_InputHandler._NoMovement += _StateMachine.ReturnToIdle;
-        //_InputHandler._OnInteractionInput += _PlayerInteractionComponents.OnInterActionExecute;
-        //_PlayerMovementComponent._OnMovingPerformed += _StateMachine.TransitionTo;
-        //_AttackComponent._StartAttackAnimation += _Tool.OnUse;
     }
 
+    private void EquipHandItemFromToolNode()
+    {
+        Node toolNode = GetNodeOrNull("Tool");
+        if (toolNode == null)
+        {
+            GD.PrintErr("Player: No Tool node found.");
+            return;
+        }
 
+        foreach (Node child in toolNode.GetChildren())
+        {
+            if (child is HandItem handItem)
+            {
+                _CurrentHandItem = handItem;
+                return;
+            }
+        }
+
+        GD.PrintErr("Player: No HandItem equipped under Tool.");
+    }
 
     /****************************** EVENTHANDLER ******************************/
 

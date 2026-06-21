@@ -19,7 +19,6 @@ public partial class WalkState : CharacterState
 
     public override void Enter()
     {
-        //GD.Print("Walk State Entered with" + _MovementBehavior.Name);
         base.Enter();
         if (_StateMachine._AnimationPlayer != null)
         {
@@ -38,12 +37,17 @@ public partial class WalkState : CharacterState
     {
         base._PhysicsProcess(delta);
 
-        if (Owner.GetType() != typeof(Player))
+        if (_MovementComponent == null)
+        {
+            return;
+        }
+
+        if (_MovementBehavior != null)
         {
             _StateMachine._CurrentDirection = _MovementBehavior.GetNextDirection();
         }
 
-        _MovementComponent?.HandleMovement(_StateMachine._CurrentDirection);
+        _MovementComponent.HandleMovement(_StateMachine._CurrentDirection);
         StartAnimation("move_");
     }
 }

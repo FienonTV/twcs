@@ -16,57 +16,49 @@ public partial class PlayerInteractionComponents : Node2D
     private List<Interaction_Area> all_interactions = new List<Interaction_Area>();
 
 
-    // Called when the node enters the scene tree for the first time.
-    public override async void _Ready()
+    public override void _Ready()
     {
-        await ToSignal(GetTree(), "process_frame");
-        GD.Print(this.GetParent().Name);
         _CharacterParent = FindParent("Player") as Player;
         if (_CharacterParent == null)
         {
-            GD.Print("CharacterParent is null");
+            GD.PrintErr("PlayerInteractionComponents: No Player parent found.");
         }
-        else
-        {
-            GD.Print("CharacterParent is not null");
-        }
-        InteractionArea = Owner.FindChild("InteractionArea", true) as Interaction_Area;
 
+        InteractionArea = GetNodeOrNull<Interaction_Area>("InteractionArea");
         if (InteractionArea == null)
         {
-            GD.Print("InteractionArea is null");
+            GD.PrintErr("PlayerInteractionComponents: No InteractionArea found.");
             _isLoaded = true;
             return;
         }
+
         _InteractionAreaCollisionShape = InteractionArea.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
         if (_InteractionAreaCollisionShape == null)
         {
-            GD.Print("= null");
+            GD.PrintErr("PlayerInteractionComponents: InteractionArea has no CollisionShape2D.");
         }
-        InteractLabel = FindChild("InteractLabel", recursive: true) as Label;
 
+        InteractLabel = FindChild("InteractLabel", recursive: true) as Label;
 
         InteractionArea.AreaEntered += on_interaction_area_entered;
         InteractionArea.AreaExited += on_interaction_area_exited;
 
         updateInteractions();
         _isLoaded = true;
-
-
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (_isLoaded)
+        if (!_isLoaded)
         {
-            ChangeCurrentInteractionCollisionShapeDirection();
+            return;
+        }
 
-            if (Input.IsActionJustPressed("interact"))
-            {
+        ChangeCurrentInteractionCollisionShapeDirection();
 
-                executeInteraction();
-            }
+        if (Input.IsActionJustPressed("interact"))
+        {
+            executeInteraction();
         }
     }
 
@@ -147,7 +139,6 @@ public partial class PlayerInteractionComponents : Node2D
         {
             _InteractionAreaCollisionShape.Position = _CharacterParent._CurrentLookingDirection * 10;
             _InteractionAreaCollisionShape.Rotation = _CharacterParent._CurrentLookingDirection.Angle();
-            //_InteractionAreaCollisionShape.Position = _CharacterParent._CurrentLookingDirection.Normalized() * _InteractionOffset.Length();
         }
 
     }
