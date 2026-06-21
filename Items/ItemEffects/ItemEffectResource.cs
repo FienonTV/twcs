@@ -7,7 +7,7 @@ public abstract partial class ItemEffectResource : Resource
     [Export]
     String _EffectDescription;
 
-    public virtual void Use()
+    public virtual void Use(Character user)
     {
 
     }

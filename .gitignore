@@ -1,5 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-
 .fake
+
+# Godot 4.4+ generated .uid files (only needed in project, not versioned)
+*.uid

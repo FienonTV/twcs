@@ -350,6 +350,4 @@ script = ExtResource("16_ewyaq")
 shape = SubResource("CircleShape2D_0f0en")
 debug_color = Color(0.650482, 0, 0.0713455, 0.42)
 
-[connection signal="area_entered" from="Enemy Detection Area" to="Enemy Detection Area" method="_on_area_entered"]
-
 [editable path="HurtBoxComponent"]

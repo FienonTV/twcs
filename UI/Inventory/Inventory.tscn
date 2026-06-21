@@ -164,5 +164,3 @@ theme_override_font_sizes/font_size = 12
 text = "This is your Item Description"
 horizontal_alignment = 1
 autowrap_mode = 2
-
-[connection signal="InventoryActive" from="." to="Control/PanelContainer/GridContainer" method="_on_inventory_inventory_active"]

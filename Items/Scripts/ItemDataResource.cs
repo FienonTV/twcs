@@ -16,16 +16,20 @@ public partial class ItemDataResource : Resource
     [Export]
     ItemEffectResource[] _ItemEffects;
 
-    public bool Use()
+    [ExportCategory("Inventory Properties")]
+    [Export]
+    public int _MaxStackSize = 99;
+
+    public bool Use(Character user)
     {
-        if (_ItemEffects.Length == 0)
+        if (_ItemEffects == null || _ItemEffects.Length == 0)
         {
             return false;
         }
 
         foreach (ItemEffectResource effect in _ItemEffects)
         {
-            effect.Use();
+            effect?.Use(user);
         }
         return true;
 

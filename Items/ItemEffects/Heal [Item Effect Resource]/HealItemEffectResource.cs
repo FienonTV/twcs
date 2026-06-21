@@ -7,21 +7,21 @@ public partial class HealItemEffectResource : ItemEffectResource
     [Export]
     int _HealAmount = 1;
 
-    public override void Use()
+    public override void Use(Character user)
     {
-        Player targetPlayer = GameManager.getPlayer();
-        if (targetPlayer == null)
+        if (user == null)
         {
-            GD.PrintErr("HealItemEffectResource: No target player found.");
+            GD.PrintErr("HealItemEffectResource: No user provided.");
             return;
         }
 
-        if (targetPlayer._HealthComponent == null)
+        HealthComponent healthComponent = user.FindChild("HealthComponent", recursive: true) as HealthComponent;
+        if (healthComponent == null)
         {
-            GD.PrintErr("HealItemEffectResource: Target player has no HealthComponent.");
+            GD.PrintErr("HealItemEffectResource: User has no HealthComponent.");
             return;
         }
 
-        targetPlayer._HealthComponent.ChangeCurrentHealth(_HealAmount);
+        healthComponent.ChangeCurrentHealth(_HealAmount);
     }
 }

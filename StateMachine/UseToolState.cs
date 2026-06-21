@@ -11,44 +11,41 @@ public partial class UseToolState : CharacterState
         _HitBoxComponent = Owner.GetNodeOrNull<HitBoxComponent>("HitBoxComponent");
         if (_HitBoxComponent == null)
         {
-            GD.Print("HitBoxComponent is null");
+            GD.PrintErr("UseToolState: No HitBoxComponent found on " + Owner.Name);
         }
-
-        CallDeferred("SetCollisionShapeDisabled");
+        else
+        {
+            _HitBoxComponent.DeactivateHitBox();
+        }
     }
     public override void Enter()
     {
         base.Enter();
 
-        if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
-            _StateMachine._AnimationPlayer.Play("Idle");
-        else
-            _StateMachine._AnimationPlayer.Play("idle_down");
+        if (_StateMachine._AnimationPlayer != null)
+        {
+            if (_StateMachine._AnimationPlayer.HasAnimation("Idle"))
+                _StateMachine._AnimationPlayer.Play("Idle");
+            else
+                _StateMachine._AnimationPlayer.Play("idle_down");
+        }
 
-        //SetHitComponentDirection();
-        _HitBoxComponent._CollisionShape2D.Disabled = false;
+        _HitBoxComponent?.ActivateHitBox();
     }
 
     public override void Exit()
     {
         base.Exit();
-        _HitBoxComponent._CollisionShape2D.Disabled = true;
+        _HitBoxComponent?.DeactivateHitBox();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-        if (_StateMachine._AnimationPlayer.CurrentAnimation.StartsWith("useTool_") == false)
+        if (_StateMachine._AnimationPlayer != null && _StateMachine._AnimationPlayer.CurrentAnimation.StartsWith("useTool_") == false)
         {
-            //SetHitComponentDirection();
             StartAnimation("useTool_");
         }
-
-    }
-
-    public void SetCollisionShapeDisabled()
-    {
-        _HitBoxComponent._CollisionShape2D.Disabled = true;
     }
 
 
