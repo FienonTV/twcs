@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://bxptushg2uo88"]
 
 [ext_resource type="Texture2D" uid="uid://ba0mqscs4ktuw" path="res://World/MysticWoods/objects/objects.png" id="1_3remf"]
-[ext_resource type="Shader" path="res://Scenes/Objects/Trees/tree_shake_shader.gdshader" id="1_wm437"]
-[ext_resource type="Script" path="res://Scenes/Objects/Trees/SmallTree.cs" id="2_yy7tp"]
+[ext_resource type="Shader" uid="uid://xuvjw5cg5m5a" path="res://Scenes/Objects/Trees/tree_shake_shader.gdshader" id="1_wm437"]
+[ext_resource type="Script" uid="uid://dvvll4iatpoe3" path="res://Scenes/Objects/Trees/SmallTree.cs" id="2_yy7tp"]
 [ext_resource type="PackedScene" uid="uid://c2mwj55ha43j6" path="res://Characters/Character Components/Hurt Box Component/Hurt_Box_Component.tscn" id="3_18teq"]
 [ext_resource type="PackedScene" uid="uid://cl1vlioksrw52" path="res://Characters/Character Components/Health Component/Health_Component.tscn" id="4_hmcrn"]
 
@@ -27,15 +27,18 @@ material = SubResource("ShaderMaterial_qbq3g")
 position = Vector2(0, -17)
 texture = SubResource("AtlasTexture_ysqrl")
 script = ExtResource("2_yy7tp")
+z_index = 1
+y_sort_enabled = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(0, 18)
 shape = SubResource("CircleShape2D_341wl")
 
 [node name="HurtboxComponent" parent="." instance=ExtResource("3_18teq")]
-_EffectiveItems = [1]
+EffectiveItems = [1]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(-0.5, 3)

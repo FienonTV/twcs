@@ -39,7 +39,9 @@ public partial class WorldInitialization : Node2D
         }
 
         _PlayerInWorld.GlobalPosition = PlayerSpawnPosition;
-        _PlayerInWorld.ZIndex = 1;
+        _PlayerInWorld.ZIndex = 0;
+        _PlayerInWorld.ZAsRelative = true;
+        _PlayerInWorld.YSortEnabled = true;
 
         _GameManager.RegisterPlayer(_PlayerInWorld);
 
