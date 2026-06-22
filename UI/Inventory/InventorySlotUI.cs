@@ -1,8 +1,7 @@
-using System.Runtime.CompilerServices;
 using Godot;
+
 public partial class InventorySlotUI : Button
 {
-
     private SlotDataResource _SlotData;
 
     public SlotDataResource SlotData
@@ -12,10 +11,10 @@ public partial class InventorySlotUI : Button
     }
 
     [Export]
-    private TextureRect TextureRect;
+    private TextureRect _TextureRect;
 
     [Export]
-    private Label QuantityLabel;
+    private Label _QuantityLabel;
 
     private InventoryMenu _InventoryMenu;
 
@@ -23,14 +22,15 @@ public partial class InventorySlotUI : Button
     {
         _InventoryMenu = Services.Get<InventoryMenu>();
 
-        if (TextureRect != null)
+        if (_TextureRect != null)
         {
-            TextureRect.Texture = null;
+            _TextureRect.Texture = null;
         }
-        if (QuantityLabel != null)
+        if (_QuantityLabel != null)
         {
-            QuantityLabel.Text = "";
+            _QuantityLabel.Text = "";
         }
+
         FocusEntered += ItemFocused;
         FocusExited += ItemUnfocused;
         Pressed += ItemPressed;
@@ -40,18 +40,26 @@ public partial class InventorySlotUI : Button
     {
         _SlotData = slotData;
 
-        if (_SlotData == null)
+        if (_SlotData == null || _SlotData.ItemData == null || _SlotData.Quantity <= 0)
         {
+            if (_TextureRect != null)
+            {
+                _TextureRect.Texture = null;
+            }
+            if (_QuantityLabel != null)
+            {
+                _QuantityLabel.Text = "";
+            }
             return;
         }
 
-        if (TextureRect != null)
+        if (_TextureRect != null)
         {
-            TextureRect.Texture = _SlotData.ItemData.Texture;
+            _TextureRect.Texture = _SlotData.ItemData.Texture;
         }
-        if (QuantityLabel != null)
+        if (_QuantityLabel != null)
         {
-            QuantityLabel.Text = _SlotData.Quantity.ToString();
+            _QuantityLabel.Text = _SlotData.Quantity.ToString();
         }
     }
 
@@ -59,7 +67,8 @@ public partial class InventorySlotUI : Button
     {
         if (_SlotData != null && _SlotData.ItemData != null && _InventoryMenu != null)
         {
-            _InventoryMenu.updateItemDescription(_SlotData.ItemData.Description);
+            _InventoryMenu.UpdateItemDescription(_SlotData.ItemData.Description);
+            _InventoryMenu.UpdateItemName(_SlotData.ItemData.ItemName);
         }
     }
 
@@ -67,7 +76,8 @@ public partial class InventorySlotUI : Button
     {
         if (_InventoryMenu != null)
         {
-            _InventoryMenu.updateItemDescription("");
+            _InventoryMenu.UpdateItemDescription("");
+            _InventoryMenu.UpdateItemName("");
         }
     }
 
@@ -94,16 +104,9 @@ public partial class InventorySlotUI : Button
             {
                 _SlotData.ItemData = null;
                 _SlotData.Quantity = 0;
-                if (TextureRect != null)
-                {
-                    TextureRect.Texture = null;
-                }
             }
 
-            if (QuantityLabel != null)
-            {
-                QuantityLabel.Text = _SlotData.Quantity > 0 ? _SlotData.Quantity.ToString() : "";
-            }
+            SetSlotData(_SlotData);
         }
     }
 }

@@ -1,31 +1,46 @@
 using Godot;
-using System;
 
 public partial class InventoryMenu : CanvasLayer
 {
     public bool IsOpen = false;
 
-    [Signal]
-    public delegate void InventoryActiveEventHandler();
-
-    [Signal]
-    public delegate void InventoryHiddenEventHandler();
-
     [Export]
     private InventoryUI _InventoryUI;
 
     [Export]
-    private Label ItemDescriptionLabel;
+    private Control _InventoryPanel;
 
     [Export]
-    private Label ItemNameLabel;
+    private Label _ItemDescriptionLabel;
+
+    [Export]
+    private Label _ItemNameLabel;
 
     private InputHandler _InputHandler;
 
     public Character CurrentUser { get; set; }
+    public InventoryDataResource InventoryData { get; set; }
 
     public override void _Ready()
     {
+        ProcessMode = ProcessModeEnum.Always;
+        HideInventory();
+
+        if (_InventoryUI == null)
+        {
+            _InventoryUI = FindChild("GridContainer", true) as InventoryUI;
+        }
+
+        if (_InventoryPanel == null)
+        {
+            _InventoryPanel = GetNodeOrNull<Control>("Control");
+        }
+
+        if (_ItemDescriptionLabel == null)
+        {
+            _ItemDescriptionLabel = GetNodeOrNull<Label>("Control/ItemDescription");
+        }
+
         _InputHandler = Services.Get<InputHandler>();
         if (_InputHandler != null)
         {
@@ -42,6 +57,7 @@ public partial class InventoryMenu : CanvasLayer
         if (@event.IsActionPressed("ui_cancel") && IsOpen)
         {
             HideInventory();
+            GetViewport().SetInputAsHandled();
         }
     }
 
@@ -65,41 +81,48 @@ public partial class InventoryMenu : CanvasLayer
             return;
         }
 
-        this.Show();
+        if (_InventoryPanel != null)
+        {
+            _InventoryPanel.Visible = true;
+        }
+
         IsOpen = true;
         _InventoryUI?.UpdateInventory();
-        EmitSignal(SignalName.InventoryActive);
 
-        if (ItemDescriptionLabel != null)
+        if (_ItemDescriptionLabel != null)
         {
-            ItemDescriptionLabel.Text = "";
+            _ItemDescriptionLabel.Text = "";
         }
-        if (ItemNameLabel != null)
+        if (_ItemNameLabel != null)
         {
-            ItemNameLabel.Text = "";
+            _ItemNameLabel.Text = "";
         }
     }
 
     public void HideInventory()
     {
-        this.Hide();
+        if (_InventoryPanel != null)
+        {
+            _InventoryPanel.Visible = false;
+        }
+
         IsOpen = false;
-        EmitSignal(SignalName.InventoryHidden);
+        _InventoryUI?.ClearInventory();
     }
 
-    public void updateItemDescription(string description)
+    public void UpdateItemDescription(string description)
     {
-        if (ItemDescriptionLabel != null)
+        if (_ItemDescriptionLabel != null)
         {
-            ItemDescriptionLabel.Text = description;
+            _ItemDescriptionLabel.Text = description;
         }
     }
 
-    public void updateItemName(string name)
+    public void UpdateItemName(string name)
     {
-        if (ItemNameLabel != null)
+        if (_ItemNameLabel != null)
         {
-            ItemNameLabel.Text = name;
+            _ItemNameLabel.Text = name;
         }
     }
 }

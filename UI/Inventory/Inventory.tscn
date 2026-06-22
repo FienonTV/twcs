@@ -1,9 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnupd7u8ie08p"]
+[gd_scene load_steps=7 format=3 uid="uid://bnupd7u8ie08p"]
 
-[ext_resource type="Script" path="res://UI/Inventory/inventory_menu.cs" id="1_s4hag"]
+[ext_resource type="Script" uid="uid://b4k2c37j2kbp" path="res://UI/Inventory/InventoryMenu.cs" id="1_1y4me"]
 [ext_resource type="Texture2D" uid="uid://dvuw2dujdgnwq" path="res://UI/Inventory/Sample-InventorySlotsSet.png" id="2_4f6e1"]
 [ext_resource type="PackedScene" uid="uid://bp7exa7wdprh4" path="res://UI/Inventory/inventory_slot.tscn" id="3_6oxkn"]
-[ext_resource type="Script" path="res://UI/Inventory/Scripts/InventoryUI.cs" id="3_uy76e"]
+[ext_resource type="Script" uid="uid://c2bff03lvb5va" path="res://UI/Inventory/Scripts/InventoryUI.cs" id="3_uy76e"]
 [ext_resource type="Resource" uid="uid://b1y8wt204tdoi" path="res://UI/Inventory/Player_Inventory.tres" id="4_472ba"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l08ln"]
@@ -21,11 +21,13 @@ texture_margin_top = 14.0
 texture_margin_right = 14.0
 texture_margin_bottom = 14.0
 
-[node name="Inventory" type="CanvasLayer"]
+[node name="InventoryMenu" type="CanvasLayer"]
 process_mode = 3
-script = ExtResource("1_s4hag")
+visible = false
+script = ExtResource("1_1y4me")
 
 [node name="Control" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,90 +65,6 @@ columns = 5
 script = ExtResource("3_uy76e")
 _Data = ExtResource("4_472ba")
 
-[node name="InventorySlot" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot2" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot3" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot4" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot5" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot6" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot7" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot10" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot11" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot12" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot13" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot14" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot15" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot16" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot17" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot18" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot19" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot20" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot21" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot22" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot23" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot24" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot25" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot26" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot27" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot28" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot8" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
-[node name="InventorySlot9" parent="Control/PanelContainer/GridContainer" instance=ExtResource("3_6oxkn")]
-layout_mode = 2
-
 [node name="ItemDescription" type="Label" parent="Control"]
 layout_mode = 1
 anchors_preset = 7
@@ -162,5 +80,23 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 12
 text = "This is your Item Description"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ItemName" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -80.0
+offset_right = 160.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Item Name"
 horizontal_alignment = 1
 autowrap_mode = 2

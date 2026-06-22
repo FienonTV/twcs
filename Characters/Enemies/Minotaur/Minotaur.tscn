@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://c5qfwkvys4upc"]
+[gd_scene load_steps=26 format=3 uid="uid://c5qfwkvys4upc"]
 
 [ext_resource type="Texture2D" uid="uid://uu63gnfo6gex" path="res://Characters/Enemies/Minotaur/Minotaur - Sprite Sheet.png" id="1_51g7n"]
 [ext_resource type="Script" path="res://Characters/Player/Enemy.cs" id="1_ia6kf"]
@@ -9,12 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://brd84b2jkkins" path="res://Animation/Animation_Controller.tscn" id="5_itcxp"]
 [ext_resource type="PackedScene" uid="uid://cl1vlioksrw52" path="res://Characters/Character Components/Health Component/Health_Component.tscn" id="6_v836c"]
 [ext_resource type="PackedScene" uid="uid://c2mwj55ha43j6" path="res://Characters/Character Components/Hurt Box Component/Hurt_Box_Component.tscn" id="7_au56f"]
-[ext_resource type="Script" path="res://Characters/Character Components/CharacterMovementComponent.cs" id="9_sfvld"]
+[ext_resource type="Script" path="res://Characters/Behaviors/FollowPlayerBehavior.cs" id="13_qgx3r"]
 [ext_resource type="PackedScene" uid="uid://c73ejqotojfb" path="res://UI/Healthbar/Health_Bar_Display.tscn" id="10_lytja"]
 [ext_resource type="Script" path="res://Characters/Behaviors/PointToPointPatrolBehavior.cs" id="12_uoiab"]
-[ext_resource type="Script" path="res://Characters/Behaviors/FollowPlayerBehavior.cs" id="13_qgx3r"]
 [ext_resource type="PackedScene" uid="uid://dgawkbyts0ufv" path="res://Characters/Character Components/Movement Component/Movement_Component.tscn" id="15_omrkc"]
-[ext_resource type="Script" path="res://Characters/Character Components/EnemyDetectionArea.cs" id="16_ewyaq"]
+[ext_resource type="Script" uid="uid://bqmnvfevj8iuh" path="res://Characters/Character Components/EnemyDetectionArea.cs" id="16_ewyaq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_swatg"]
 radius = 15.0
@@ -310,10 +309,6 @@ libraries = {
 libraries = {
 "": SubResource("AnimationLibrary_ckt6r")
 }
-
-[node name="CharacterMovementComponent" type="Node" parent="."]
-script = ExtResource("9_sfvld")
-_CharacterSpeed = 50
 
 [node name="HealthbarPosition" type="Node2D" parent="."]
 

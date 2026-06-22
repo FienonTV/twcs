@@ -33,7 +33,8 @@ public partial class Player : Character
 
     /****************************** OTHER VARIABLES ******************************/
 
-    public InventoryDataResource InventoryData { get; private set; }
+    [Export]
+    public InventoryDataResource InventoryData;
 
     /****************************** CALLBACK METHODS ******************************/
     public override void _Ready()
@@ -92,6 +93,24 @@ public partial class Player : Character
         if (MovementComponent != null && InputHandler != null)
         {
             InputHandler._OnMoveInput += MovementComponent.HandleMovement;
+        }
+
+        InventoryMenu inventoryMenu = Services.Get<InventoryMenu>();
+        if (inventoryMenu != null)
+        {
+            inventoryMenu.CurrentUser = this;
+            if (InventoryData == null)
+            {
+                InventoryData = new InventoryDataResource();
+                InventoryData.Slots = new SlotDataResource[28];
+            }
+
+            inventoryMenu.InventoryData = InventoryData;
+            InventoryUI inventoryUI = inventoryMenu.GetNodeOrNull<InventoryUI>("Control/PanelContainer/GridContainer");
+            if (inventoryUI != null)
+            {
+                inventoryUI._Data = InventoryData;
+            }
         }
     }
 

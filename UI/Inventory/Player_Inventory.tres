@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="InventoryDataResource" load_steps=2 format=3 uid="uid://b1y8wt204tdoi"]
 
-[ext_resource type="Script" path="res://UI/Inventory/Scripts/InventoryDataResource.cs" id="1_tkobp"]
+[ext_resource type="Script" uid="uid://0lfkwn3vl4a7" path="res://UI/Inventory/Scripts/InventoryDataResource.cs" id="1_tkobp"]
 
 [resource]
 script = ExtResource("1_tkobp")
-_Slots = Array[Object]([null, null, null, null, null])
+Slots = Array[SlotDataResource]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])

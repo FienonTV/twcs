@@ -1,18 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://bp7exa7wdprh4"]
+[gd_scene load_steps=3 format=3 uid="uid://bp7exa7wdprh4"]
 
-[ext_resource type="Texture2D" uid="uid://c4oxhqfg65sky" path="res://World/objects.png" id="1_1fwfb"]
-[ext_resource type="Script" path="res://UI/Inventory/InventorySlotUI.cs" id="1_mfp2x"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rifjk"]
-atlas = ExtResource("1_1fwfb")
-region = Rect2(131, 84, 11, 11)
+[ext_resource type="Script" uid="uid://cp1w1dg8054ub" path="res://UI/Inventory/InventorySlotUI.cs" id="1_mfp2x"]
 
 [node name="InventorySlot" type="Button"]
 custom_minimum_size = Vector2(32, 32)
 offset_right = 32.0
 offset_bottom = 32.0
-text = "
-"
+text = ""
 script = ExtResource("1_mfp2x")
 
 [node name="TextureRect" type="TextureRect" parent="."]
@@ -28,7 +22,6 @@ offset_right = 8.0
 offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_rifjk")
 stretch_mode = 3
 
 [node name="QuantityLabel" type="Label" parent="."]
@@ -36,5 +29,4 @@ layout_mode = 0
 offset_right = 30.0
 offset_bottom = 23.0
 theme_override_font_sizes/font_size = 8
-text = "99"
 horizontal_alignment = 2

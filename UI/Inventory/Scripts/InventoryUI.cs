@@ -1,22 +1,20 @@
 using Godot;
-using System;
-
 
 public partial class InventoryUI : Control
 {
     private PackedScene _InventorySlotScene;
 
     [Export]
-    InventoryDataResource _Data;
+    public InventoryDataResource _Data;
 
-    InventoryMenu _InventoryMenu;
+    private InventoryMenu _InventoryMenu;
 
     public override void _Ready()
     {
-        _InventoryMenu = Owner as InventoryMenu;
+        _InventoryMenu = Services.Get<InventoryMenu>();
         if (_InventoryMenu == null)
         {
-            Logger.Error("InventoryUI: Owner is not InventoryMenu.");
+            Logger.Error("InventoryUI: InventoryMenu autoload not found.");
             return;
         }
 
@@ -27,8 +25,6 @@ public partial class InventoryUI : Control
             return;
         }
 
-        _InventoryMenu.InventoryActive += UpdateInventory;
-        _InventoryMenu.InventoryHidden += ClearInventory;
         ClearInventory();
     }
 
