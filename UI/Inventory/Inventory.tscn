@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://bnupd7u8ie08p"]
 
-[ext_resource type="Script" uid="uid://b4k2c37j2kbp" path="res://UI/Inventory/InventoryMenu.cs" id="1_1y4me"]
+[ext_resource type="Script" uid="uid://bcjl4pnqgdhx0" path="res://UI/Inventory/InventoryMenu.cs" id="1_1y4me"]
 [ext_resource type="Texture2D" uid="uid://dvuw2dujdgnwq" path="res://UI/Inventory/Sample-InventorySlotsSet.png" id="2_4f6e1"]
 [ext_resource type="PackedScene" uid="uid://bp7exa7wdprh4" path="res://UI/Inventory/inventory_slot.tscn" id="3_6oxkn"]
-[ext_resource type="Script" uid="uid://c2bff03lvb5va" path="res://UI/Inventory/Scripts/InventoryUI.cs" id="3_uy76e"]
+[ext_resource type="Script" uid="uid://cm5drfscnn56n" path="res://UI/Inventory/Scripts/InventoryUI.cs" id="3_uy76e"]
 [ext_resource type="Resource" uid="uid://b1y8wt204tdoi" path="res://UI/Inventory/Player_Inventory.tres" id="4_472ba"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l08ln"]

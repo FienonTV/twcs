@@ -19,12 +19,15 @@ Im Anschluss war das Inventar:
 
 ## Änderungen
 
-### Verwaiste Skript-Referenzen
+### Verwaiste Skript-Referenzen und UIDs
 - `UI/Inventory/Inventory.tscn`
   - ExtResource `res://UI/Inventory/inventory_menu.cs` entfernt.
   - Root-Node `InventoryMenu` bekommt `InventoryMenu.cs` als Skript.
   - `load_steps` von 8 auf 7 korrigiert.
   - Szene startet jetzt unsichtbar (`visible = false`).
+  - UIDs für `InventoryMenu.cs` und `InventoryUI.cs` auf die aktuellen `.uid`-Dateien korrigiert.
+- `UI/Inventory/inventory_slot.tscn`
+  - UID für `InventorySlotUI.cs` auf die aktuelle `.uid`-Datei korrigiert.
 - `Characters/Enemies/Minotaur/Minotaur.tscn`
   - Verwaiste Node `CharacterMovementComponent` und zugehörige ExtResource entfernt.
   - `load_steps` entsprechend angepasst.
