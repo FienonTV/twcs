@@ -19,6 +19,11 @@ public partial class UseToolState : CharacterState
             HitBoxComponent = Owner.GetNodeOrNull<HitBoxComponent>("HitBoxComponent");
         }
 
+        if (HitBoxComponent == null && Owner != null)
+        {
+            HitBoxComponent = Owner.GetParent().GetNodeOrNull<HitBoxComponent>("HitBoxComponent");
+        }
+
         if (HitBoxComponent == null)
         {
             Logger.Error($"UseToolState: No HitBoxComponent found on '{Owner.Name}'.");
