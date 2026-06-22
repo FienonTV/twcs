@@ -81,6 +81,7 @@ public partial class InventoryMenu : CanvasLayer
             return;
         }
 
+        Visible = true;
         if (_InventoryPanel != null)
         {
             _InventoryPanel.Visible = true;
@@ -101,6 +102,7 @@ public partial class InventoryMenu : CanvasLayer
 
     public void HideInventory()
     {
+        Visible = false;
         if (_InventoryPanel != null)
         {
             _InventoryPanel.Visible = false;
